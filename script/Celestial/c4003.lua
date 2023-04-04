@@ -28,7 +28,7 @@ function s.initial_effect(c)
 end
 --add
 function s.thfilter(c,tp)
-	return c:IsSetCard(0xFA1) and c:IsType(TYPE_NORMAL_SPELL) and c:IsAbleToHand() 
+	return c:IsSetCard(0xFA1) and c:GetType()==TYPE_SPELL and c:IsAbleToHand() 
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
