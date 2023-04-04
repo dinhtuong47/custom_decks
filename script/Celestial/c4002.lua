@@ -39,7 +39,7 @@ function s.ntcon(e,c,minc)
 	return minc==0 and Duel.CheckTribute(c,0)
 end
 function s.adfilter(c,tp)
-	return c:IsSetCard(0xFA1) and c:IsType(TYPE_NORMAL_TRAP) and c:IsAbleToHand() 
+	return c:IsSetCard(0xFA1) and c:GetType()==TYPE_TRAP and c:IsAbleToHand() 
 end
 function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
