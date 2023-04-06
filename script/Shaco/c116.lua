@@ -16,7 +16,7 @@ function s.rmfilter(c,tp)
 	return c:IsFaceup() and c:IsCode(111) and c:IsAbleToRemove()
 end
 function s.thfilter(c,tp)
-	return c:IsRace(RACE_SPELLCASTER) and c:IsLevelAbove(5) and c:IsAbleToHand()
+	return c:IsRace(RACE_SPELLCASTER) and c:IsLevelAbove(5) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToHand()
 end
 function s.rtfilter(c,e,tp)
 	return c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
