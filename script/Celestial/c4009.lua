@@ -22,10 +22,9 @@ function s.initial_effect(c)
 	e2:SetOperation(s.tdop)
 	c:RegisterEffect(e2)
 end
-s.listed_series={0xFA1}
--- Infinitrack monster
+s.listed_series={0xFA0}
 function s.filter(c,e,tp)
-	return c:IsSetCard(0xFA1) and c:IsMonster() and c:IsAbleToHand()
+	return c:IsSetCard(0xFA0) and c:IsMonster() and c:IsAbleToHand()
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp) -- Add to hand
 	if not e:GetHandler():IsRelateToEffect(e) then return end
@@ -48,12 +47,12 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_DECK,0,nil,0xFA1)
+		local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_DECK,0,nil,0xFA0)
 		return aux.SelectUnselectGroup(g,e,tp,1,3,nil,chk)
 	end
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_DECK,0,nil,0xFA1)
+	local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_DECK,0,nil,0xFA0)
 	local rg=aux.SelectUnselectGroup(g,e,tp,1,3,nil,1,tp,aux.Stringid(id,1))
 	if #rg>0 then
 		Duel.ConfirmCards(1-tp,rg)
