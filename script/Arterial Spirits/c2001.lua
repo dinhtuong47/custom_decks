@@ -31,7 +31,7 @@ function s.thfilter(c,e,tp)
 	return s.tdfilter(c,e,tp) and c:IsSetCard(0x7D0)
 end
 function s.filter2(c)
-	return c:IsSetCard(0x7D0) and c:IsAbleToHand()
+	return c:IsSetCard(0x7D0) and c:IsType(TYPE_SPELL) and c:IsAbleToHand()
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
