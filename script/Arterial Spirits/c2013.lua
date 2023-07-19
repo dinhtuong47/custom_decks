@@ -32,14 +32,11 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
     if tc:IsCode(2004) and tc:IsRelateToEffect(e) then
 		Duel.BreakEffect()
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-		local e1=Effect.CreateEffect(tc)
-		e1:SetDescription(3206)
-		e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetTargetRange(LOCATION_MZONE,0)
-		e1:SetCode(EFFECT_CANNOT_ATTACK)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		tc:RegisterEffect(e1)
+		local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_CANNOT_ATTACK)
+	e1:SetTargetRange(0,LOCATION_MZONE)
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	Duel.RegisterEffect(e1,tp)
 	end
 end
