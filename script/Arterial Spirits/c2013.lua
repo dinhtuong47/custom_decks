@@ -40,6 +40,6 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetTargetRange(LOCATION_MZONE,0)
 		e1:SetCode(EFFECT_CANNOT_ATTACK)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		tc:GetFirst():RegisterEffect(e1)
+		tc:RegisterEffect(e1)
 	end
 end
