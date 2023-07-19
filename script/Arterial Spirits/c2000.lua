@@ -44,6 +44,12 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.BreakEffect()
 		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,0,LOCATION_SZONE+LOCATION_FZONE)
 		local g=Duel.GetMatchingGroup(nil,1-tp,LOCATION_SZONE+LOCATION_FZONE,0,nil)
+	if #g>0 then
+		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_TOGRAVE)
+		local sg=g:Select(1-tp,1,1,nil)
+		Duel.HintSelection(sg)
+		Duel.SendtoGrave(sg,REASON_RULE)
+	end
 	elseif tc:IsRace(RACE_DRAGON) and tc:IsLocation(LOCATION_HAND) and Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil,tp)
 	and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 	--set to field
