@@ -4,6 +4,8 @@ function s.initial_effect(c)
 	local e1=Fusion.CreateSummonEff{handler=c,fusfilter=s.spfilter,matfilter=Card.IsAbleToDeck,extrafil=s.fextra,
 									extraop=s.extraop,value=0,chkf=FUSPROC_NOTFUSION|FUSPROC_LISTEDMATS}					
 	e1:SetCountLimit(1,id)
+	e1:SetHintTiming(0,TIMING_BATTLE_START)
+	e1:SetCondition(s.condition)
 	c:RegisterEffect(e1)
 	--add
 	local e2=Effect.CreateEffect(c)
@@ -20,6 +22,9 @@ function s.initial_effect(c)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
+end
+function s.condition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()~=tp
 end
 function s.spfilter(c)
 	return c:IsType(TYPE_FUSION) and c:IsRace(RACE_THUNDER)
