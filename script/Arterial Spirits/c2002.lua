@@ -51,6 +51,10 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetValue(tc:GetAttack()/2)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e2) 
+		local e3=e2:Clone()
+		e3:SetCode(EFFECT_SET_DEFENSE_FINAL)
+		e3:SetValue(tc:GetDefense()/2)
+		tc:RegisterEffect(e3)
 		end
 	elseif not tc:IsRace(RACE_BEAST) and tc:IsLocation(LOCATION_HAND)
 		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
