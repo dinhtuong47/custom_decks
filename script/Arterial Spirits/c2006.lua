@@ -12,6 +12,14 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
+	--cannot direct attack
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_CANNOT_DIRECT_ATTACK)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e2:SetTarget(s.atktarget)
+	c:RegisterEffect(e2)
 end
 function s.cfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevel(4)
@@ -53,6 +61,10 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SendtoHand(e:GetLabelObject(),nil,REASON_EFFECT)
+end
+--cannot attack directly
+function s.atktarget(e,c)
+	return c:GetAttack()<=3000
 end
 
 
