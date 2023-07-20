@@ -12,6 +12,22 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
+	--Prevents adding cards to the hand
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_CANNOT_TO_HAND)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetTargetRange(LOCATION_DECK+LOCATION_GRAVE,0)
+	e3:SetCondition(s.drcon)
+	c:RegisterEffect(e3)
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e4:SetRange(LOCATION_MZONE)
+	e4:SetCode(EFFECT_CANNOT_DRAW)
+	e4:SetCondition(s.drcon)
+	e4:SetTargetRange(0,1)
+	c:RegisterEffect(e4)
 end
 function s.cfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevel(4)
@@ -53,6 +69,10 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SendtoHand(e:GetLabelObject(),nil,REASON_EFFECT)
+end
+--cannot add to hand
+function s.drcon(e)
+	return Duel.IsBattlePhase()
 end
 
 
