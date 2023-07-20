@@ -23,7 +23,5 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if op==0 then Duel.MoveSequence(tc,0) end
 	if not (tc:IsLevel(6) and tc:IsAttackAbove(1000)) then return end
 	local ct=Duel.Draw(tp,tc:GetAttack()/1000,REASON_EFFECT)
-	end
-end
 end
 
