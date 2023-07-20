@@ -12,6 +12,13 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
+	--Cannot banish
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_CANNOT_REMOVE)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetTargetRange(0,LOCATION_GRAVE)
+	c:RegisterEffect(e2)
 end
 function s.cfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevel(4)
