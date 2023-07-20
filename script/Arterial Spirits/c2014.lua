@@ -55,7 +55,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.etg(e,c)
-	return c:IsFaceup() or c:IsFacedown()
+	return c:IsFaceup() 
 end
 function s.efilter(e,re)
 	return re==e:GetLabelObject()
