@@ -64,7 +64,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 --cannot attack directly
 function s.atktarget(e,c)
-	return c:GetAttack()<=3000
+	return c:GetCurrentAttack()>=3000
 end
 
 
