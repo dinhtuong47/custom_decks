@@ -86,12 +86,12 @@ end
 function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 	local a=e:GetLabelObject()
 	if a:IsFaceup() then
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(-500)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		a:RegisterEffect(e1)
+		local e3=Effect.CreateEffect(c)
+		e3:SetType(EFFECT_TYPE_SINGLE)
+		e3:SetCode(EFFECT_UPDATE_ATTACK)
+		e3:SetValue(-1000)
+		e3:SetReset(RESET_EVENT+RESETS_STANDARD)
+		a:RegisterEffect(e3)
 	end
 end
 --Reset a monster's ATK
