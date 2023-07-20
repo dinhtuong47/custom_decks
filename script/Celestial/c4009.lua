@@ -19,7 +19,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
 	--[[Duel.ConfirmCards(tp,tc)]]--
 	Duel.ConfirmCards(1-tp,tc)
-	local op=Duel.SelectOption(tp,aux.Stringid(id,2),aux.Stringid(id,3))
+	local op=Duel.SelectOption(tp,aux.Stringid(id,0),aux.Stringid(id,1))
 	if op==0 then Duel.MoveSequence(tc,0) end
 	if not tc:IsLevel(6) then return end
 	local ct=Duel.Draw(tp,1,REASON_EFFECT)
