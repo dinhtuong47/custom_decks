@@ -17,15 +17,12 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
 	if #g==0 then return end
 	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
-	Duel.ConfirmCards(tp,tc)
+	--[[Duel.ConfirmCards(tp,tc)]]--
 	Duel.ConfirmCards(1-tp,tc)
 	local op=Duel.SelectOption(tp,aux.Stringid(id,2),aux.Stringid(id,3))
 	if op==0 then Duel.MoveSequence(tc,0) end
 	if not (tc:IsLevel(6) and tc:IsAttackAbove(1000)) then return end
 	local ct=Duel.Draw(tp,tc:GetAttack()/1000,REASON_EFFECT)
-	if ct>0 then
-		Duel.BreakEffect()
-		Duel.Recover(tp,ct*1000,REASON_EFFECT)
 	end
 end
 
