@@ -11,26 +11,21 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>2 end
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>0 end
 end
-function s.thfilter(c)
-	return c:IsLevel(6) and c:IsAbleToHand()
-end	
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
-	if #g<3 then return end
+	if #g==0 then return end
 	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
-	Duel.MoveSequence(tc,0)
-	Duel.ConfirmDecktop(tp,4)
-	local g=Duel.GetDecktopGroup(tp,4)
-	if g:IsExists(s.thfilter,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local sg=g:FilterSelect(tp,s.thfilter,1,1,nil)
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
-		Duel.ShuffleHand(tp)
+	Duel.ConfirmCards(tp,tc)
+	Duel.ConfirmCards(1-tp,tc)
+	local op=Duel.SelectOption(tp,aux.Stringid(id,2),aux.Stringid(id,3))
+	if op==0 then Duel.MoveSequence(tc,0) end
+	if not (tc:IsLevel(6) and tc:IsAttackAbove(1000)) then return end
+	local ct=Duel.Draw(tp,tc:GetAttack()/1000,REASON_EFFECT)
+	if ct>0 then
+		Duel.BreakEffect()
+		Duel.Recover(tp,ct*1000,REASON_EFFECT)
 	end
-	Duel.ShuffleDeck(tp)
 end
 
