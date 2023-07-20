@@ -15,11 +15,13 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.thfilter(c)
 	return c:IsLevel(6) and c:IsAbleToHand()
-end
+end	
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)<3 then return end
-	Duel.ConfirmDeckbot(tp,3)
-	local g=Duel.GetDeckbottomGroup(tp,3)
+	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
+	Duel.MoveSequence(tc,0)
+	Duel.ConfirmDecktop(tp,3)
+	local g=Duel.GetDecktopGroup(tp,3)
 	if g:IsExists(s.thfilter,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=g:FilterSelect(tp,s.thfilter,1,1,nil)
@@ -28,5 +30,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ShuffleHand(tp)
 	end
 	Duel.ShuffleDeck(tp)
+end
 end
 
