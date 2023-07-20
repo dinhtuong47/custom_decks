@@ -14,7 +14,7 @@ function s.initial_effect(c)
 end
 s.listed_series={0x7D0}
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsMainPhase()
+	return rp==1-tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
 end
 function s.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevel(4)
@@ -48,7 +48,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RegisterEffect(e2,tp)
 		end
 		Duel.BreakEffect()
-		if tc:IsCode(2000) and tc:IsRelateToEffect(e) then
+		if Duel.IsMainPhase() and tc:IsCode(2000) and tc:IsRelateToEffect(e) then
 		Duel.BreakEffect()
 		--end main phase
 		Duel.SkipPhase(1-tp,Duel.GetCurrentPhase(),RESET_PHASE+PHASE_END,1)
