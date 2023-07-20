@@ -21,9 +21,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
 	if #g<3 then return end
 	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
-	Duel.MoveSequence(tc,3)
-	Duel.ConfirmDecktop(tp,3)
-	local g=Duel.GetDecktopGroup(tp,3)
+	Duel.MoveSequence(tc,0)
+	Duel.ConfirmDecktop(tp,4)
+	local g=Duel.GetDecktopGroup(tp,4)
 	if g:IsExists(s.thfilter,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=g:FilterSelect(tp,s.thfilter,1,1,nil)
