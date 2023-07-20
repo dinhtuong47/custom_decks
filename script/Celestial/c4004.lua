@@ -31,7 +31,7 @@ function s.initial_effect(c)
 	e4:SetCategory(CATEGORY_SUMMON)
 	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e4:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
-	e4:SetCode(EVENT_TO_DECK)
+	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e4:SetRange(LOCATION_SZONE)
 	e4:SetCountLimit(1,id)
 	e4:SetCondition(s.sumcon)
@@ -45,7 +45,7 @@ function s.atkfilter(c)
 	return c:GetLevel()==6 and (c:IsFaceup() or not c:IsLocation(LOCATION_MZONE)) and c:IsAbleToDeckAsCost()
 end
 function s.atkfilter2(c)
-	return c:IsFaceup() and c:IsRace(RACE_THUNDER) --[[c:IsSummonType(SUMMON_TYPE_NORMAL)]]--
+	return c:IsFaceup() 
 end
 function s.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.atkfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
@@ -86,7 +86,7 @@ function s.sumcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.filter,1,nil)
 end
 function s.sumfilter(c)
-	return c:IsLevel(6) and c:IsSummonableCard()
+	return c:IsLevel(6) and c:IsRace(RACE_THUNDER) and c:IsSummonableCard()
 end
 function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
