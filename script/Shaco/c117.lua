@@ -40,11 +40,11 @@ end
 function s.gyfilter(c,tp)
 	return c:GetColumnGroup():IsExists(Card.IsControler,1,nil,1-tp)
 end
-function s.gytg(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_MZONE,0,1,nil,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_ONFIELD)
 end
-function s.gyop(e,tp,eg,ep,ev,re,r,rp)
+function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local pg=Duel.GetMatchingGroup(s.gyfilter,tp,LOCATION_MZONE,0,nil,tp)
 	if #pg==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SELECT)
