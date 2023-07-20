@@ -3,7 +3,7 @@ function s.initial_effect(c)
 	--destroy
 	local e0=Effect.CreateEffect(c)
 	e0:SetDescription(aux.Stringid(id,0))
-	e0:SetCategory(CATEGORY_DESTROY)
+	e0:SetCategory(CATEGORY_TOGRAVE)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
 	e0:SetCode(EVENT_SUMMON_SUCCESS)
 	e0:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
@@ -38,7 +38,7 @@ function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,111),tp,LOCATION_MZONE,0,1,nil)
 end
 function s.gyfilter(c,tp)
-	return c:GetColumnGroup():IsExists(Card.IsControler,1,nil,1-tp)
+	return c:IsCode(111) and c:GetColumnGroup():IsExists(Card.IsControler,1,nil,1-tp)
 end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_MZONE,0,1,nil,tp) end
