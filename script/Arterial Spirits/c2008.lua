@@ -86,7 +86,7 @@ end
 function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 	local a=e:GetLabelObject()
 	if a:IsFaceup() then
-		local e3=Effect.CreateEffect(c)
+		local e3=Effect.CreateEffect(e:GetHandler())
 		e3:SetType(EFFECT_TYPE_SINGLE)
 		e3:SetCode(EFFECT_UPDATE_ATTACK)
 		e3:SetValue(-1000)
