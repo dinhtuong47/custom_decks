@@ -55,7 +55,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tc)
 		local ct=Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)
-	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.filter),tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,ct):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tdfilter),tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,ct):GetFirst()
 	if tc then
 		if tc:IsLocation(LOCATION_DECK) then
 			Duel.ShuffleDeck(tp)
@@ -67,8 +67,8 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		if not tc:IsLocation(LOCATION_EXTRA) then
 			Duel.ConfirmDecktop(tp,1)
 		end
-		end
-		local e1=Effect.CreateEffect(e:GetHandler())
+	end
+	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
