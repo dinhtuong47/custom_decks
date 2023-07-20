@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_CANNOT_REMOVE)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetTargetRange(0,LOCATION_GRAVE)
+	e2:SetTargetRange(LOCATION_GRAVE,0)
 	c:RegisterEffect(e2)
 end
 function s.cfilter(c)
