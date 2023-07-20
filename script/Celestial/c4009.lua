@@ -2,7 +2,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--Add to Hand
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DRAW)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
@@ -21,6 +21,5 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ConfirmCards(1-tp,tc)
 	local op=Duel.SelectOption(tp,aux.Stringid(id,0),aux.Stringid(id,1))
 	if op==0 then Duel.MoveSequence(tc,0) end
-	if not tc:IsLevel(6) then return end
-	local ct=Duel.Draw(tp,1,REASON_EFFECT)
+	if tc:IsLevel(6) then Duel.Draw(tp,1,REASON_EFFECT) end
 end
