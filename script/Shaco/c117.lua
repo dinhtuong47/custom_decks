@@ -38,7 +38,10 @@ function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 		--[[and Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,111),tp,LOCATION_MZONE,0,1,nil)]]--
 end
 function s.gyfilter(c,tp)
-	return c:IsCode(111) and c:GetColumnGroup():IsExists(Monster.IsControler,1,nil,1-tp)
+	return c:IsCode(111) and c:GetColumnGroup():IsExists(s.desfilter,1,nil,1-tp)
+end
+function s.desfilter(c,tp)
+	return c:IsType(TYPE_MONSTER)
 end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_MZONE,0,1,nil,tp) end
@@ -51,7 +54,7 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local pc=pg:Select(tp,1,1,nil):GetFirst()
 	if not pc then return end
 	Duel.HintSelection(pc,true)
-	local g=pc:GetColumnGroup():Filter(Monster.IsControler,nil,1-tp)
+	local g=pc:GetColumnGroup():Filter(s.desfilter,nil,1-tp)
 	if #g>0 then
 		Duel.Destroy(g,REASON_EFFECT)
 	end
