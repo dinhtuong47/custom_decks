@@ -13,6 +13,7 @@ function s.initial_effect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCode(EVENT_CHAIN_SOLVED)
 	e2:SetCountLimit(1,id)
@@ -47,7 +48,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then return end
 	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 end
---add
+--add field spell, or des s/t
 function s.sfilter(c)
 	return c:IsCode(115) and c:IsAbleToHand()
 end
@@ -83,6 +84,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
     	if #g2>0 then
     	local sg2=g2:Select(tp,1,1,nil)
 		Duel.SendtoHand(sg2,nil,1,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg2)
 		end
 	end
 end 
