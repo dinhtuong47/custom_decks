@@ -54,11 +54,10 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local cg=Duel.GetFieldGroup(p,LOCATION_HAND,0)
 	Duel.ConfirmCards(1-p,cg)
 	local g=Duel.GetMatchingGroup(s.scfilter,p,LOCATION_HAND,0,nil)
-	if #g<1 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-    	Duel.BreakEffect()
+	if #g<1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local g1=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
-		if #g1>0 then
+		if #g1>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2))  then
 			Duel.SendtoHand(g1,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,g1)
 		end
