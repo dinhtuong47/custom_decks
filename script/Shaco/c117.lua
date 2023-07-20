@@ -3,17 +3,17 @@ function s.initial_effect(c)
 	--destroy
 	local e0=Effect.CreateEffect(c)
 	e0:SetDescription(aux.Stringid(id,0))
-	e0:SetCategory(CATEGORY_TOGRAVE)
+	e0:SetCategory(CATEGORY_DESTROY)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
-	e0:SetCode(EVENT_SUMMON_SUCCESS)
+	e0:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e0:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e0:SetCondition(s.spcon)
 	e0:SetTarget(s.destg)
 	e0:SetOperation(s.desop)
 	c:RegisterEffect(e0)
-	local e1=e0:Clone()
+	--[[local e1=e0:Clone()
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	c:RegisterEffect(e1)
+	c:RegisterEffect(e1)]]--
 	--neg attack
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
@@ -32,17 +32,17 @@ function s.initial_effect(c)
 	e3:SetOperation(s.disop)
 	c:RegisterEffect(e3)	
 end
---send to gy
+--DES
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(Card.IsSummonPlayer,1,nil,1-tp) 
-		and Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,111),tp,LOCATION_MZONE,0,1,nil)
+		--[[and Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,111),tp,LOCATION_MZONE,0,1,nil)]]--
 end
 function s.gyfilter(c,tp)
-	return c:IsCode(111) and c:GetColumnGroup():IsExists(Card.IsControler,1,nil,1-tp)
+	return c:IsCode(111) and c:GetColumnGroup():IsExists(Monster.IsControler,1,nil,1-tp)
 end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_MZONE,0,1,nil,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_MZONE)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,0,1-tp,LOCATION_MZONE)
 end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local pg=Duel.GetMatchingGroup(s.gyfilter,tp,LOCATION_MZONE,0,nil,tp)
@@ -51,9 +51,9 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local pc=pg:Select(tp,1,1,nil):GetFirst()
 	if not pc then return end
 	Duel.HintSelection(pc,true)
-	local g=pc:GetColumnGroup():Filter(Card.IsControler,nil,1-tp)
+	local g=pc:GetColumnGroup():Filter(Monster.IsControler,nil,1-tp)
 	if #g>0 then
-		Duel.SendtoGrave(g,REASON_EFFECT)
+		Duel.Destroy(g,REASON_EFFECT)
 	end
 end
 --neg attack
