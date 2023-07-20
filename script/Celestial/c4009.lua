@@ -25,4 +25,5 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.Draw(tp,tc:GetAttack()/1000,REASON_EFFECT)
 	end
 end
+end
 
