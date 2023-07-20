@@ -18,7 +18,7 @@ function s.thfilter(c)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)<3 then return end
-	Duel.ConfirmDeckbottom(tp,3)
+	Duel.ConfirmDeckbot(tp,3)
 	local g=Duel.GetDeckbottomGroup(tp,3)
 	if g:IsExists(s.thfilter,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
