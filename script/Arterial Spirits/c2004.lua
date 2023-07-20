@@ -72,7 +72,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 --cannot add to hand
 function s.drcon(e)
-	return Duel.IsBattlePhase()
+	return e:GetHandler():Duel.IsBattlePhase()
 end
 
 
