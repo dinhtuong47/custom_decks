@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
-	e2:SetCode(EVENT_TO_DECK)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetHintTiming(TIMINGS_CHECK_MONSTER_E+TIMING_END_PHASE)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id)
@@ -55,7 +55,7 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(c,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 end
 function s.thfilter(c)
-	return c:IsLevel(6) and c:IsAbleToHand()
+	return c:IsLevel(6) and c:IsRace(RACE_THUNDER) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_GRAVE,0,1,nil) end
