@@ -32,7 +32,7 @@ function s.initial_effect(c)
 	e3:SetOperation(s.disop)
 	c:RegisterEffect(e3)	
 end
---des
+--send to gy
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(Card.IsSummonPlayer,1,nil,1-tp) 
 		and Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,111),tp,LOCATION_MZONE,0,1,nil)
@@ -42,7 +42,7 @@ function s.gyfilter(c,tp)
 end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_MZONE,0,1,nil,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_ONFIELD)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_MZONE)
 end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local pg=Duel.GetMatchingGroup(s.gyfilter,tp,LOCATION_MZONE,0,nil,tp)
