@@ -17,7 +17,9 @@ function s.thfilter(c)
 	return c:IsLevel(6) and c:IsAbleToHand()
 end	
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)<3 then return end
+    if not e:GetHandler():IsRelateToEffect(e) then return end
+	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
+	if #g<3 then return end
 	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
 	Duel.MoveSequence(tc,0)
 	Duel.ConfirmDecktop(tp,3)
