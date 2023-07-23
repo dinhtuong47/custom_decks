@@ -1,4 +1,4 @@
---origin
+--seal
 local s,id=GetID()
 function s.initial_effect(c)
 	--search and...
@@ -13,6 +13,16 @@ function s.initial_effect(c)
 	e1:SetOperation(s.thop)
 	c:RegisterEffect(e1)
 	--place
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_TODECK)
+    e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCode(EVENT_SUMMON_SUCCESS)
+	e3:SetCountLimit(1,id+50)
+	e3:SetTarget(s.tdtg)
+	e3:SetOperation(s.tdop)
+	c:RegisterEffect(e3)
 end
 --add
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -52,6 +62,30 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,tp)
 	end
 end
-
+--place
+function s.tdfilter(c,tp)
+	return c:IsAbleToDeck() 
+end
+function s.tdfilter2(c,tp)
+	return c:IsAbleToDeck() 
+end
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_HAND,0,1,nil) 
+	and Duel.IsExistingMatchingCard(s.tdfilter2,tp,0,LOCATION_HAND,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND)
+end
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_HAND,0,1,1,nil)
+	local sg=Duel.SelectMatchingCard(tp,s.tdfilter2,tp,0,LOCATION_HAND,1,1,nil)
+	if #g>0 and #sg>0 then					 
+		Duel.BreakEffect()
+		Duel.ShuffleHand(tp)
+		Duel.SendtoDeck(g,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+		Duel.BreakEffect()
+		Duel.ShuffleHand(1-tp)
+		Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)	
+	end
+end
 
 		
