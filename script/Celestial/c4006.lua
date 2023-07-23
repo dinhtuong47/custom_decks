@@ -33,8 +33,8 @@ end
 function s.fcondition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2)
 end
-function s.rmfilter(c,e,tp)
-	return c:IsLevel(6) and c:IsMonster() and c:IsAbleToDeckAsCost()
+function s.tdfilter(c,e,tp)
+	return c:IsMonster() and c:IsAbleToDeckAsCost()
 		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c:GetCode())
 end
 function s.spfilter(c,e,tp,code)
@@ -43,9 +43,9 @@ function s.spfilter(c,e,tp,code)
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.rmfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,e,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local sc=Duel.SelectMatchingCard(tp,s.rmfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,e,tp):GetFirst()
+	local sc=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,e,tp):GetFirst()
 	local rg=Group.FromCards(sc,c)
 	Duel.SendtoDeck(rg,nil,1,REASON_COST)
 	Duel.SetTargetCard(sc)
