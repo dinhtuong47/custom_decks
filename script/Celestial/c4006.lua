@@ -1,11 +1,17 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	--Activate
-	local e1=Fusion.CreateSummonEff{handler=c,fusfilter=s.spfilter,matfilter=Card.IsAbleToDeck,extrafil=s.fextra,
-									extraop=s.extraop,value=0,chkf=FUSPROC_NOTFUSION|FUSPROC_LISTEDMATS}					
-	e1:SetCountLimit(1,id)
+	--Activate	
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)			
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetHintTiming(0,TIMING_MAIN_END)
+	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.fcondition)
+	e1:SetCost(s.spcost)
+	e1:SetTarget(s.sptg)
+	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
 	--add
 	local e2=Effect.CreateEffect(c)
@@ -23,24 +29,38 @@ function s.initial_effect(c)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
 end
+--fusion
 function s.fcondition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2)
 end
-function s.spfilter(c)
-	return c:IsType(TYPE_FUSION) and c:IsRace(RACE_THUNDER)
+function s.rmfilter(c,e,tp)
+	return c:IsLevel(6) and c:IsMonster() and c:IsAbleToDeckAsCost()
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c:GetCode())
 end
-function s.fextra(e,tp,mg)
-	return Duel.GetMatchingGroup(aux.NecroValleyFilter(Fusion.IsMonsterFilter(Card.IsAbleToDeck)),tp,LOCATION_GRAVE,0,nil)
+function s.spfilter(c,e,tp,code)
+	return c:IsRace(RACE_THUNDER) and c:ListsCode(code) and not c:IsCode(code)
+		and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function s.extraop(e,tc,tp,sg)
-	local rg=sg:Filter(Card.IsFacedown,nil)
-	if #rg>0 then Duel.ConfirmCards(1-tp,rg) end
-	local gyrmg=sg:Filter(Card.IsLocation,nil,LOCATION_GRAVE)
-	if #gyrmg>0 then Duel.HintSelection(gyrmg,true) end
-	Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
-	local ct=Duel.GetOperatedGroup():FilterCount(Card.IsLocation,nil,LOCATION_DECK)
-	if ct>0 then Duel.SortDeckbottom(tp,tp,ct) end
-	sg:Clear()
+function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.rmfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectMatchingCard(tp,s.atkfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
+	Duel.ConfirmCards(1-tp,g)
+	Duel.SendtoDeck(g,nil,1,REASON_COST)
+end
+function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+end
+function s.spop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	if not tc:IsRelateToEffect(e) or tc:IsFacedown() then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc:GetCode())
+	if #g>0 then
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+	end
 end
 --add 
 function s.filter(c)
