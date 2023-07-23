@@ -34,7 +34,7 @@ function s.fcondition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2)
 end
 function s.rmfilter(c,e,tp)
-	return c:IsLevel(6) and c:IsMonster() and c:IsAbleToDeckAsCost()
+	return c:IsLevel(6) and c:IsMonster() and c:IsAbleToRemoveAsCost()
 		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c:GetCode())
 end
 function s.spfilter(c,e,tp,code)
@@ -44,10 +44,10 @@ function s.spfilter(c,e,tp,code)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.rmfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,e,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local sc=Duel.SelectMatchingCard(tp,s.rmfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,e,tp):GetFirst()
 	local rg=Group.FromCards(sc,c)
-	Duel.SendtoDeck(rg,nil,1,REASON_COST)
+	Duel.Remove(rg,POS_FACEUP,REASON_COST)
 	Duel.SetTargetCard(sc)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
