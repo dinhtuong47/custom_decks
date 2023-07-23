@@ -68,23 +68,20 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --place
-function s.tdcfilter(c,tp)
-	return c:IsMonster() and c:IsLevel(6) and c:IsReason(REASON_EFFECT) and c:IsPreviousControler(tp)
-end
-function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.tdcfilter,1,nil,tp)
-end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local loc=LOCATION_GRAVE
-	if chkc then return chkc:IsLocation(loc) and chkc:IsAbleToDeck() end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsAbleToDeck,tp,loc,loc,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,Card.IsAbleToDeck,tp,loc,loc,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+	if chk==0 then return true end
+	Duel.SetTargetPlayer(tp)
+	Duel.SetOperationInfo(0,CATEGORY_TODEK,nil,0,tp,1)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.SendtoDeck(tc,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
-	end
-end
+	local ct=math.min(Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0),3)
+			if ct==0 then return end
+			Duel.BreakEffect()
+			local g=Duel.GetDecktopGroup(1-tp,ct)
+			Duel.ConfirmCards(tp,g)
+			local opt=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
+			Duel.SortDecktop(tp,1-tp,ct)
+			if opt==0 then
+				Duel.MoveToDeckBottom(ct,1-tp)
+			end
+		end
