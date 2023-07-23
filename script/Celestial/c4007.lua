@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)		
 	e1:SetCondition(s.ctcon)
-	e1:SetCountLimit(1,id)
+	e1:SetCountLimit(1,0)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
@@ -24,12 +24,13 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_DECK)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,id+50)
+	e2:SetCountLimit(1,0)
 	e2:SetCondition(s.gspcon)
 	e2:SetTarget(s.target2)
 	e2:SetOperation(s.activate2)
 	c:RegisterEffect(e2)
 end
+s.listed_names={4001}
 function s.matfilter(c,fc,sumtype,tp)
 	return c:GetLevel()==6
 end
