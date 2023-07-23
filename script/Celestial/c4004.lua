@@ -1,22 +1,18 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	--Activate
+	--gain atk
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCategory(CATEGORY_TODECK+CATEGORY_ATKCHANGE)
+	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	e1:SetCost(s.atkcost)
+	e:SetTarget(s.atktg)
+	e1:SetOperation(s.atkop)
 	c:RegisterEffect(e1)
-	--gain atk
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_ATKCHANGE)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e2:SetRange(LOCATION_SZONE)
-	e2:SetCountLimit(1,id)
-	e2:SetCost(s.atkcost)
-	e2:SetTarget(s.atktg)
-	e2:SetOperation(s.atkop)
-	c:RegisterEffect(e2)
 	--no tribute
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
@@ -32,9 +28,8 @@ function s.initial_effect(c)
 	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e4:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e4:SetRange(LOCATION_SZONE)
-	e4:SetCountLimit(1,id)
-	e4:SetCondition(s.sumcon)
+	e4:SetRange(LOCATION_GRAVE)
+	e4:SetCost(s.sumcost)
 	e4:SetTarget(s.sumtg)
 	e4:SetOperation(s.sumop)
 	e4:SetLabelObject(e3)
@@ -74,19 +69,19 @@ function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
---Summon 
+--con without tribute 
 function s.ntcon(e,c,minc)
 	if c==nil then return true end
 	return minc==0 and Duel.CheckTribute(c,0)
 end 
-function s.filter(c)
-	return not c:IsType(TYPE_TOKEN)
-end
-function s.sumcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.filter,1,nil)
+--Summon 
+function s.sumcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsAbleToDeck() end
+	Duel.SendtoDeck(c,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 end
 function s.sumfilter(c)
-	return c:IsLevel(6) and c:IsRace(RACE_THUNDER) and c:IsSummonableCard()
+	return c:IsSetCard(0xFA0) and c:IsSummonableCard()
 end
 function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
