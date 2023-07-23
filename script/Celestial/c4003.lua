@@ -32,11 +32,12 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
-	if #tc>0 then Duel.SendtoHand(tc,nil,REASON_EFFECT) 
-	    Duel.ConfirmCards(1-tp,tc)        
+	if #tc>0 then Duel.SendtoHand(tc,nil,REASON_EFFECT)
+	    Duel.ConfirmCards(1-tp,tc) end       
+		if Duel.IsExistingMatchingCard(Card.IsAbleToHand,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToHand,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
-		if #g>0 then Duel.SelectYesNo(tp,aux.Stringid(id,2)) 
+		if #g>0 then
 			Duel.HintSelection(g,true)
 			Duel.BreakEffect()
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
