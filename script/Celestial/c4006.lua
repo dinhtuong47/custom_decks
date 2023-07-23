@@ -22,7 +22,7 @@ function s.tdfilter(c,e,tp)
 		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c:GetCode())
 end
 function s.spfilter(c,e,tp,code)
-	return c:IsRace(RACE_THUNDER) and c:ListsCode(code) and not c:IsCode(code)
+	return c:IsSetCard(0xFA0) and c:ListsCode(code) and not c:IsCode(code)
 		and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
