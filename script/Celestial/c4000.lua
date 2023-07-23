@@ -1,4 +1,4 @@
---savior
+--sword
 local s,id=GetID()
 function s.initial_effect(c)
 	--search and normal summon 
@@ -23,12 +23,10 @@ function s.initial_effect(c)
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_TODECK)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_SUMMON_SUCCESS)
-	e3:SetRange(LOCATION_MZONE)
 	e3:SetCountLimit(1,id+50)
-	e3:SetCondition(s.tdcon)
 	e3:SetTarget(s.tdtg)
 	e3:SetOperation(s.tdop)
 	c:RegisterEffect(e3)
@@ -70,27 +68,27 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --place
-function s.tdcfilter(c,tp)
-	return c:IsControler(tp) and c:IsLevel(6)
-end
-function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
-	return  not eg:IsContains(e:GetHandler()) and eg:IsExists(s.tdcfilter,1,nil,tp)    
-end
 function s.tdfilter(c,tp)
 	return c:IsAbleToDeck() 
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local loc=LOCATION_ONFIELD
-	if chkc then return chkc:IsLocation(loc) and chkc:IsAbleToDeck() end
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,loc,loc,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,s.tdfilter,tp,loc,loc,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+	if chkc then return false end
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_ONFIELD,0,1,nil)
+		and Duel.IsExistingTarget(s.tdfilter,tp,0,LOCATION_ONFIELD,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g1=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g2=Duel.SelectTarget(tp,s.tdfilter,tp,0,LOCATION_ONFIELD,1,1,nil)
+	g1:Merge(g2)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,2,0,0)
+end
+function s.tdfilter(c,e)
+	return c:IsRelateToEffect(e)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.SendtoDeck(tc,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+	local tg=g:Filter(s.tdfilter,nil,e)
+	if #tg>0 then
+		Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end
-		
