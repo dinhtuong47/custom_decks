@@ -10,42 +10,31 @@ function s.initial_effect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e0:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e0:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e0:SetCountLimit(1,id)
+	e0:SetCountLimit(1,0)
 	e0:SetTarget(s.remtg)
 	e0:SetOperation(s.remop)
 	c:RegisterEffect(e0)
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,1))
-	e1:SetCategory(CATEGORY_TODECK)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetCountLimit(1,id)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetTarget(s.remtg)
-	e1:SetOperation(s.remop)
-	c:RegisterEffect(e1)
 	--add
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,5))
+	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e2:SetCode(EVENT_LEAVE_FIELD)
-	e2:SetCountLimit(1,id+50)
 	e2:SetCondition(s.addcon)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
-	--spsummon condition
+	--[[spsummon condition
 	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,6))
+	e3:SetDescription(aux.Stringid(id,2))
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e3:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e3:SetValue(aux.fuslimit)
-	c:RegisterEffect(e3)
+	c:RegisterEffect(e3)]]--
 end
+s.listed_names={4000,4002,4003}
 --place
 function s.remtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -69,18 +58,18 @@ function s.remop(e,tp,eg,ep,ev,re,r,rp)
 	local g3=Duel.GetMatchingGroup(s.rmfilter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,nil)
 	local g1=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_HAND,nil)
 	local sg=Group.CreateGroup()
-	if #g1>0 and ((#g2==0 and #g3==0) or Duel.SelectYesNo(tp,aux.Stringid(id,2))) then
+	if #g1>0 and ((#g2==0 and #g3==0) or Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 		local sg1=g1:RandomSelect(tp,1)
 		sg:Merge(sg1)
 	end
-	if #g2>0 and ((#sg==0 and #g3==0) or Duel.SelectYesNo(tp,aux.Stringid(id,3))) then
+	if #g2>0 and ((#sg==0 and #g3==0) or Duel.SelectYesNo(tp,aux.Stringid(id,1))) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 		local sg2=g2:Select(tp,1,1,nil)
 		Duel.HintSelection(sg2)
 		sg:Merge(sg2)
 	end
-	if #g3>0 and (#sg==0 or Duel.SelectYesNo(tp,aux.Stringid(id,4))) then
+	if #g3>0 and (#sg==0 or Duel.SelectYesNo(tp,aux.Stringid(id,2))) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 		local sg3=g3:Select(tp,1,1,nil)
 		Duel.HintSelection(sg3)
