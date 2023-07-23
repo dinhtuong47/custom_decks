@@ -81,9 +81,6 @@ function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	g1:Merge(g2)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,2,0,0)
 end
-function s.tdfilter(c,e)
-	return c:IsRelateToEffect(e)
-end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
 	local tg=g:Filter(s.tdfilter,nil,e)
