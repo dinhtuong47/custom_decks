@@ -1,4 +1,4 @@
---soriz
+--fists
 local s,id=GetID()
 function s.initial_effect(c)
 	--search and normal summon 
@@ -23,12 +23,10 @@ function s.initial_effect(c)
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_TODECK)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
-	e3:SetCode(EVENT_TO_GRAVE)
-	e3:SetRange(LOCATION_MZONE)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCode(EVENT_SUMMON_SUCCESS)
 	e3:SetCountLimit(1,id+50)
-	e3:SetCondition(s.tdcon)
 	e3:SetTarget(s.tdtg)
 	e3:SetOperation(s.tdop)
 	c:RegisterEffect(e3)
@@ -39,7 +37,7 @@ function s.ntcon(e,c,minc)
 	return minc==0 and Duel.CheckTribute(c,0)
 end
 function s.adfilter(c,tp)
-	return c:IsSetCard(0xFA1) and c:GetType()==TYPE_TRAP+TYPE_CONTINUOUS and c:IsAbleToHand() 
+	return c:IsCode(4005) and c:IsAbleToHand() 
 end
 function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
