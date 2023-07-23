@@ -43,11 +43,15 @@ function s.spfilter(c,e,tp,code)
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.rmfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
+	local c=e:GetHandler()
+	if chk==0 then return c:IsAbleToRemoveAsCost()
+		and Duel.IsExistingMatchingCard(s.rmfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,s.atkfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
-	Duel.ConfirmCards(1-tp,g)
-	Duel.SendtoDeck(g,nil,1,REASON_COST)
+	local sc=Duel.SelectMatchingCard(tp,s.rmfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp):GetFirst()
+	local rg=Group.FromCards(sc,c)
+	Duel.ConfirmCards(1-tp,rg)
+	Duel.SendtoDeck(rg,nil,1,REASON_COST)
+	Duel.SetTargetCard(sc)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
