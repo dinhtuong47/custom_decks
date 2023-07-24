@@ -77,5 +77,6 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.BreakEffect()
 			local g=Duel.GetDecktopGroup(1-tp,ct)
 			Duel.ConfirmCards(tp,g)
+	                Duel.SortDecktop(tp,1-tp,ct)
 		        Duel.MoveToDeckBottom(ct,1-tp)
 		end
