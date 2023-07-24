@@ -39,7 +39,7 @@ function s.ngcon(e,tp,eg,ep,ev,re,r,rp)
 	return ep==1-tp and cplayer==tp and ( ceff:GetHandler():IsSetCard(0xFA0) or ceff:GetHandler():IsSetCard(0xFA1) )
 end
 function s.ngtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return re:GetHandler():IsCanTurnSet() end
+	if chk==0 then return re:GetHandler():IsAbleToDeck() end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 end
 function s.ngop(e,tp,eg,ep,ev,re,r,rp)
