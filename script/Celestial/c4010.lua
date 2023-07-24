@@ -5,7 +5,7 @@ function s.initial_effect(c)
 	Fusion.AddProcMix(c,true,true,4000,s.matfilter)  
 	--negate
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_NEGATE+(CATEGORY_TODECK)
+	e2:SetCategory(CATEGORY_NEGATE+CATEGORY_TODECK)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
 	e2:SetCode(EVENT_CHAINING)
