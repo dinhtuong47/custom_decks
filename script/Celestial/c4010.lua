@@ -26,7 +26,6 @@ function s.initial_effect(c)
 	e4:SetValue(aux.tgoval)
 	c:RegisterEffect(e4)
 end
-end
 s.listed_names={4000}
 function s.matfilter(c,fc,sumtype,tp)
 	return c:GetLevel()==6
