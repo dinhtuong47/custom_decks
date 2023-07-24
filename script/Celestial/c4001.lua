@@ -77,5 +77,6 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.ConfirmCards(tp,g)
 			Duel.Hint(HINT_SELECTMSG,tp,0)
 			local ac=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
-			if ac==1 then Duel.MoveSequence(g:GetFirst(),1)
-		end
+			if ac==1 then Duel.MoveSequence(g:GetFirst(),1) end 
+	end
+		end 
