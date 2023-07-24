@@ -68,7 +68,7 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 end
 --place
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return true end
+	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>0 end
 	Duel.SetTargetPlayer(tp)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
