@@ -74,7 +74,8 @@ end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetDecktopGroup(1-tp,1)
 		if #g>0 then
-			Duel.Hint(HINT_SELECTMSG,tp,0)
+		Duel.ConfirmCards(tp,g)	
+		Duel.Hint(HINT_SELECTMSG,tp,0)
 			local ac=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
 			if ac==1 then Duel.MoveSequence(g:GetFirst(),1) end 
 	end
