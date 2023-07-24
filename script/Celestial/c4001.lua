@@ -79,4 +79,3 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.ConfirmCards(tp,g)
 		        Duel.MoveToDeckBottom(ct,1-tp)
 		end
-	end
