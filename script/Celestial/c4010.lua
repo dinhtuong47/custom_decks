@@ -68,6 +68,5 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateEffect(ev) and rc:IsRelateToEffect(re) and rc:IsAbleToDeck() then
 		rc:CancelToGrave()
 			Duel.SendtoDeck(rc,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
-		Duel.RaiseEvent(rc,EVENT_TODECK,e,REASON_EFFECT,tp,tp,0)
 	end
 end
