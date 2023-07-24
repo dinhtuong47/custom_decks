@@ -72,11 +72,10 @@ function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetTargetPlayer(tp)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local ct=math.min(Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0),3)
-			if ct==0 then return end
-			Duel.BreakEffect()
-			local g=Duel.GetDecktopGroup(1-tp,ct)
+	local g=Duel.GetDecktopGroup(1-tp,1)
+		if #g>0 then
 			Duel.ConfirmCards(tp,g)
-	                Duel.SortDecktop(tp,1-tp,ct)
-		        Duel.MoveToDeckBottom(ct,1-tp)
+			Duel.Hint(HINT_SELECTMSG,tp,0)
+			local ac=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
+			if ac==1 then Duel.MoveSequence(g:GetFirst(),1) end
 		end
