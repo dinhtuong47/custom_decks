@@ -36,7 +36,7 @@ function s.ngcon(e,tp,eg,ep,ev,re,r,rp)
 	if ch<=0 then return false end
 	local cplayer=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_CONTROLER)
 	local ceff=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_EFFECT)
-	return ep==1-tp and cplayer==tp and ( ceff:GetHandler():IsSetCard(0xFA0) or ceff:GetHandler():IsSetCard(0xFA1) )
+	return ep==1-tp and cplayer==tp and ceff:GetHandler():IsSetCard(0xFA0)
 end
 function s.ngtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return re:GetHandler():IsAbleToDeck() end
