@@ -11,6 +11,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EVENT_PHASE+PHASE_END)
 	e1:SetCountLimit(1,id)
+	e1:SetCost(s.remcost)
 	e1:SetTarget(s.remtg)
 	e1:SetOperation(s.remop)
 	c:RegisterEffect(e1)
@@ -37,6 +38,9 @@ function s.initial_effect(c)
 end
 s.listed_names={4000,4002,4003}
 --place
+function s.remcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.CheckLPCost(tp,500) end
+	Duel.PayLPCost(tp,1000)
 function s.remtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		if Duel.IsPlayerAffectedByEffect(1-tp,69832741) then
