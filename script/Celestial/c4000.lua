@@ -53,7 +53,7 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,s.adfilter,tp,LOCATION_DECK,0,1,1,nil,tp):GetFirst()
 	if tc and Duel.SendtoHand(tc,tp,tp,LOCATION_HAND,true)~=0 and Duel.ConfirmCards(1-tp,tc)~=0 then
 		local se=e:GetLabelObject()
-		if c:IsSummonable(true,se) then
+		if c:IsLocation(LOCATION_HAND) and c:IsSummonable(true,se) then
 			Duel.BreakEffect()
 			Duel.Summon(tp,c,true,se)
 		end
