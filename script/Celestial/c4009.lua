@@ -20,19 +20,27 @@ function s.initial_effect(c)
 	e2:SetOperation(s.repop)
 	c:RegisterEffect(e2)
 end
-function s.filter(c)
+function s.eqpfilter(c)
 	return c:IsSetCard(0xFA0) and c:IsMonster() and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil) end
+	local rvg=Duel.GetMatchingGroup(s.eqpfilter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK,0,1,1,nil)
-	if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local rvg=Duel.GetMatchingGroup(s.eqpfilter,tp,LOCATION_DECK,0,nil)
+	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
+	if #g==2 then
 		Duel.ConfirmCards(1-tp,g)
+		Duel.ShuffleDeck(tp)
+		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_ATOHAND)
+		local sg=g:Select(1-tp,1,1,nil)
+		Duel.SendtoHand(sg,tp,REASON_EFFECT)
+		g:RemoveCard(sg)
+		Duel.ShuffleDeck(tp)
+		Duel.MoveToDeckBottom(g,tp)
 	end
 end
 --replace
