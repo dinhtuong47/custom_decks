@@ -131,7 +131,6 @@ end
 function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 	local fid=eg:GetFirst():GetFieldID()
 	e:GetLabelObject():SetLabel(fid)
-                        end
 		end
 	end
 end
