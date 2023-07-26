@@ -110,11 +110,11 @@ function s.activate2(e,tp,eg,ep,ev,re,r,rp)
 	     	end
 			--Can only attack with 1 monster this turn
 	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetDescription(aux.Stringid(id,2))
+	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_CLIENT_HINT)
 	e1:SetCode(EFFECT_CANNOT_ATTACK_ANNOUNCE)
-	e1:SetTargetRange(LOCATION_MZONE,0)
+	e1:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
 	e1:SetCondition(s.atkcon)
 	e1:SetTarget(s.atktg)
 	e1:SetReset(RESET_PHASE+PHASE_END)
