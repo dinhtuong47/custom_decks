@@ -109,28 +109,34 @@ function s.activate2(e,tp,eg,ep,ev,re,r,rp)
 	    	tc:RegisterEffect(e1)
 	     	end
 			--Can only attack with 1 monster this turn
-	local e1=Effect.CreateEffect(c)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetDescription(aux.Stringid(id,2))
 	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_CLIENT_HINT)
 	e1:SetCode(EFFECT_CANNOT_ATTACK_ANNOUNCE)
 	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetCondition(function(e) return e:GetLabel()~=0 end)
-	e1:SetTarget(function(e,c) return c:GetFieldID()~=e:GetLabel() end)
+	e1:SetCondition(s.atkcon)
+	e1:SetTarget(s.atktg)
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e1,tp)
-	local e2=Effect.CreateEffect(c)
+	local e2=Effect.CreateEffect(e:GetHandler())
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e2:SetLabelObject(e1)
 	e2:SetOperation(s.checkop)
 	e2:SetReset(RESET_PHASE+PHASE_END)
+	e2:SetLabelObject(e1)
 	Duel.RegisterEffect(e2,tp)
-	aux.RegisterClientHint(c,0,tp,1,0,aux.Stringid(id,2))
+end
+function s.atkcon(e)
+	return e:GetLabel()~=0
+end
+function s.atktg(e,c)
+	return c:GetFieldID()~=e:GetLabel()
 end
 function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 	local fid=eg:GetFirst():GetFieldID()
 	e:GetLabelObject():SetLabel(fid)
-		end
+end
 	end
 end
