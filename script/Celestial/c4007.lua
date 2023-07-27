@@ -47,7 +47,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local sc=Duel.GetMatchingGroup(Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
-	if sc:IsAbleGrave() and Duel.SendtoGrave(sc,nil,REASON_EFFECT)>0 then
+	if sc:IsAbleToGrave() and Duel.SendtoGrave(sc,nil,REASON_EFFECT)>0 then
 	local c=e:GetHandler()
 	local tc=Duel.GetOperatedGroup():GetFirst()
 	if tc and c:IsRelateToEffect(e) and c:IsFaceup() and tc:IsMonster() and tc:IsLevel(6) and tc:IsLocation(LOCATION_GRAVE) then
