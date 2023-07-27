@@ -13,10 +13,10 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetHintTiming(0,TIMING_BATTLE_END)
-	e1:SetCondition(s.ctcon)
+	e1:SetCondition(s.tgcon)
 	e1:SetCountLimit(1,id)
-	e1:SetTarget(s.target)
-	e1:SetOperation(s.activate)
+	e1:SetTarget(s.tgtg)
+	e1:SetOperation(s.tgop)
 	c:RegisterEffect(e1)
 	--add returned card
 	local e2=Effect.CreateEffect(c)
@@ -37,17 +37,24 @@ function s.matfilter(c,fc,sumtype,tp)
 	return c:GetLevel()==6
 end
 --gain atk
-function s.ctcon(e,tp,eg,ep,ev,re,r,rp)
+function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsBattlePhase() 
 end
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	local sc=Duel.GetMatchingGroup(Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
-	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=1 and sc and sc:IsAbleToGrave() end
+
+function s.tgfilter(c)
+	return c:IsSequence() and c:IsAbleToGrave()
+end
+function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_DECK,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
-function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local sc=Duel.GetMatchingGroup(Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
-	if Duel.SendtoGrave(sc,1-tp,REASON_EFFECT)==0 then return end
+function s.tgop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g=Duel.SelectMatchingCard(tp,s.tgfilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoGrave(g,REASON_EFFECT)
+	end
+end
 	local tc=Duel.GetOperatedGroup():GetFirst()
 	local c=e:GetHandler()
 	if tc and tc:IsLevel(6) and tc:IsMonster() and tc:IsLocation(LOCATION_GRAVE) then
