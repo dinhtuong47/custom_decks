@@ -54,7 +54,6 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SendtoGrave(g,REASON_EFFECT)
 	end
-end
 	local tc=Duel.GetOperatedGroup():GetFirst()
 	local c=e:GetHandler()
 	if tc and tc:IsLevel(6) and tc:IsMonster() and tc:IsLocation(LOCATION_GRAVE) then
