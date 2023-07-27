@@ -53,7 +53,7 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ConfirmDecktop(tp,1)
 	if tc:IsAbleToGrave(tp,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.DisableShuffleCheck()
-		Duel.SendtoGrave(tc,nil,REASON_EFFECT)
+		Duel.SendtoGrave(tc,REASON_EFFECT)
 	end
 	local tc=Duel.GetOperatedGroup():GetFirst()
 	local c=e:GetHandler()
