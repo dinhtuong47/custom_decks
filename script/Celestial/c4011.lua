@@ -36,7 +36,7 @@ function s.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsMainPhase() 
 end
 function s.cfilter(c)
-	return c:IsFaceup() and c:HasLevel() and c:GetLevel()>0 and c:IsControlerCanBeChanged()
+	return c:IsFaceup() and c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:HasLevel() and c:GetLevel()>0 and c:IsControlerCanBeChanged()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(1-tp) and s.cfilter(chkc) end
