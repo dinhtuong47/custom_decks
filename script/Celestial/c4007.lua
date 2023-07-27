@@ -40,19 +40,20 @@ end
 function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsBattlePhase() 
 end
-
-function s.tgfilter(c)
-	return c:IsSequence(SEQUENCE_BOTTOM) and c:IsAbleToGrave()
-end
 function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_DECK,0,1,nil) end
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 function s.tgop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.tgfilter,tp,LOCATION_DECK,0,1,1,nil)
-	if #g>0 then
-		Duel.SendtoGrave(g,REASON_EFFECT)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
+	if #g==0 then return end
+	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
+	Duel.MoveSequence(tc,0)
+	Duel.ConfirmDecktop(tp,1)
+	if tc:IsAbleToGrave(tp,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+		Duel.DisableShuffleCheck()
+		Duel.SendtoGrave(tc,nil,REASON_EFFECT)
 	end
 	local tc=Duel.GetOperatedGroup():GetFirst()
 	local c=e:GetHandler()
