@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	e2:SetValue(SUMMON_TYPE_NORMAL)
 	c:RegisterEffect(e2)
 	e1:SetLabelObject(e2)
-	--place
+	--place stack
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
@@ -65,22 +65,21 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,tp)
 	end
 end
---place
-function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,1-tp,LOCATION_DECK,LOCATION_DECK)>2 end
-	Duel.SetTargetPlayer(tp)
+--Stack Topdeck
+function s.tdfilter(c)
+	return c:IsSetCard(0xFA0) or c:IsSetCard(0xFA1)
+end
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>1
+		and Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_DECK,0,1,nil) end
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local ct=math.min(Duel.GetFieldGroupCount(tp,1-tp,LOCATION_DECK,LOCATION_DECK),3)
-			if ct==0 then return end
-			Duel.BreakEffect()
-			if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>2 and Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>2 then
-			local st=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
-			if st==0 then Duel.SortDecktop(tp,tp,3)
-			else Duel.SortDecktop(tp,1-tp,3) end
-		elseif Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>2 then
-			Duel.SortDecktop(tp,tp,3)
-		elseif Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>2 then
-			Duel.SortDecktop(tp,1-tp,3)
-		end
+	local g=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_DECK,0,1,1,nil)
+	local tc=g:GetFirst()
+	if tc and Duel.SelectOption(tp,aux.Stringid(id,0),aux.Stringid(id,1))==0 then
+		Duel.ShuffleDeck(tp)
+		Duel.MoveSequence(tc,0)
+		Duel.ConfirmDecktop(tp,1)
+   else Duel.MoveSequence(tc,1)
 	end
+end
