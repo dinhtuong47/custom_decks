@@ -1,4 +1,3 @@
---sword
 local s,id=GetID()
 function s.initial_effect(c)
 	--search and normal summon 
@@ -22,7 +21,6 @@ function s.initial_effect(c)
 	--place
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
-	e3:SetCategory(CATEGORY_TODECK)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e3:SetCode(EVENT_SUMMON_SUCCESS)
@@ -37,7 +35,7 @@ function s.ntcon(e,c,minc)
 	return minc==0 and Duel.CheckTribute(c,0)
 end
 function s.adfilter(c,tp)
-	return c:IsCode(4004) and c:IsAbleToHand() 
+	return c:IsCode(67378104) and c:IsAbleToHand() 
 end
 function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -68,23 +66,21 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --place
-function s.tdfilter(c,tp)
-	return c:IsAbleToDeck() 
-end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_ONFIELD,0,1,nil)
-		and Duel.IsExistingTarget(s.tdfilter,tp,0,LOCATION_ONFIELD,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g1=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g2=Duel.SelectTarget(tp,s.tdfilter,tp,0,LOCATION_ONFIELD,1,1,nil)
-	g1:Merge(g2)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,2,0,0)
+	if chk==0 then return Duel.GetFieldGroupCount(tp,1-tp,LOCATION_DECK,LOCATION_DECK)>2 end
+	Duel.SetTargetPlayer(tp)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	local tg=g:Filter(s.tdfilter,nil,e)
-	if #tg>0 then
-		Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+	local ct=math.min(Duel.GetFieldGroupCount(tp,1-tp,LOCATION_DECK,LOCATION_DECK),3)
+			if ct==0 then return end
+			Duel.BreakEffect()
+			if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>2 and Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>2 then
+			local st=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
+			if st==0 then Duel.SortDecktop(tp,tp,3)
+			else Duel.SortDecktop(tp,1-tp,3) end
+		elseif Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>2 then
+			Duel.SortDecktop(tp,tp,3)
+		elseif Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>2 then
+			Duel.SortDecktop(tp,1-tp,3)
+		end
 	end
-end
