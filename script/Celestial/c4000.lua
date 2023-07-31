@@ -80,6 +80,7 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ShuffleDeck(tp)
 		Duel.MoveSequence(tc,0)
 		Duel.ConfirmDecktop(tp,1)
-   else Duel.MoveSequence(tc,1)
+   else Duel.ShuffleDeck(tp)
+		Duel.MoveSequence(tc,1)
 	end
 end
