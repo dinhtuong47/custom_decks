@@ -1,4 +1,3 @@
---fists
 local s,id=GetID()
 function s.initial_effect(c)
 	--search and normal summon 
@@ -22,8 +21,9 @@ function s.initial_effect(c)
 	--place
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_TODECK)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e3:SetCode(EVENT_SUMMON_SUCCESS)
 	e3:SetCountLimit(1,id+50)
 	e3:SetTarget(s.tdtg)
@@ -36,7 +36,7 @@ function s.ntcon(e,c,minc)
 	return minc==0 and Duel.CheckTribute(c,0)
 end
 function s.adfilter(c,tp)
-	return c:IsCode(4005) and c:IsAbleToHand() 
+	return c:IsCode(4004) and c:IsAbleToHand() 
 end
 function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -67,16 +67,20 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --place
+function s.tdfilter(c,tp)
+	return c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:IsAbleToDeck() 
+end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>0 end
-	Duel.SetTargetPlayer(tp)
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetDecktopGroup(1-tp,1)
-		if #g>0 then
-		Duel.ConfirmCards(tp,g)	
-		Duel.Hint(HINT_SELECTMSG,tp,0)
-			local ac=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
-			if ac==1 then Duel.MoveSequence(g:GetFirst(),1) end 
+	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+	local tg=g:Filter(s.tdfilter,nil,e)
+	if #tg>0 then
+		Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
-		end 
+end
