@@ -7,6 +7,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--Fusion
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)			
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -28,6 +29,18 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	local e3=e2:Clone()
 	e3:SetCode(EFFECT_CANNOT_ATTACK_ANNOUNCE)
+	c:RegisterEffect(e3)
+	--cook itself during the End Phase
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_TODECK)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
+	e3:SetCode(EVENT_PHASE+PHASE_END)
+	e3:SetRange(LOCATION_SZONE)
+	e3:SetCountLimit(1)
+	e3:SetCondition(s.tgcond)
+	e3:SetTarget(s.tgtg)
+	e3:SetOperation(s.tgop)
 	c:RegisterEffect(e3)
 end
 --fusion
@@ -67,3 +80,17 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	if tc then Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP) end
 	end
+--cook
+function s.rfilter(c)
+	return c:IsSetCard(0xFA0) and c:IsFaceup()
+end
+function s.tgcond(e,tp,eg,ep,ev,re,r,rp)
+	return not Duel.IsExistingMatchingCard(s.rfilter,tp,LOCATION_MZONE,0,1,nil)
+end
+function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,e:GetHandler(),1,tp,LOCATION_SZONE)
+end
+function s.tgop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+end
