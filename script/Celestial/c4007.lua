@@ -1,128 +1,58 @@
---lord
 local s,id=GetID()
 function s.initial_effect(c)
-	--fusion summon
-	c:EnableReviveLimit()
-	Fusion.AddProcMix(c,true,true,4001,s.matfilter)  
-	--send bottom card
+	--Activate	
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_ACTIVATE)
+	e0:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e0)
+	--Fusion
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOGRAVE)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)			
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetHintTiming(0,TIMING_BATTLE_END)
-	e1:SetCondition(s.tgcon)
+	e1:SetHintTiming(TIMINGS_CHECK_MONSTER_E+TIMING_MAIN_END+TIMING_END_PHASE)
 	e1:SetCountLimit(1,id)
-	e1:SetTarget(s.tgtg)
-	e1:SetOperation(s.tgop)
+	e1:SetRange(LOCATION_SZONE)
+	e1:SetCondition(s.fcondition)
+	e1:SetCost(s.spcost)
+	e1:SetTarget(s.sptg)
+	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-	--add returned card
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_DECK)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,id+50)
-	e2:SetCondition(s.gspcon)
-	e2:SetTarget(s.target2)
-	e2:SetOperation(s.activate2)
-	c:RegisterEffect(e2)
 end
-s.listed_names={4001}
-function s.matfilter(c,fc,sumtype,tp)
-	return c:GetLevel()==6
+--fusion
+function s.fcondition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()~=tp 
 end
---gain atk
-function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsBattlePhase() 
+function s.tdfilter(c,e,tp)
+    local att=c:GetAttribute() 
+	return c:IsLevel(6) and c:IsMonster() and c:IsAbleToDeckAsCost()
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,att,c)
 end
-function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local sc=Duel.GetMatchingGroup(Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
-	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=1 and sc and sc:IsAbleToGrave() end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
+function s.spfilter(c,e,tp,att,sc)
+	return c:IsSetCard(0xFA0) and  c:GetAttribute()==att and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and Duel.GetLocationCountFromEx(tp,tp,sc,c)>0 
 end
-function s.tgop(e,tp,eg,ep,ev,re,r,rp)
-	local sc=Duel.GetMatchingGroup(Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
-	if Duel.SendtoGrave(sc,REASON_EFFECT)==0 then return end
-	local tc=Duel.GetOperatedGroup():GetFirst()
+function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	e:SetLabel(100)
+	return true
+end
+function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		if e:GetLabel()~=100 then return false end
+		e:SetLabel(0)
+		return Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,e,tp)
+	end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local sc=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,e,tp):GetFirst()
+	local rg=Group.FromCards(sc,c)
+	Duel.SendtoDeck(rg,nil,1,REASON_COST)
+	e:SetLabelObject(sc)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+end
+function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if tc and tc:IsLevel(6) and tc:IsMonster() and tc:IsLocation(LOCATION_GRAVE) then
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(tc:GetAttack())
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE+RESET_PHASE+PHASE_END)
-		c:RegisterEffect(e1)
+	local att=e:GetLabelObject():GetAttribute()
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,att)
+	local tc=g:GetFirst()
+	if tc then Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP) end
 	end
-end
---add
-function s.gspconfilter(c,tp)
-	return  c:IsType(TYPE_MONSTER) and c:IsLocation(LOCATION_DECK) and not c:IsLocation(LOCATION_EXTRA)
-end
-function s.gspconfilter2(c,e,tp)
-	return s.gspconfilter(c,tp) and c:IsAbleToHand() 
-end
-function s.gspcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.gspconfilter,1,nil)
-end
-function s.target2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	local g=eg:Filter(s.gspconfilter2,nil,1-tp)
-	Duel.SetTargetCard(g)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,#g,0,0)
-end
-function s.activate2(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-	local g=Duel.GetTargetCards(e)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local rg=g:Select(tp,1,1,nil)
-	if #rg>0 then
-		Duel.SendtoHand(rg,tp,REASON_EFFECT)
-		if rg:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then
-		Duel.ConfirmCards(1-tp,rg)
-		local tc=rg:GetFirst()
-		for tc in aux.Next(rg) do
-		local e1=Effect.CreateEffect(c)
-	    	e1:SetType(EFFECT_TYPE_SINGLE)
-	    	e1:SetCode(EFFECT_CHANGE_LEVEL)
-	    	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	    	e1:SetValue(6)
-	    	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-	    	tc:RegisterEffect(e1)
-	     	end
-	end
-end
---Can only attack with 1 monster
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,2))
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_CLIENT_HINT)
-	e2:SetCode(EFFECT_CANNOT_ATTACK_ANNOUNCE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
-	e2:SetCondition(s.limitcon)
-	e2:SetTarget(s.limittg)
-	e2:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e2,tp)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e3:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e3:SetOperation(s.checkop)
-	e3:SetReset(RESET_PHASE+PHASE_END)
-	e3:SetLabelObject(e2)
-	Duel.RegisterEffect(e3,tp)
-end
-function s.limitcon(e)
-	return e:GetLabel()~=0
-end
-function s.limittg(e,c)
-	return c:GetFieldID()~=e:GetLabel()
-end
-function s.checkop(e,tp,eg,ep,ev,re,r,rp)
-	local fid=eg:GetFirst():GetFieldID()
-	e:GetLabelObject():SetLabel(fid)
-end
