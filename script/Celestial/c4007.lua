@@ -18,6 +18,17 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
+	-- Non-CelestialThunder cannot attack or activate their effects
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_CANNOT_TRIGGER)
+	e2:SetRange(LOCATION_SZONE)
+	e2:SetTargetRange(LOCATION_MZONE,0)
+	e2:SetTarget(function(_,c) return not c:IsSetCard(0xFA0) end)
+	c:RegisterEffect(e2)
+	local e3=e2:Clone()
+	e3:SetCode(EFFECT_CANNOT_ATTACK_ANNOUNCE)
+	c:RegisterEffect(e3)
 end
 --fusion
 function s.fcondition(e,tp,eg,ep,ev,re,r,rp)
