@@ -75,7 +75,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 --cook
 function s.rfilter(c)
-	return c:IsLevel(6) and c:IsFaceup()
+	return c:IsSetCard(0xFA0) and c:IsFaceup()
 end
 function s.tgcond(e,tp,eg,ep,ev,re,r,rp)
 	return not Duel.IsExistingMatchingCard(s.rfilter,tp,LOCATION_MZONE,0,1,nil)
