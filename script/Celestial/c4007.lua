@@ -75,5 +75,5 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(0xFA0) 
+	return not c:IsSetCard(0xFA0) end
 end
