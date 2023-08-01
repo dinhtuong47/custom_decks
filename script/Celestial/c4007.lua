@@ -71,8 +71,9 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RegisterEffect(e1,tp)
 	local e2=e1:Clone()
 		e2:SetCode(EFFECT_CANNOT_SUMMON)
-		c:RegisterEffect(e2)
+		Duel.RegisterEffect(e2,tp)
 	end
+end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	return not c:IsSetCard(0xFA0) 
 end
