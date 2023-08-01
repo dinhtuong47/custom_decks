@@ -1,47 +1,45 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	--Add to Hand
+	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetCategory(CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e1:SetTarget(s.thtg)
-	e1:SetOperation(s.thop)
+	e1:SetHintTiming(0,TIMING_END_PHASE)
+	e1:SetTarget(s.target)
+	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 	--Destruction replacement effect
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EFFECT_DESTROY_REPLACE)
-	e2:SetRange(LOCATION_SZONE)
+	e2:SetRange(LOCATION_GRAVE)
 	e2:SetTarget(s.reptg)
 	e2:SetValue(s.repval)
 	e2:SetOperation(s.repop)
 	c:RegisterEffect(e2)
 end
---add
-function s.eqpfilter(c)
-	return c:IsSetCard(0xFA0) and c:IsMonster() and c:IsAbleToHand()
+function s.filter(c)
+	return c:IsSpellTrap() and c:IsAbleToHand()
 end
-function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local rvg=Duel.GetMatchingGroup(s.eqpfilter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return rvg:GetClassCount(Card.GetAttribute)>=2 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return false end
+	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,0,LOCATION_ONFIELD,1,nil)
+		and Duel.IsExistingTarget(s.filter,tp,LOCATION_ONFIELD,0,1,e:GetHandler()) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
+	local g1=Duel.SelectTarget(tp,s.filter,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler())
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
+	local g2=Duel.SelectTarget(tp,s.filter,tp,0,LOCATION_ONFIELD,1,1,nil)
+	g1:Merge(g2)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g1,2,0,0)
 end
-function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local rvg=Duel.GetMatchingGroup(s.eqpfilter,tp,LOCATION_DECK,0,nil)
-	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
-	if #g==2 then
-		Duel.ConfirmCards(1-tp,g)
-		Duel.ShuffleDeck(tp)
-		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_ATOHAND)
-		local sg=g:Select(1-tp,1,1,nil)
-		Duel.SendtoHand(sg,tp,REASON_EFFECT)
-		g:RemoveCard(sg)
-		Duel.ShuffleDeck(tp)
-		Duel.MoveToDeckBottom(g,tp)
+function s.activate(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+	local sg=g:Filter(Card.IsRelateToEffect,nil,e)
+	if #sg>0 then
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 	end
 end
 --replace
