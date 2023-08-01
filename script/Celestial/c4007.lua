@@ -72,6 +72,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local e2=e1:Clone()
 		e2:SetCode(EFFECT_CANNOT_SUMMON)
 		Duel.RegisterEffect(e2,tp)
+		end
 	end
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
