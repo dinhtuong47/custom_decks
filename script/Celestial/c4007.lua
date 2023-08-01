@@ -73,7 +73,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCode(EFFECT_CANNOT_SUMMON)
 		c:RegisterEffect(e2)
 	end
-end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(0xFA0) end
+	return not c:IsSetCard(0xFA0) 
 end
