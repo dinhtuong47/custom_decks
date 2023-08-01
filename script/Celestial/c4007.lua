@@ -19,17 +19,6 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-	-- Non-CelestialThunder cannot attack or activate their effects
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_CANNOT_TRIGGER)
-	e2:SetRange(LOCATION_SZONE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
-	e2:SetTarget(function(_,c) return not c:IsSetCard(0xFA0) end)
-	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetCode(EFFECT_CANNOT_ATTACK_ANNOUNCE)
-	c:RegisterEffect(e3)
 	--cook itself during the End Phase
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
@@ -44,8 +33,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 --fusion
+
+function s.cfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0xFA0)
+end
 function s.fcondition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp 
+	return Duel.GetTurnPlayer()~=tp and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil) 
 end
 function s.tdfilter(c,e,tp)
     local att=c:GetAttribute() 
@@ -82,7 +75,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 --cook
 function s.rfilter(c)
-	return c:IsSetCard(0xFA0) and c:IsFaceup()
+	return c:IsLevel(6) and c:IsFaceup()
 end
 function s.tgcond(e,tp,eg,ep,ev,re,r,rp)
 	return not Duel.IsExistingMatchingCard(s.rfilter,tp,LOCATION_MZONE,0,1,nil)
