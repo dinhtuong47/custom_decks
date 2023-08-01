@@ -60,7 +60,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	if tc then Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP) end
 	end
-		local e1=Effect.CreateEffect(c)
+		--[[local e2=e1:Clone()
+		e2:SetCode(EFFECT_CANNOT_SUMMON)
+		Duel.RegisterEffect(e2,tp)]]--
+local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD)
 		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
 		e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
@@ -69,10 +72,8 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetTarget(s.splimit)
 		e1:SetReset(RESET_PHASE+PHASE_END,2)
 		Duel.RegisterEffect(e1,tp)
-		local e2=e1:Clone()
-		e2:SetCode(EFFECT_CANNOT_SUMMON)
-		Duel.RegisterEffect(e2,tp)
+	end
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(0xFA0) 
+	return not c:IsSetCard(0xFA0)  
 end
