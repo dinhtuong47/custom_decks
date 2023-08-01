@@ -72,8 +72,7 @@ local e1=Effect.CreateEffect(c)
 		e1:SetTarget(s.splimit)
 		e1:SetReset(RESET_PHASE+PHASE_END,2)
 		Duel.RegisterEffect(e1,tp)
-	end
-end
+
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	return not c:IsSetCard(0xFA0)  
 end
