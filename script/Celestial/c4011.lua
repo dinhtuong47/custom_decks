@@ -51,7 +51,7 @@ end
 --replace
 function s.repfilter(c,tp)
 	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) and c:IsLevel(6)
-		and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT)
+		and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_BATTLE+REASON_EFFECT)
 end
 function s.repcfilter(c)
 	return c:IsAbleToDeck()
