@@ -28,7 +28,7 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCode(EFFECT_UPDATE_ATTACK)
+	e2:SetCode(EFFECT_UPDATE_DEFENSE)
 	e2:SetValue(s.atkval)
 	c:RegisterEffect(e2)
 end
@@ -83,9 +83,9 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 --gain atk/def
 function s.deffilter(c)
-	return c:GetBaseAttack()>=0 
+	return c:GetBaseDefense()>=0 and c:IsFaceup()
 end
 function s.atkval(e,c)
 	local g=Duel.GetMatchingGroup(s.deffilter,1,LOCATION_MZONE,LOCATION_MZONE,c)
-	return g:GetSum(Card.GetBaseAttack)
+	return g:GetSum(Card.GetBaseDefense)
 end
