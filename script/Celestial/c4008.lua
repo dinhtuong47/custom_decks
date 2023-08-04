@@ -76,7 +76,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 --add the returned card
 function s.gspconfilter(c,tp)
-	return  c:IsType(TYPE_MONSTER) and c:IsLocation(LOCATION_DECK) and not c:IsLocation(LOCATION_EXTRA)
+	return  c:IsType(TYPE_MONSTER)  and c:IsPreviousPosition(POS_FACEUP) and c:IsLocation(LOCATION_DECK) and not c:IsLocation(LOCATION_EXTRA)
 end
 function s.gspconfilter2(c,e,tp)
 	return s.gspconfilter(c,tp) and c:IsAbleToHand() 
