@@ -68,21 +68,14 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --set
-function s.setfilter(c)
-	return c:IsFaceup() and c:IsCanTurnSet()
-end
-function s.settg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
+function s.setg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsCanTurnSet() end
+	if chk==0 then return Duel.IsExistingTarget(Card.IsCanTurnSet,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	local g=Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,2,nil)
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,2,0,0)
+	local g=Duel.SelectTarget(tp,Card.IsCanTurnSet,tp,LOCATION_MZONE,LOCATION_MZONE,1,2,nil)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,#g,0,0)
 end
---[[function s.chkfilter(c,e)
-	return c:IsRelateToEffect(e) and c:IsLocation(LOCATION_MZONE) and c:IsFaceup()
-end]]--
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)--[[:Filter(s.chkfilter,nil,e)]]--
-	if #g>0 then
-		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
+	local g=Duel.GetTargetCards(e)
+	if #g~=0 then return Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE) 
 	end
-end
