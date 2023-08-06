@@ -33,17 +33,18 @@ function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
 end	
 function s.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
+	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(1)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 function s.drop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
+if not e:GetHandler():IsRelateToEffect(e) then return end
+	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
+	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	if #g<2 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,sg)
+	Duel.ConfirmCards(1-tp,g)
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
 	local ct=Duel.Draw(p,d,REASON_EFFECT)
 	if ct~=0 then
