@@ -79,3 +79,4 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e)
 	if #g~=0 then return Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE) 
 	end
+end
