@@ -15,7 +15,7 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
-function s.cfilter(c,rtype)
+function s.cfilter(c,tp,rtype)
 	return c:IsSetCard(0xBB8) and not c:IsType(rtype)  
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
