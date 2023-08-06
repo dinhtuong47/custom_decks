@@ -28,13 +28,18 @@ function s.initial_effect(c)
 	--flip
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
-	e3:SetCategory(CATEGORY_SUMMON)
+	e3:SetCategory(CATEGORY_MSET)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCountLimit(1,id+50)
 	e3:SetTarget(s.nstg)
 	e3:SetOperation(s.nsop)
 	c:RegisterEffect(e3)
+	local e4=e3:Clone()
+	e4:SetDescription(aux.Stringid(id,2))
+	e4:SetTarget(s.nstg2)
+	e4:SetOperation(s.nsop2)
+	c:RegisterEffect(e4)
 end
 --immu target
 function s.imuop(e,tp,eg,ep,ev,re,r,rp)
@@ -69,18 +74,33 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,c)
 	end
 end
---set
+--set from hand
 function s.nsfilter(c)
 	return c:IsType(TYPE_FLIP) and c:IsSummonable(true,nil)
 end
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
+	Duel.SetOperationInfo(0,CATEGORY_MSET,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
 end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_MSET)
 	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,1,nil):GetFirst()
 	if sc then
 		Duel.MSet(tp,sc,true,nil)
+	end
+end
+--set on field
+function s.posfilter(c)
+	return c:IsType(TYPE_FLIP) and c:IsFaceup() and c:IsCanChangePosition()
+end
+function s.nstg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_MZONE,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,0,0)
+end
+function s.nsop2(e,tp,eg,ep,ev,re,r,rp,chk)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
+	local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil)
+	if #g>0 then
+		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
 	end
 end
