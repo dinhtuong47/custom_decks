@@ -26,5 +26,4 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if #g<2 then return end
 			local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 			Duel.ConfirmCards(1-tp,sg,REASON_EFFECT)
-			end
 end
