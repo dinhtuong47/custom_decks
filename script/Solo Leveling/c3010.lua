@@ -28,7 +28,6 @@ function s.initial_effect(c)
 	local e3=e2:Clone()
 	e3:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e3)
-end
 	--to hand
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,0))
@@ -46,7 +45,6 @@ function s.aclimit(e,re,tp)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
 	c:RegisterEffect(e0)
-	end
 end
 function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
