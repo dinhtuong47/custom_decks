@@ -1,6 +1,6 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	--control sw
+	--attack def
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
@@ -82,6 +82,6 @@ local c=e:GetHandler()
 	if #g>0 and c:IsRelateToEffect(e) then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
-		Duel.ChangePosition(c,POS_FACEUP_DEFENSE)
+		--[[Duel.ChangePosition(c,POS_FACEUP_DEFENSE)]]--
 	end
 end
