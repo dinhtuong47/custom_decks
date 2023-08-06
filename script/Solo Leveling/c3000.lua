@@ -37,13 +37,13 @@ function s.nsfilter(c)
 end
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=1 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
+	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
 end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,1,tp,HINTMSG_CONFIRM)
+	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	if #g<2 then return end
 	Duel.ConfirmCards(1-tp,g)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
