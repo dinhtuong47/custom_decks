@@ -15,10 +15,15 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
-function s.cfilter(c,re)
+function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic() 
 end	
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
+	Duel.SetOperationInfo(0,CATEGORY_CONFIRM,g,#g,0,0)
+end
+--[[function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
 	local relation=rc:IsRelateToEffect(re)
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,ec:GetHandler():GetType())
@@ -29,12 +34,11 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	else
 		Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,0,0,rc:GetPreviousLocation())
 	end
-end
+end]]]--
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,ec:GetHandler():GetType())
-	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
-	if #g<2 then return end
+	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
+	local sg=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
+	if #sg<2 then return end
 	Duel.ConfirmCards(1-tp,g)
 	local ec=re:GetHandler()
 	if Duel.NegateActivation(ev) and ec:IsRelateToEffect(re) and ec:IsCanTurnSet() then
