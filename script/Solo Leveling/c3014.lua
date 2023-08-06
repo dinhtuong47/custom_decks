@@ -21,7 +21,7 @@ end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
 	local relation=rc:IsRelateToEffect(re)
-	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,re:GetHandler():GetType())
+	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,ec:GetHandler():GetType())
 	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	if relation then
@@ -32,7 +32,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,re:GetHandler():GetType())
+	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,ec:GetHandler():GetType())
 	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	if #g<2 then return end
 	Duel.ConfirmCards(1-tp,g)
