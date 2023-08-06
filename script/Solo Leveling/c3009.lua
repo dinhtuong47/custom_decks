@@ -40,7 +40,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function s.filter(c)
-	return c:IsSetCard(0xBB8) and c:IsFacedown() and c:IsCanChangePosition()
+	return c:IsFacedown() and c:IsCanChangePosition()
 end
 function s.filter2(c)
 	return c:IsFaceup() and c:IsCanChangePosition()
