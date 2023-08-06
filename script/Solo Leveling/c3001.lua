@@ -34,7 +34,6 @@ function s.cfilter(c)
 end	
 function s.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.SelectMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(1)
