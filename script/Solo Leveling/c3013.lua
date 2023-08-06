@@ -10,6 +10,18 @@ function s.initial_effect(c)
 	e1:SetTarget(s.settg)
 	e1:SetOperation(s.setop)
 	c:RegisterEffect(e1)
+	--change pos
+        local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(id,2))
+	e2:SetCategory(CATEGORY_POSITION)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CARD_TARGET)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCost(s.bfgcost)
+	e2:SetTarget(s.settg)
+	e2:SetOperation(s.setop)
+	c:RegisterEffect(e2)
 end
 function s.setfilter(c,e,tp)
 	if not c:IsSetCard(0xBB8) then return end
