@@ -11,8 +11,11 @@ function s.initial_effect(c)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 end
+function s.cdfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0xBB8)
+end
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
-	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
+	return Duel.IsExistingMatchingCard(s.cdfilter,tp,LOCATION_MZONE,0,1,nil)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -26,7 +29,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local ec=re:GetHandler()
 	if Duel.NegateActivation(ev) then
 	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if #g>1 and g:GetClassCount(Card.GetCode)>=2 and ec:IsRelateToEffect(re) and ec:IsCanTurnSet() and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+	if #g>1 and g:GetClassCount(Card.GetCode)>=2 and ec:IsRelateToEffect(re)
+		    and ec:IsCanTurnSet() and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
 		ec:CancelToGrave()
