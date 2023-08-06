@@ -24,9 +24,9 @@ function s.initial_effect(c)
 	e3:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xBB8))
 	e3:SetValue(0x10001)
 	c:RegisterEffect(e3)
-	local e4=e3:Clone()
+	--[[local e4=e3:Clone()
 	e4:SetCode(EFFECT_DECREASE_TRIBUTE)
-	c:RegisterEffect(e4)
+	c:RegisterEffect(e4)]]--
 	--ss from gy
 	local e5=Effect.CreateEffect(c)
 	e5:SetCategory(CATEGORY_SPECIAL_SUMMON)
