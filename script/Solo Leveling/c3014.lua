@@ -15,22 +15,16 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	return (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
 function s.cfilter(c)
-	return c:IsSetCard(0xBB8) and not c:IsPublic() and not sg:IsExists(Card.IsType,1,nil,c:GetType())
+	return c:IsSetCard(0xBB8) and not c:IsPublic()  
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_DECK,0,nil,re:GetHandler():GetType())
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateActivation(ev) then
-		if re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsRelateToEffect(re) then
-			Duel.SendtoGrave(eg,REASON_EFFECT)
-		end
-		local cd=re:GetHandler():GetCode()
-		local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,cd)
-		if #g<2 then return end
+	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_DECK,0,nil,re:GetHandler():GetType())
+	if #g<2 then return end
 			local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 			Duel.ConfirmCards(1-tp,sg,REASON_EFFECT)
-		
-	end
+			end
 end
