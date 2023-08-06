@@ -21,7 +21,6 @@ end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
-	Duel.SetOperationInfo(0,CATEGORY_CONFIRM,g,#g,0,0)
 end
 --[[function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
