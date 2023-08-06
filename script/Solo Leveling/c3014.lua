@@ -24,7 +24,7 @@ function s.cfilter(c)
 end	
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local ec=re:GetHandler()
-	Duel.NegateActivation(ev) end
+	if Duel.NegateActivation(ev) then
 	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
 	if #g>1 and g:GetClassCount(Card.GetCode)>=2 and ec:IsRelateToEffect(re)
 		    and ec:IsCanTurnSet() and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
@@ -47,6 +47,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetReset(RESET_PHASE+PHASE_END,2)
 		e2:SetTargetRange(0,1)
 		Duel.RegisterEffect(e2,tp)
+		end
 	end
 end
 function s.aclimit(e,re,tp)
