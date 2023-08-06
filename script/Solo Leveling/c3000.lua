@@ -6,8 +6,7 @@ function s.initial_effect(c)
 	e0:SetCode(id)
 	e0:SetValue(SUMMON_TYPE_NORMAL)
 	c:RegisterEffect(e0)
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
+	local e1=Effect.CreateEffect(c)	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SUMMON)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
@@ -58,7 +57,7 @@ function s.ntcon(e,c,minc)
 end
 --ss from gy
 function s.filter(c,e,tp)
-	return c:IsType(TYPE_FLIP) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+	return c:IsType(TYPE_FLIP) and c:IsLevelBelow(5) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
