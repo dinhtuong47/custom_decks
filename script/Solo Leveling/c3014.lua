@@ -13,7 +13,7 @@ end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local cd=re:GetHandler():GetType()
 	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,cd)
-	if chk==0 then return g:GetClassCount(Card.GetType)>=2 end
+	if chk==0 then return aux.SelectUnselectGroup(g,e,tp,2,2,s.rescon,0) and g:GetClassCount(Card.GetType)>=2 end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 end
 function s.cfilter(c)
@@ -26,7 +26,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		end
 		local cd=re:GetHandler():GetType()
 		local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,cd)
-		if #g>1 then
+		if #g<2 then return end
+			local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 			Duel.ConfirmCards(1-tp,g,REASON_EFFECT)
 		end
 	end
