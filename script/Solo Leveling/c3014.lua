@@ -26,8 +26,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		if re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsRelateToEffect(re) then
 			Duel.SendtoGrave(eg,REASON_EFFECT)
 		end
-		local ct=re:GetHandler():GetType()
-		local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil,ct)
+		local cd=re:GetHandler():GetCode()
+		local g=Duel.GetMatchingGroup(Card.IsCode,rp,LOCATION_HAND,0,nil,cd)
 		if #g<2 then return end
 			local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 			Duel.ConfirmCards(1-tp,sg,REASON_EFFECT)
