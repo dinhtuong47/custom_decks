@@ -36,19 +36,19 @@ function s.nsfilter(c)
 	return c:IsSetCard(0xBB8) and c:IsSummonable(true,nil)
 end
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
+	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
+	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
 end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if #g<2 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
+	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
+	if #g==2 and Duel.ConfirmCards(1-tp,g) and Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON) then
 	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,1,nil):GetFirst()
 	if sc then
 		Duel.MSet(tp,sc,true,nil)
+		end
 	end
 end
 function s.ntcon(e,c,minc)
