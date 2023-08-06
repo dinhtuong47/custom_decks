@@ -33,17 +33,16 @@ function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
 end
 local Type=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
-function s.rescon(sg,e,tp,mg)
+--[[function s.rescon(sg,e,tp,mg)
 	return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,sg)
-end
-function s.thfilter(c,e,tp,sg,ctype)
+end]]--
+function s.thfilter(c,e,tp,sg)
 	return c:IsSetCard(0xBB8) and c:IsAbleToHand() and not c:IsType(ctype&key)
-	
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return aux.SelectUnselectGroup(g,e,tp,2,2,s.rescon,0) and g:GetClassCount(Card.GetType)>=2 end
+	if chk==0 then return g:GetClassCount(Card.GetType)>=2 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
@@ -52,7 +51,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local eq=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp,sg,c:GetType()):GetFirst()
+		local eq=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp,sg):GetFirst()
 		if not eq then return end
 		Duel.BreakEffect()
 		Duel.SendtoHand(eq,0,tp,REASON_EFFECT)
