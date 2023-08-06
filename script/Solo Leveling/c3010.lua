@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e1)
 	--atk
-	local e2=Effect.CreateEffect(c)
+	--[[local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetTargetRange(LOCATION_MZONE,0)
@@ -17,7 +17,18 @@ function s.initial_effect(c)
 	local e3=e2:Clone()
 	e3:SetCode(EFFECT_UPDATE_DEFENSE)
 	e3:SetValue(400)
+	c:RegisterEffect(e3)]]--
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_UPDATE_ATTACK)
+	e2:SetRange(LOCATION_FZONE)
+	e2:SetTargetRange(LOCATION_MZONE,0)
+	e2:SetValue(s.aclimit)
+	c:RegisterEffect(e2)
+	local e3=e2:Clone()
+	e3:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e3)
+end
 	--to hand
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,0))
@@ -27,6 +38,15 @@ function s.initial_effect(c)
 	e4:SetTarget(s.thtg)
 	e4:SetOperation(s.thop)
 	c:RegisterEffect(e4)
+end
+--atkup
+function s.aclimit(e,re,tp)
+	local c=e:GetHandler()
+	local tc=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
+	c:RegisterEffect(e0)
+	end
 end
 function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
@@ -56,3 +76,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(eq,0,tp,REASON_EFFECT)
 	Duel.ConfirmCards(1-tp,eq)
 end
+
+
+ 
