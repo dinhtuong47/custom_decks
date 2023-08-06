@@ -20,10 +20,10 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		if re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsRelateToEffect(re) then
 			Duel.SendtoGrave(eg,REASON_EFFECT)
 		end
-		local cd=re:GetHandler():GetCode()
-		local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND,0,nil,cd)
+		local cd=re:GetHandler():GetType()
+		local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND,0,nil,cd)
 		if #g>0 then
-			Duel.SendtoGrave(g,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,g,REASON_EFFECT)
 		end
 	end
 end
