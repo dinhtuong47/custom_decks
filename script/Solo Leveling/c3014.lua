@@ -7,7 +7,6 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetCondition(s.negcon)
-	e1:SetCost(s.negcost)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
@@ -17,12 +16,7 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
 function s.cfilter(c,rtype)
-	return c:IsSetCard(0xBB8) and not c:IsType(rtype) and c:IsAbleToGraveAsCost()
-end
-function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local rtype=(re:GetActiveType()&0x7)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND,0,1,nil,rtype) end
-	Duel.DiscardHand(tp,s.cfilter,1,1,REASON_COST,nil,rtype)
+	return c:IsSetCard(0xBB8) and not c:IsType(rtype)  
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
