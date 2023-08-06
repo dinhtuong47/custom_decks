@@ -34,7 +34,7 @@ end
 	else
 		Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,0,0,rc:GetPreviousLocation())
 	end
-end]]]--
+end]]--
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
 	local sg=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
