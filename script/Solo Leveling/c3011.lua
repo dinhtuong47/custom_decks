@@ -42,11 +42,11 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 --replace
 function s.repfilter(c,tp)
-	return c:IsFaceup() and c:IsLevel(6) and c:IsLocation(LOCATION_MZONE)
-		and c:IsControler(tp) and c:IsReason(REASON_BATTLE) and not c:IsReason(REASON_REPLACE)
+	return c:IsFaceup() and c:IsSetCard(0xBB8) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsLocation(LOCATION_MZONE)
+		and c:IsControler(tp) and c:IsReason(REASON_BATTLE+REASON_EFFECT) and not c:IsReason(REASON_REPLACE)
 end
 function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToDeck() and not e:GetHandler():IsStatus(STATUS_DESTROY_CONFIRMED)
+	if chk==0 then return e:GetHandler():IsAbleToRemove() and not e:GetHandler():IsStatus(STATUS_DESTROY_CONFIRMED)
 		and eg:IsExists(s.repfilter,1,nil,tp) end
 	if Duel.SelectEffectYesNo(tp,e:GetHandler(),96) then
 		return true
@@ -58,5 +58,5 @@ function s.repval(e,c)
 	return s.repfilter(c,e:GetHandlerPlayer())
 end
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+	Duel.Remove(e:GetHandler(),nil,POS_FACEUP,REASON_EFFECT)
 end
