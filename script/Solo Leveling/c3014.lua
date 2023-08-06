@@ -25,5 +25,4 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
 	if #g<1 then return end
 			Duel.ConfirmCards(1-tp,g,REASON_EFFECT)
-	end
 end
