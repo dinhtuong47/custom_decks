@@ -11,12 +11,12 @@ function s.initial_effect(c)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 end
-function s.negcon(e,tp,eg,ep,ev,re,r,rp,sg,mg)
+function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
-function s.cfilter(c,sg)
-	return c:IsSetCard(0xBB8) and not c:IsPublic() and not sg:IsExists(Card.IsType,1,nil,c:GetType())
+function s.cfilter(c,re)
+	return c:IsSetCard(0xBB8) and not c:IsPublic() and not re:IsExists(Card.IsType,1,nil,c:GetType())
 end	
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
