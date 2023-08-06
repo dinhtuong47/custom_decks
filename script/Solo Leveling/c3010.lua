@@ -32,7 +32,7 @@ end
 function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
 end
-local Type=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
+local key=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
 --[[function s.rescon(sg,e,tp,mg)
 	return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,sg)
 end]]--
