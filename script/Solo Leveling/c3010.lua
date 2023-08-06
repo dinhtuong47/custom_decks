@@ -42,7 +42,7 @@ end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return aux.SelectUnselectGroup(g,e,tp,2,2,s.rescon,0) end
+	if chk==0 then return aux.SelectUnselectGroup(g,e,tp,2,2,s.rescon,0) and g:GetClassCount(Card.GetCode)>=2 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
