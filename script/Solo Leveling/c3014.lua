@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function s.cdfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xBB8)
+	return c:IsFaceup() and c:IsType(TYPE_FLIP)
 end
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(s.cdfilter,tp,LOCATION_MZONE,0,1,nil)
