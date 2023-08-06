@@ -15,12 +15,12 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
-function s.cfilter(c)
-	return c:IsSetCard(0xBB8) and not c:IsPublic() 
+function s.cfilter(c,re)
+	return c:IsSetCard(0xBB8) and not c:IsPublic() and not re:GetHandler():GetType()
 end	
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
+	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil)
 end
 --[[function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
@@ -35,7 +35,7 @@ end
 	end
 end]]--
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
+	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil)
 	local sg=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	if #sg<2 then return end
 	Duel.ConfirmCards(1-tp,g)
