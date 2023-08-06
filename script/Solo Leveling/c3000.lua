@@ -43,7 +43,7 @@ end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
+	local g=aux.SelectUnselectGroup(rvg,e,tp,1,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	if #g<2 then return end
 	Duel.ConfirmCards(1-tp,g)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
