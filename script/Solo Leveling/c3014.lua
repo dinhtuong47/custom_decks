@@ -27,7 +27,8 @@ end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
 	local relation=rc:IsRelateToEffect(re)
-	if chk==0 then return true end
+	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
+	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	if relation then
 		Duel.SetOperationInfo(0,CATEGORY_POSITION,rc,1,rc:GetControler(),rc:GetLocation())
@@ -36,6 +37,11 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
+	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
+	if #g<2 then return end
+	Duel.ConfirmCards(1-tp,g)
 	local ec=re:GetHandler()
 	if Duel.NegateActivation(ev) and ec:IsRelateToEffect(re) and ec:IsCanTurnSet() then
 		ec:CancelToGrave()
