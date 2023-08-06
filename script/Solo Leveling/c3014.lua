@@ -19,11 +19,11 @@ function s.cfilter(c)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_DECK,0,nil,re:GetHandler():GetType())
+	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_DECK,0,nil,re:GetHandler():GetType())
-	if #g<2 then return end
-			local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
+	local g=Duel.GetMatchingGroup(s.cfilter,ep,LOCATION_HAND,0,nil,re:GetHandler():GetType())
+	if #g<1 then return end
 			Duel.ConfirmCards(1-tp,sg,REASON_EFFECT)
+	end
 end
