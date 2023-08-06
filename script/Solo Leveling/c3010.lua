@@ -42,9 +42,9 @@ end
 function s.aclimit(e,re,tp)
 	local c=e:GetHandler()
 	local tc=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
-	c:RegisterEffect(e0)
+	tc:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	tc:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
+	c:RegisterEffect(tc)
 end
 function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
