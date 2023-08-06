@@ -76,3 +76,10 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
+--change pos
+function s.cfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0xBB8) 
+end
+function s.setcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
+end
