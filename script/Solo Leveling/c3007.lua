@@ -79,8 +79,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_GRAVE,0,1,1,nil)
-	if #g>0 and c:IsRelateToEffect(e) and Duel.ChangePosition(c,POS_FACEUP_DEFENSE)~=0 then
+	if #g>0 and c:IsRelateToEffect(e) then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
+		Duel.ChangePosition(c,POS_FACEUP_DEFENSE)
 	end
 end
