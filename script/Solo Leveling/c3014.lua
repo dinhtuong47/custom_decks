@@ -26,7 +26,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local ec=re:GetHandler()
 	if Duel.NegateActivation(ev) then
 	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if #g>1 and g:GetClassCount(Card.GetType)>=2 and ec:IsRelateToEffect(re) and ec:IsCanTurnSet() and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+	if #g>1 and g:GetClassCount(Card.GetCode)>=2 and ec:IsRelateToEffect(re) and ec:IsCanTurnSet() and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
 		ec:CancelToGrave()
