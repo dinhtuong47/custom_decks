@@ -13,7 +13,7 @@ end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,rp,LOCATION_HAND)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,tp,LOCATION_HAND)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) then
@@ -21,7 +21,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 			Duel.SendtoGrave(eg,REASON_EFFECT)
 		end
 		local cd=re:GetHandler():GetCode()
-		local g=Duel.GetMatchingGroup(Card.IsCode,rp,LOCATION_HAND,0,nil,cd)
+		local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND,0,nil,cd)
 		if #g>0 then
 			Duel.SendtoGrave(g,REASON_EFFECT)
 		end
