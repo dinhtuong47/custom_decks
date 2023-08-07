@@ -37,14 +37,20 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	if not tc or not tc:IsRelateToEffect(e) then return end
 	local andifyoudo=false
 	if tc:IsMonster() then
-		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)>0 then
+		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)>0 then
 		Duel.ConfirmCards(1-tp,tc)
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_FIELD)
-		e1:SetTargetRange(0,LOCATION_MZONE)
-		e1:SetCode(EFFECT_CANNOT_SELECT_BATTLE_TARGET)
-		e1:SetReset(RESET_PHASE+PHASE_END)
-		tc:RegisterEffect(e1)
+		--Cannot be targeted for attacks
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetDescription(3007)
+			e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetCode(EFFECT_CANNOT_BE_BATTLE_TARGET)
+			e1:SetValue(aux.imval1)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+			tc:RegisterEffect(e1)
+		end
+	end
+	Duel.SpecialSummonComplete()
 end
 	elseif tc:IsSpellTrap() then
 		if tc:IsType(TYPE_FIELD) then
