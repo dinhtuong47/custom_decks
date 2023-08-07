@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.setfilter(c,e,tp)
-	if not c:IsSetCard(0xBB8) then return end
+	if not (c:IsSetCard(0xBB8) and not c:IsLevelAbove(6)) then return end
 	if c:IsMonster() then
 		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
 	elseif c:IsSpellTrap() then
@@ -52,9 +52,18 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local andifyoudo=false
 	if tc:IsMonster() then
 		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)>0 then
-			Duel.ConfirmCards(1-tp,tc)
-			andifyoudo=true
-		end
+		Duel.ConfirmCards(1-tp,tc)
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetTargetRange(0,LOCATION_MZONE)
+		e1:SetCode(EFFECT_CANNOT_SELECT_BATTLE_TARGET)
+		e1:SetValue(s.atlimit)
+		e1:SetReset(RESET_PHASE+PHASE_END)
+		Duel.RegisterEffect(e1,tp)
+end
+function s.atlimit(e,c)
+	return c:IsFacedown()
+end
 	elseif tc:IsSpellTrap() then
 		if tc:IsType(TYPE_FIELD) then
 			local fc=Duel.GetFieldCard(tp,LOCATION_SZONE,5)
