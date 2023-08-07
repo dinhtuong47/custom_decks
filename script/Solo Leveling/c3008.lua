@@ -5,59 +5,48 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e1)
-	--Prevent effect target
+	--decrease tribute
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
-	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
+	e2:SetCode(EFFECT_DECREASE_TRIBUTE)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetTarget(function(e,c) return c:IsFacedown() end)
-	e2:SetValue(aux.indoval)
+	e2:SetTargetRange(LOCATION_HAND,0)
+	e2:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xBB8))
+	e2:SetValue(0x1)
 	c:RegisterEffect(e2)
-	--decrease tribute set
+	--material
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_DECREASE_TRIBUTE_SET)
+	e3:SetDescription(aux.Stringid(id,0))
+	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_SZONE)
-	e3:SetTargetRange(LOCATION_HAND,0)
-	e3:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xBB8))
-	e3:SetValue(0x1)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e3:SetCountLimit(1)
+	e3:SetTarget(s.mattg)
+	e3:SetOperation(s.matop)
 	c:RegisterEffect(e3)
-	--ss from gy
-	local e5=Effect.CreateEffect(c)
-	e5:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e5:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e5:SetCode(EVENT_BATTLE_DESTROYED)
-	e5:SetCountLimit(1,id)
-	e5:SetRange(LOCATION_SZONE)
-	e5:SetCondition(s.spcon)
-	e5:SetTarget(s.sptg)
-	e5:SetOperation(s.spop)
-	c:RegisterEffect(e5)
 end
-function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-	local tc=eg:GetFirst()
-	local rc=tc:GetReasonCard()
-	return #eg==1 and rc:IsControler(tp) and rc:IsSetCard(0xBB8)
-		and tc:IsMonster() and tc:IsReason(REASON_BATTLE) and tc:IsLocation(LOCATION_GRAVE)
-	        and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+s.listed_series={0x107d}
+function s.xyzfilter(c,tp)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ)
+		and Duel.IsExistingMatchingCard(s.matfilter,tp,LOCATION_MZONE+LOCATION_HAND,0,1,c)
 end
-function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local tc=eg:GetFirst()
-	local rc=tc:GetReasonCard()
-	local bc=rc:GetBattleTarget()
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and bc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) end
-	Duel.SetTargetCard(bc)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,bc,1,0,0)
+function s.matfilter(c)
+	return (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and c:IsSetCard(0x107d) and c:IsMonster() and not c:IsType(TYPE_TOKEN)
 end
-function s.spop(e,tp,eg,ep,ev,re,r,rp)
+function s.mattg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.xyzfilter(chkc,tp) end
+	if chk==0 then return Duel.IsExistingTarget(s.xyzfilter,tp,LOCATION_MZONE,0,1,nil,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	Duel.SelectTarget(tp,s.xyzfilter,tp,LOCATION_MZONE,0,1,1,nil,tp)
+end
+function s.matop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
-		Duel.ConfirmCards(1-tp,tc)
+	if tc:IsFaceup() and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+		local g=Duel.SelectMatchingCard(tp,s.matfilter,tp,LOCATION_MZONE+LOCATION_HAND,0,1,1,tc)
+		if #g>0 then
+			Duel.Overlay(tc,g,true)
+		end
 	end
 end
-
