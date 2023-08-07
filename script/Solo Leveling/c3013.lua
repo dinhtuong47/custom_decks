@@ -57,12 +57,8 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_FIELD)
 		e1:SetTargetRange(0,LOCATION_MZONE)
 		e1:SetCode(EFFECT_CANNOT_SELECT_BATTLE_TARGET)
-		e1:SetValue(s.atlimit)
 		e1:SetReset(RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e1)
-end
-function s.atlimit(e,c)
-	return c:IsFacedown()
 end
 	elseif tc:IsSpellTrap() then
 		if tc:IsType(TYPE_FIELD) then
