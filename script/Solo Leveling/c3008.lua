@@ -8,7 +8,7 @@ function s.initial_effect(c)
 	--decrease tribute
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_DECREASE_TRIBUTE)
+	e2:SetCode(EFFECT_DECREASE_TRIBUTE_SET)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetTargetRange(LOCATION_HAND,0)
 	e2:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xBB8))
