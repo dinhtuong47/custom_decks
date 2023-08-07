@@ -1,19 +1,24 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_ACTIVATE)
+	e0:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e0)
+	--Prevent effect target
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetTargetRange(LOCATION_MZONE,0)
+	e1:SetRange(LOCATION_SZONE)
+	e1:SetTarget(function(e,c) return c:IsFacedown() end)
+	e1:SetValue(aux.indoval)
 	c:RegisterEffect(e1)
-	--Indes
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
+	--Indes card effect
+	local e2=e1:Clone()
 	e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
-	e2:SetRange(LOCATION_SZONE)
-	e2:SetTarget(function(e,c) return c:IsFacedown() end)
-	e2:SetValue(aux.indoval)
 	c:RegisterEffect(e2)
 	--decrease tribute
 	local e3=Effect.CreateEffect(c)
