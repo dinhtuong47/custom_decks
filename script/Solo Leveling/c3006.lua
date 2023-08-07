@@ -71,18 +71,30 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,c)
 	end
 end
---SEND TO GY
-function s.gyfilter(c)
-	return c:IsSetCard(0xBB8) and c:IsAbleToGrave()
+--Set
+function s.stfilter(c)
+	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsCanTurnSet()
 end
-function s.gytg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
+function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and s.stfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.stfilter,tp,0,LOCATION_ONFIELD,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
+	local g=Duel.SelectTarget(tp,s.stfilter,tp,0,LOCATION_ONFIELD,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,0,0)
 end
-function s.gyop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.gyfilter,tp,LOCATION_DECK,0,1,1,nil)
-	if #g>0 then
-		Duel.SendtoGrave(g,REASON_EFFECT)
+function s.posop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	if tc:IsRelateToEffect(e) then
+		if tc:IsAttackPos() then
+			local pos=0
+			if tc:IsCanTurnSet() then
+				pos=Duel.SelectPosition(tp,tc,POS_DEFENSE)
+			else
+				pos=Duel.SelectPosition(tp,tc,POS_FACEUP_DEFENSE)
+			end
+			Duel.ChangePosition(tc,pos)
+		else
+			Duel.ChangePosition(tc,0,0,POS_FACEDOWN_DEFENSE,POS_FACEUP_DEFENSE)
+		end
 	end
 end
