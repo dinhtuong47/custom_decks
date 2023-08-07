@@ -48,8 +48,6 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetValue(aux.imval1)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 			tc:RegisterEffect(e1)
-			end
-		end
 	end
 	elseif tc:IsSpellTrap() then
 		if tc:IsType(TYPE_FIELD) then
