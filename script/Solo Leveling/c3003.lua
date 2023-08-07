@@ -1,10 +1,10 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	--indes
+	--atkup
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
-	e0:SetOperation(s.indesop)
+	e0:SetOperation(s.atkop)
 	c:RegisterEffect(e0)
 	--flip effect
 	local e1=Effect.CreateEffect(c)
@@ -36,13 +36,12 @@ function s.initial_effect(c)
 	e3:SetOperation(s.setop)
 	c:RegisterEffect(e3)
 end
-function s.indesop(e,tp,eg,ep,ev,re,r,rp)
+--ATKUP
+function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetValue(1)
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetValue(1000)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 	e:GetHandler():RegisterEffect(e1)
 end
