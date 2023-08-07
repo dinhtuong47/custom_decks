@@ -81,7 +81,6 @@ end
 function s.posop(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
 	local tc=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil):GetFirst()
-	if not tc:IsRelateToEffect(e) then return end
 	local opt=0
 	if tc:IsPosition(POS_FACEDOWN) or tc:IsPosition(POS_FACEUP_DEFENSE) then
 		opt=POS_FACEUP_ATTACK
