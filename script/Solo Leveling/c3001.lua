@@ -20,10 +20,9 @@ function s.initial_effect(c)
 	local e3=e1:Clone()
 	e3:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
 	c:RegisterEffect(e3)
-	--Set face-down
+	--block attack
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_POSITION)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCode(EVENT_FREE_CHAIN)
@@ -76,23 +75,19 @@ end
 function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.filter(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,LOCATION_MZONE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
 	local g=Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,0,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,0,0)
 end
 function s.posop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		if tc:IsAttackPos() then
-			local pos=0
-			if tc:IsCanTurnSet() then
-				pos=Duel.SelectPosition(tp,tc,POS_DEFENSE)
-			else
-				pos=Duel.SelectPosition(tp,tc,POS_FACEUP_DEFENSE)
-			end
-			Duel.ChangePosition(tc,pos)
-		else
-			Duel.ChangePosition(tc,0,0,POS_FACEDOWN_DEFENSE,POS_FACEUP_DEFENSE)
+	if tc:IsRelateToEffect(e) then	
+	     --Cannot be targeted for attacks
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetDescription(3007)
+			e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetCode(EFFECT_CANNOT_BE_BATTLE_TARGET)
+			e1:SetValue(aux.imval1)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+			tc:RegisterEffect(e1)
 		end
 	end
-end
