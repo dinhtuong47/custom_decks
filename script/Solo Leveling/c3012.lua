@@ -22,6 +22,6 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
-		Duel.Summon(tp,tc,true,nil)
+		Duel.MSet(tp,tc,true,nil)
 	end
 end
