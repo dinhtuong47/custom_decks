@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	e2:SetTarget(function(e,c) return c:IsFacedown() end)
 	e2:SetValue(aux.indoval)
 	c:RegisterEffect(e2)
-	--decrease tribute
+	--decrease tribute set
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
 	e3:SetCode(EFFECT_DECREASE_TRIBUTE_SET)
