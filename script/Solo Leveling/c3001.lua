@@ -17,7 +17,23 @@ function s.initial_effect(c)
 	e1:SetOperation(s.spop)
 	e1:SetLabelObject(e0)
 	c:RegisterEffect(e1)
-	
+	local e3=e1:Clone()
+	e3:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
+	c:RegisterEffect(e3)
+	--Set face-down
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(id,1))
+	e2:SetCategory(CATEGORY_POSITION)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
+	e2:SetCountLimit(1,id+50)
+	e2:SetCost(s.poscost)
+	e2:SetCondition(s.poscon)
+	e2:SetTarget(s.postg)
+	e2:SetOperation(s.posop)
+	c:RegisterEffect(e2)
 end
 --ss sung
 function s.cfilter(c)
@@ -46,51 +62,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end
 end
-
---Flip face-up
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_POSITION)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(s.poscost)
-	e2:SetCondition(s.poscon)
-	e2:SetTarget(s.postg)
-	e2:SetOperation(s.posop)
-	c:RegisterEffect(e2)
-end
 --set
-function s.cfilter(c)
-	return c:IsSetCard(0xBB8) and not c:IsPublic()
-end	
-function s.nsfilter(c)
-	return c:IsSetCard(0xBB8) and c:IsSummonable(true,nil)
-end
-function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
-end
-function s.nsop(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
-	if #g<2 then return end
-	Duel.ConfirmCards(1-tp,g)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,1,nil):GetFirst()
-	if sc then
-		Duel.MSet(tp,sc,true,nil)
-	end
-end
-function s.ntcon(e,c,minc)
-	if c==nil then return true end
-	return minc==0 and c:GetLevel()>4 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
-end
---change pos
 function s.posfilter(c)
 	return c:IsMonster()
 end
@@ -109,7 +81,7 @@ function s.posop(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
 	local tc=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil):GetFirst()
 	if tc then
-		local pos=Duel.SelectPosition(tp,tc,POS_FACEUP_ATTACK+POS_FACEUP_DEFENSE)
+		local pos=Duel.SelectPosition(tp,tc,POS_FACEUP_DEFENSE+POS_FACEDOWN_DEFENSE)
 		Duel.ChangePosition(tc,pos)
 	end
 end
