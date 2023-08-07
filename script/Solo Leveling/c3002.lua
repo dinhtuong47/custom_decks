@@ -24,7 +24,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.rettg)
 	e2:SetOperation(s.retop)
 	c:RegisterEffect(e2)
-	--flip
+	--set from hand
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,0))
 	e3:SetCategory(CATEGORY_SUMMON)
@@ -34,10 +34,15 @@ function s.initial_effect(c)
 	e3:SetTarget(s.nstg)
 	e3:SetOperation(s.nsop)
 	c:RegisterEffect(e3)
-	local e4=e3:Clone()
+	--set on field
+	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,1))
-	e4:SetTarget(s.nstg2)
-	e4:SetOperation(s.nsop2)
+	e4:SetCategory(CATEGORY_POSITION)
+	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
+	e4:SetProperty(EFFECT_FLAG_DELAY)
+	e4:SetCountLimit(1,id+50)
+	e4:SetTarget(s.nstg)
+	e4:SetOperation(s.nsop)
 	c:RegisterEffect(e4)
 end
 --immu target
