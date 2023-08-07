@@ -7,8 +7,8 @@ function s.initial_effect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
 	e0:SetCode(EVENT_FREE_CHAIN)
 	e0:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e0:SetTarget(s.nstg)
-	e0:SetOperation(s.nsop)
+	e0:SetTarget(s.target)
+	e0:SetOperation(s.activate)
 	c:RegisterEffect(e0)
 	--Flip
 	local e1=Effect.CreateEffect(c)
@@ -27,18 +27,19 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 --set from hand
-function s.nsfilter(c)
+function s.filter(c)
 	return c:IsSetCard(0xBB8) and c:IsSummonable(true,nil)
 end
-function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND)
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
 end
-function s.nsop(e,tp,eg,ep,ev,re,r,rp)
+function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND,0,1,1,nil):GetFirst()
-	if sc then
-		Duel.MSet(tp,sc,true,nil)
+	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
+	local tc=g:GetFirst()
+	if tc then
+		Duel.MSet(tp,tc,true,nil)
 	end
 end
 --set from field
