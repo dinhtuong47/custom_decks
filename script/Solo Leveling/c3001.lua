@@ -85,7 +85,6 @@ function s.posop(e,tp,eg,ep,ev,re,r,rp,chk)
 		opt=POS_FACEUP_DEFENSE
 	elseif tc:IsPosition(POS_FACEUP_ATTACK) then
 		opt=POS_FACEUP_DEFENSE+POS_FACEDOWN_DEFENSE
-	end
 	elseif tc:IsPosition(POS_FACEUP_DEFENSE) then
 		opt=POS_FACEDOWN_DEFENSE
 	end
