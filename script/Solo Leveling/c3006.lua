@@ -32,8 +32,8 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e3:SetCountLimit(1,id+50)
-	e3:SetTarget(s.gytg)
-	e3:SetOperation(s.gyop)
+	e3:SetTarget(s.postg)
+	e3:SetOperation(s.posop)
 	c:RegisterEffect(e3)
 end
 --cannot swith, cannot be banished
@@ -73,7 +73,7 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 end
 --Set
 function s.stfilter(c)
-	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsCanTurnSet()
+	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsFaceup() and c:IsCanTurnSet()
 end
 function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and s.stfilter(chkc) end
@@ -84,17 +84,6 @@ function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.posop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		if tc:IsAttackPos() then
-			local pos=0
-			if tc:IsCanTurnSet() then
-				pos=Duel.SelectPosition(tp,tc,POS_DEFENSE)
-			else
-				pos=Duel.SelectPosition(tp,tc,POS_FACEUP_DEFENSE)
-			end
-			Duel.ChangePosition(tc,pos)
-		else
-			Duel.ChangePosition(tc,0,0,POS_FACEDOWN_DEFENSE,POS_FACEUP_DEFENSE)
+	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
+			Duel.ChangePosition(tc,0,0,POS_FACEDOWN)
 		end
-	end
-end
