@@ -94,3 +94,28 @@ function s.posop(e,tp,eg,ep,ev,re,r,rp,chk)
 	if pos==0 then return end
 	Duel.ChangePosition(tc,pos)
 end
+
+
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.filter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
+	local g=Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,0,0)
+end
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	if tc:IsRelateToEffect(e) then
+		if tc:IsAttackPos() then
+			local pos=0
+			if tc:IsCanTurnSet() then
+				pos=Duel.SelectPosition(tp,tc,POS_DEFENSE)
+			else
+				pos=Duel.SelectPosition(tp,tc,POS_FACEUP_DEFENSE)
+			end
+			Duel.ChangePosition(tc,pos)
+		else
+			Duel.ChangePosition(tc,0,0,POS_FACEDOWN_DEFENSE,POS_FACEUP_DEFENSE)
+		end
+	end
+end
