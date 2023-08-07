@@ -87,3 +87,4 @@ function s.posop(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
 			Duel.ChangePosition(tc,0,0,POS_FACEDOWN)
 		end
+end
