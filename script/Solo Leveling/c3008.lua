@@ -17,16 +17,7 @@ function s.initial_effect(c)
 	local e3=e2:Clone()
 	e3:SetCode(EFFECT_DECREASE_TRIBUTE)
 	c:RegisterEffect(e3)
-	--Prevent effect target
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
-	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e3:SetTargetRange(LOCATION_MZONE,0)
-	e3:SetRange(LOCATION_SZONE)
-	e3:SetTarget(function(e,c) return c:IsFacedown() end)
-	e3:SetValue(aux.indoval)
-	c:RegisterEffect(e3)
+	
 	--ss from gy
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
