@@ -7,24 +7,10 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,id)
+	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetTarget(s.settg)
 	e1:SetOperation(s.setop)
 	c:RegisterEffect(e1)
-	--change pos
-        local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,2))
-	e2:SetCategory(CATEGORY_POSITION)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CARD_TARGET)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCountLimit(1,id+50)
-	e2:SetCondition(s.setcon)
-	e2:SetCost(aux.bfgcost)
-	e2:SetTarget(s.settg2)
-	e2:SetOperation(s.setop2)
-	c:RegisterEffect(e2)
 end
 function s.setfilter(c,e,tp)
 	if not (c:IsSetCard(0xBB8) and not c:IsLevelAbove(6)) then return end
@@ -80,39 +66,6 @@ end
 			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 			tc:RegisterEffect(e1)
-		end
-	end
-end
---change pos
-function s.cfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xBB8) 
-end
-function s.setcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
-end
-function s.filter(c)
-	return c:IsMonster()
-end
-function s.settg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
-	local g=Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,0,0)
-end
-function s.setop2(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		if tc then
-			local pos=0
-			if tc:IsCanTurnSet() then
-				pos=Duel.SelectPosition(tp,tc,POS_DEFENSE)
-			else
-				pos=Duel.SelectPosition(tp,tc,POS_FACEUP_DEFENSE)
-			end
-			Duel.ChangePosition(tc,pos)
-		else
-			Duel.ChangePosition(tc,0,0,POS_FACEDOWN_DEFENSE,POS_FACEUP_DEFENSE)
 		end
 	end
 end
