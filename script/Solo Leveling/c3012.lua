@@ -28,7 +28,7 @@ function s.initial_effect(c)
 end
 --set from hand
 function s.filter(c)
-	return c:IsSetCard(0xBB8) and c:IsSummonable(true,nil)
+	return c:IsSummonable(true,nil)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
@@ -39,7 +39,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
-		Duel.MSet(tp,tc,true,nil)
+		Duel.Summon(tp,tc,true,nil)
 	end
 end
 --set from field
