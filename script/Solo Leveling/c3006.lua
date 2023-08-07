@@ -84,7 +84,7 @@ function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.posop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
-			Duel.SSet(tc,0,0,POS_FACEDOWN)
+	if tc:IsRelateToEffect(e) and tc:IsFaceup() and tc:IsCanTurnSet() then
+			Duel.ChangePosition(tc,POS_FACEDOWN)
 		end
 end
