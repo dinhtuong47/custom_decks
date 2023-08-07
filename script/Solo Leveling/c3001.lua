@@ -80,8 +80,17 @@ end
 function s.posop(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
 	local tc=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil):GetFirst()
-	if tc then
-		local pos=Duel.SelectPosition(tp,tc,POS_FACEUP_DEFENSE+POS_FACEDOWN_DEFENSE)
-		Duel.ChangePosition(tc,pos)
+	local opt=0
+	if tc:IsPosition(POS_FACEDOWN) then
+		opt=POS_FACEUP_DEFENSE
+	elseif tc:IsPosition(POS_FACEUP_ATTACK) then
+		opt=POS_FACEUP_DEFENSE+POS_FACEDOWN_DEFENSE
 	end
+	elseif tc:IsPosition(POS_FACEUP_DEFENSE) then
+		opt=POS_FACEDOWN_DEFENSE
+	end
+	if opt==0 then return end
+	local pos=Duel.SelectPosition(tp,tc,opt)
+	if pos==0 then return end
+	Duel.ChangePosition(tc,pos)
 end
