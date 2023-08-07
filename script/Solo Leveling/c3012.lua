@@ -28,7 +28,7 @@ function s.initial_effect(c)
 end
 --set from hand
 function s.nsfilter(c)
-	return c:IsSetCard(0xBB8) and c:IsSetable()
+	return c:IsSetCard(0xBB8) and c:IsMonster()
 end
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
