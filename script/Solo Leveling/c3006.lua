@@ -85,6 +85,6 @@ end
 function s.posop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
-			Duel.ChangePosition(tc,0,0,POS_FACEDOWN)
+			Duel.TurnSet(tc,0,0,POS_FACEDOWN)
 		end
 end
