@@ -61,7 +61,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	if tc==hc then tc=g:GetNext() end
 	if tc:IsFacedown() and tc:IsRelateToEffect(e) then
-		Duel.ChangePosition(tc,POS_FACEUP_DEFENSE,REASON_EFFECT)
+		Duel.ChangePosition(tc,POS_FACEUP_ATTACK,REASON_EFFECT)
 		if hc:IsFaceup() and hc:IsRelateToEffect(e) then
 			Duel.BreakEffect()
 			Duel.ChangePosition(hc,POS_FACEDOWN_DEFENSE,REASON_EFFECT)
