@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
+	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_BATTLE_END)
 	e2:SetCountLimit(1,id+50)
 	e2:SetCost(s.poscost)
 	e2:SetCondition(s.poscon)
@@ -67,7 +67,7 @@ function s.zfilter(c)
 	return c:IsMonster() and c:IsFacedown()
 end
 function s.poscon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp and Duel.GetFieldGroupCount(e:GetHandlerPlayer(),LOCATION_MZONE,0)>=2
+	return Duel.IsBattlePhase() and Duel.GetTurnPlayer()~=tp and Duel.GetFieldGroupCount(e:GetHandlerPlayer(),LOCATION_MZONE,0)>=2
 end
 function s.poscost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToHandAsCost() end
