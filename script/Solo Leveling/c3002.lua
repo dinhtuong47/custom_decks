@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	--set from hand
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,0))
-	e3:SetCategory(CATEGORY_SUMMON)
+	e3:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND+CATEGORY_SUMMON)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCountLimit(1,id+50)
@@ -89,7 +89,7 @@ function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 		if not g:GetFirst():IsLocation(LOCATION_HAND) then return end
 		--Normal summon 1 flip monster
 		local sg1=Duel.GetMatchingGroup(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
-		if #sg1>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if #sg1~=0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.ShuffleHand(tp)
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
