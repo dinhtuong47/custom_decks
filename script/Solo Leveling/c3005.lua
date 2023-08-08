@@ -30,7 +30,7 @@ function s.initial_effect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_TODECK)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCountLimit(1,id+50)
 	e3:SetTarget(s.tdtg)
 	e3:SetOperation(s.tdop)
@@ -69,16 +69,13 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --shuffle
-function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsFacedown() and chkc:IsAbleToDeck() end
-	if chk==0 then return Duel.IsExistingTarget(aux.AND(Card.IsFacedown,Card.IsAbleToDeck),tp,0,LOCATION_ONFIELD,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,aux.AND(Card.IsFacedown,Card.IsAbleToDeck),tp,0,LOCATION_ONFIELD,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local dg=Duel.GetMatchingGroup(aux.AND(Card.IsFacedown,Card.IsAbleToDeck),tp,0,LOCATION_ONFIELD,nil)
+	if chk==0 then return #dg>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,dg,#dg,0,0)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.SendtoDeck(tc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-	end
+	local dg=Duel.GetMatchingGroup(aux.AND(Card.IsFacedown,Card.IsAbleToDeck),tp,0,LOCATION_ONFIELD,nil)
+	if #dg==0 then return end
+	Duel.SendtoDeck(dg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end
