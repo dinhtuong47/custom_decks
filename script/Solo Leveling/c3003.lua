@@ -25,17 +25,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.rettg)
 	e2:SetOperation(s.retop)
 	c:RegisterEffect(e2)
-	--flip
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,1))
-	e3:SetCategory(CATEGORY_POSITION+CATEGORY_DAMAGE)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e3:SetCountLimit(1,id+50)
-	e3:SetTarget(s.settg)
-	e3:SetOperation(s.setop)
-	c:RegisterEffect(e3)
-end
+	
 --ATKUP
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
@@ -66,19 +56,34 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,c)
 	end
 end
---set
-function s.settg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsCanTurnSet() end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsCanTurnSet,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	local g=Duel.SelectTarget(tp,Card.IsCanTurnSet,tp,LOCATION_MZONE,LOCATION_MZONE,1,2,nil)
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,#g,0,0)
+
+--flip
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_TODECK)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCountLimit(1,id+50)
+	e3:SetCost(s.cost)
+	e3:SetTarget(s.tdtg)
+	e3:SetOperation(s.tdop)
+	c:RegisterEffect(e3)
 end
-function s.setop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetTargetCards(e)
-	if #g~=0 then return 
-		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE) 
-		Duel.BreakEffect()
-	        Duel.Damage(1-tp,800,REASON_EFFECT)
-	end
+--shuffle
+function s.filter(c)
+	return c:IsSetCard(0xBB8) and c:IsType(TYPE_MONSTER) and c:IsDiscardable()
+end
+function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.DiscardHand(tp,s.filter,1,1,REASON_COST+REASON_DISCARD)
+end
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local dg=Duel.GetMatchingGroup(aux.AND(Card.IsFacedown,Card.IsAbleToDeck),tp,0,LOCATION_ONFIELD,nil)
+	if chk==0 then return #dg>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,dg,#dg,0,0)
+end
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+	local dg=Duel.GetMatchingGroup(aux.AND(Card.IsFacedown,Card.IsAbleToDeck),tp,0,LOCATION_ONFIELD,nil)
+	if #dg==0 then return end
+	Duel.SendtoDeck(dg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end
