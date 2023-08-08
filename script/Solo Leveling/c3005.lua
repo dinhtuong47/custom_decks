@@ -81,6 +81,6 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	if #g~=0 then return 
 		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE) 
 		Duel.BreakEffect()
-	        Duel.Damage(1-tp,800,REASON_EFFECT)
+	        Duel.Damage(1-tp,800,REASON_EFFECT) end 
 	end
 end
