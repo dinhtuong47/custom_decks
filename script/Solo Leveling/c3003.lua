@@ -69,7 +69,7 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 end
 --shuffle
 function s.filter(c)
-	return c:IsSetCard(0xBB8) and c:IsType(TYPE_MONSTER) and c:IsDiscardable()
+	return c:IsSetCard(0xBB8) and c:IsDiscardable()
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND,0,1,nil) end
