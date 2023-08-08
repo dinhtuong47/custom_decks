@@ -32,6 +32,7 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCountLimit(1,id+50)
+	e3:SetCost(s.cost)
 	e3:SetTarget(s.tdtg)
 	e3:SetOperation(s.tdop)
 	c:RegisterEffect(e3)
@@ -69,6 +70,13 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --shuffle
+function s.filter(c)
+	return c:IsSetCard(0xBB8) and c:IsType(TYPE_MONSTER) and c:IsDiscardable()
+end
+function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.DiscardHand(tp,s.filter,1,1,REASON_COST+REASON_DISCARD)
+end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local dg=Duel.GetMatchingGroup(aux.AND(Card.IsFacedown,Card.IsAbleToDeck),tp,0,LOCATION_ONFIELD,nil)
 	if chk==0 then return #dg>0 end
