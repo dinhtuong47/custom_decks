@@ -34,16 +34,6 @@ function s.initial_effect(c)
 	e3:SetTarget(s.nstg)
 	e3:SetOperation(s.nsop)
 	c:RegisterEffect(e3)
-	--set on field
-	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(id,1))
-	e4:SetCategory(CATEGORY_POSITION)
-	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
-	e4:SetProperty(EFFECT_FLAG_DELAY)
-	e4:SetCountLimit(1,id+50)
-	e4:SetTarget(s.nstg)
-	e4:SetOperation(s.nsop)
-	c:RegisterEffect(e4)
 end
 --immu target
 function s.imuop(e,tp,eg,ep,ev,re,r,rp)
@@ -79,32 +69,33 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --set from hand
+function s.thfilter(c)
+	return c:IsSetCard(0xBB8) and c:IsMonster() and c:IsAbleToHand()
+end
+function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+end
 function s.nsfilter(c)
 	return c:IsType(TYPE_FLIP) and c:IsSummonable(true,nil)
 end
-function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
-end
+	--Add monster from deck to hand
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,1,nil):GetFirst()
-	if sc then
-		Duel.MSet(tp,sc,true,nil)
-	end
-end
---set on field
-function s.posfilter(c)
-	return c:IsType(TYPE_FLIP) and c:IsFaceup() and c:IsCanChangePosition()
-end
-function s.nstg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,0,0)
-end
-function s.nsop2(e,tp,eg,ep,ev,re,r,rp,chk)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
-	local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
 	if #g>0 then
-		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
+		if not g:GetFirst():IsLocation(LOCATION_HAND) then return end
+		--Normal summon 1 flip monster
+		local sg1=Duel.GetMatchingGroup(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
+		if #sg1>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			Duel.ShuffleHand(tp)
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+			local sg2=sg1:Select(tp,1,1,nil):GetFirst()
+			Duel.Mset(tp,sg2,true,nil)
+		end
 	end
 end
+
