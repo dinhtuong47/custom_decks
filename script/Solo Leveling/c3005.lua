@@ -79,7 +79,7 @@ end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e)
 	if #g~=0 then return 
-		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE) 
+		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE) end
 		Duel.BreakEffect()
 	        Duel.Damage(1-tp,800,REASON_EFFECT) 
 end
