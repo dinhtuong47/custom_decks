@@ -25,7 +25,18 @@ function s.initial_effect(c)
 	e2:SetTarget(s.rettg)
 	e2:SetOperation(s.retop)
 	c:RegisterEffect(e2)
-	
+	--flip
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_TODECK)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCountLimit(1,id+50)
+	e3:SetCost(s.cost)
+	e3:SetTarget(s.tdtg)
+	e3:SetOperation(s.tdop)
+	c:RegisterEffect(e3)
+end
 --ATKUP
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
@@ -55,19 +66,6 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(c,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,c)
 	end
-end
-
---flip
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,1))
-	e3:SetCategory(CATEGORY_TODECK)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY)
-	e3:SetCountLimit(1,id+50)
-	e3:SetCost(s.cost)
-	e3:SetTarget(s.tdtg)
-	e3:SetOperation(s.tdop)
-	c:RegisterEffect(e3)
 end
 --shuffle
 function s.filter(c)
