@@ -84,7 +84,23 @@ function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.posop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() and tc:IsCanTurnSet() then
-			Duel.ChangePosition(tc,POS_FACEDOWN)
-		end
+	if tc:IsRelateToEffect(e) and Duel.ChangePosition(tc,POS_FACEDOWN)>0 then
+		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+		e1:SetCode(EVENT_PHASE+PHASE_END)
+		e1:SetCondition(s.tgcon)
+		e1:SetOperation(s.tgop)
+		e1:SetReset(RESET_PHASE+PHASE_END)
+		e1:SetCountLimit(1)
+		e1:SetLabelObject(tc)
+		Duel.RegisterEffect(e1,tp)
+	end
+end
+function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetLabelObject():GetFlagEffect(id)>0
+end
+function s.tgop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.SendtoGrave(e:GetLabelObject(),REASON_EFFECT)
 end
