@@ -28,7 +28,7 @@ function s.initial_effect(c)
 	--flip
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
-	e3:SetCategory(CATEGORY_POSITION)
+	e3:SetCategory(CATEGORY_POSITION+CATEGORY_DAMAGE)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e3:SetCountLimit(1,id+50)
@@ -76,6 +76,9 @@ function s.settg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e)
-	if #g~=0 then return Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE) 
+	if #g~=0 then return 
+		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE) 
+		Duel.BreakEffect()
+	        Duel.Damage(1-tp,800,REASON_EFFECT)
 	end
 end
