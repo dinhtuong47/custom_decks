@@ -94,7 +94,7 @@ function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.ShuffleHand(tp)
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
 			local sg2=sg1:Select(tp,1,1,nil):GetFirst()
-			Duel.Mset(tp,sg2,true,nil)
+			Duel.MSet(tp,sg2,true,nil)
 		end
 	end
 end
