@@ -53,7 +53,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	--reveal
 	if tc and tc:IsRelateToEffect(e) then
 		local g=Duel.SelectMatchingCard(tp,s.cffilter,tp,LOCATION_HAND,0,1,1,nil,tc:GetType())
-		if #g>0 and Duel.ConfirmCards(1-tp,g)>0 then
+		if #g>0 and Duel.ConfirmCards(1-tp,g) then
 			local ogc=Duel.GetOperatedGroup():GetFirst()
 			if ogc:IsLocation(LOCATION_GRAVE) and c:IsRelateToEffect(e) then
 				--Search
