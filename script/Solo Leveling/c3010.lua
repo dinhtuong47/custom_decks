@@ -31,18 +31,17 @@ function s.initial_effect(c)
 end
 --add
 local key=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
-function s.togravefilter(c,ctype)
-	return c:IsSetCard(0xBB8) and not c:IsType(ctype&key) and c:IsAbleToGrave()
+function s.cffilter(c,ctype)
+	return c:IsSetCard(0xBB8) and not c:IsType(ctype&key) and not c:IsPublic()
 end
 function s.tgfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xBB8) and Duel.IsExistingMatchingCard(s.togravefilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
+	return c:IsFaceup() and c:IsSetCard(0xBB8) and Duel.IsExistingMatchingCard(s.cffilter,tp,LOCATION_HAND,0,1,nil,c:GetType())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and s.tgfilter(chkc,tp) end
 	if chk==0 then return Duel.IsExistingTarget(s.tgfilter,tp,LOCATION_ONFIELD,0,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.SelectTarget(tp,s.tgfilter,tp,LOCATION_ONFIELD,0,1,1,nil,tp)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.tohandfilter(c,type1,type2)
@@ -51,11 +50,10 @@ end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	--Send to GY
+	--reveal
 	if tc and tc:IsRelateToEffect(e) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local g=Duel.SelectMatchingCard(tp,s.togravefilter,tp,LOCATION_DECK,0,1,1,nil,tc:GetType())
-		if #g>0 and Duel.SendtoGrave(g,REASON_EFFECT)>0 then
+		local g=Duel.SelectMatchingCard(tp,s.cffilter,tp,LOCATION_HAND,0,1,1,nil,tc:GetType())
+		if #g>0 and Duel.ConfirmCards(1-tp,g)>0 then
 			local ogc=Duel.GetOperatedGroup():GetFirst()
 			if ogc:IsLocation(LOCATION_GRAVE) and c:IsRelateToEffect(e) then
 				--Search
