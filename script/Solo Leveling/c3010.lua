@@ -37,7 +37,7 @@ function s.rescon(sg,e,tp,mg)
 end
 function s.thfilter(c,e,tp,sg)
 	return c:IsSetCard(0xBB8) and c:IsAbleToHand()
-		and not sg:IsExists(Card.IsType,1,nil,c:GetType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP))
+		and not sg:IsExists(Card.IsType,1,nil,c:GetType())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -54,7 +54,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		local eq=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp,sg):GetFirst()
 		if not eq then return end
 		Duel.BreakEffect()
-		Duel.SendtoHand(eq,0,tp,REASON_EFFECT)
+		Duel.SendtoHand(eq,tp,REASON_EFFECT)
 	Duel.ConfirmCards(1-tp,eq)
 end
 
