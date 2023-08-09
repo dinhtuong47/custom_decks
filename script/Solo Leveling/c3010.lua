@@ -31,15 +31,16 @@ function s.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 --add
+local key=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
 function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
 end
 function s.rescon(sg,e,tp,mg)
 	return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,sg)
 end
-function s.thfilter(c,e,tp,sg)
+function s.thfilter(c,e,tp,sg,ctype)
 	return c:IsSetCard(0xBB8) and c:IsAbleToHand()  
-		and not sg:IsExists(Card.IsType,1,nil,c:GetType())
+		and not sg:IsExists(Card.IsType(ctype&key),1,nil,c:GetType())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
