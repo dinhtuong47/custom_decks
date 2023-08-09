@@ -59,8 +59,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		if not eq then return end
 		Duel.BreakEffect()
 		Duel.SendtoHand(eq,tp,REASON_EFFECT)
-	Duel.ConfirmCards(1-tp,eq)
+		Duel.ConfirmCards(1-tp,eq)
+	end
 end
-
-
- 
