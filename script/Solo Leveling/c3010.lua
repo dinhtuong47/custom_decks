@@ -31,21 +31,20 @@ function s.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 --add
-local key=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
-function s.thfilter(c,ctype)
-	return c:IsSetCard(0xBB8) and c:IsAbleToHand() and not c:IsType(ctype&key)  
-		--[[and not sg:IsExists(Card.IsType,1,nil,c:GetType()) ]]--
+function s.cfilter(c)
+	return c:IsSetCard(0xBB8) and not c:IsPublic()
 end
-function s.cfilter(c,tp)
-	return c:IsSetCard(0xBB8) and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
-end
---[[function s.rescon(sg,e,tp,mg)
+function s.rescon(sg,e,tp,mg)
 	return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,sg)
-end]]--
+end
+function s.thfilter(c,e,tp,sg)
+	return c:IsSetCard(0xBB8) and c:IsAbleToHand()  
+		and not sg:IsExists(Card.IsType,1,nil,c:GetType())
+end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return g:GetClassCount(Card.GetCode)>=2 end --[[aux.SelectUnselectGroup(g,e,tp,2,2,s.rescon,0) and]]--
+	if chk==0 then return aux.SelectUnselectGroup(g,e,tp,2,2,s.rescon,0) and g:GetClassCount(Card.GetCode)>=2 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
