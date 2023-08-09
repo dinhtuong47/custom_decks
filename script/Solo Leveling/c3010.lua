@@ -34,11 +34,11 @@ function s.cffilter(c,ctype)
 	return c:IsSetCard(0xBB8) and not c:IsType(ctype&key)  and not c:IsPublic() 
 end
 function s.tgfilter(c,tp)
-	return c:IsSetCard(0xBB8) and Duel.IsExistingMatchingCard(s.cffilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
+	return c:IsSetCard(0xBB8) and Duel.IsExistingMatchingCard(s.cffilter,tp,LOCATION_HAND,0,1,nil,c:GetType())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingTarget(s.tgfilter,tp,LOCATION_HAND,0,1,nil,tp) end
-	Duel.SelectTarget(tp,s.tgfilter,tp,LOCATION_ONFIELD,0,1,1,nil,tp)
+	Duel.SelectTarget(tp,s.tgfilter,tp,LOCATION_HAND,0,1,1,nil,tp)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.tohandfilter(c,type1,type2)
