@@ -32,16 +32,16 @@ function s.initial_effect(c)
 end
 --add
 local key=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
+function s.thfilter(c,ctype)
+	return c:IsSetCard(0xBB8) and c:IsAbleToHand() and not c:IsType(ctype&key)  
+		--[[and not sg:IsExists(Card.IsType,1,nil,c:GetType()) ]]--
+end
 function s.cfilter(c,tp)
 	return c:IsSetCard(0xBB8) and not c:IsPublic() and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
 end
 --[[function s.rescon(sg,e,tp,mg)
 	return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,sg)
 end]]--
-function s.thfilter(c,ctype)
-	return c:IsSetCard(0xBB8) and c:IsAbleToHand() and not c:IsType(ctype&key)  
-		--[[and not sg:IsExists(Card.IsType,1,nil,c:GetType()) ]]--
-end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
