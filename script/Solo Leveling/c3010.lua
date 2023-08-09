@@ -37,6 +37,7 @@ function s.tgfilter(c,tp)
 	return c:IsSetCard(0xBB8) and Duel.IsExistingMatchingCard(s.cffilter,tp,LOCATION_HAND,0,1,nil,c:GetType())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_HAND) and chkc:IsControler(tp) and s.tgfilter(chkc,tp) end
 	if chk==0 then return Duel.IsExistingTarget(s.tgfilter,tp,LOCATION_HAND,0,1,nil,tp) end
 	Duel.SelectTarget(tp,s.tgfilter,tp,LOCATION_HAND,0,1,1,nil,tp)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
@@ -57,9 +58,8 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e1,tp)
 	aux.RegisterClientHint(c,nil,tp,1,0,aux.Stringid(id,1),nil)
-	--Send to GY and Special Summon
+	
 	if tc and tc:IsRelateToEffect(e) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 		local g=Duel.SelectMatchingCard(tp,s.cffilter,tp,LOCATION_HAND,0,1,1,nil,tc:GetType())
 		if #g>0 and Duel.ConfirmCards(1-tp,g)>0 then
 			local ogc=Duel.GetOperatedGroup():GetFirst()
