@@ -48,8 +48,9 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	local g1=Duel.GetMatchingGroup(s.cfilter1,tp,LOCATION_HAND,0,nil,g1:GetType())
-	local g2=Duel.GetMatchingGroup(s.cfilter2,tp,LOCATION_HAND,0,nil,g2:GetType())
+	local c=e:GetHandler()
+	local g1=Duel.GetMatchingGroup(s.cfilter1,tp,LOCATION_HAND,0,nil,e:GetHandler():GetType())
+	local g2=Duel.GetMatchingGroup(s.cfilter2,tp,LOCATION_HAND,0,nil,e:GetHandler():GetType())
 	if #g1>0 and #g2>0 then
 	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg1)
