@@ -33,13 +33,13 @@ end
 --add
 local key=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
 function s.cfilter(c,ctype)
-	return c:IsSetCard(0xBB8) and not c:IsPublic() and not c:IsType(ctype&key) 
+	return c:IsSetCard(0xBB8) and not c:IsPublic() and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
 end
 --[[function s.rescon(sg,e,tp,mg)
 	return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,sg)
 end]]--
-function s.thfilter(c,type1)
-	return c:IsSetCard(0xBB8) and c:IsAbleToHand() and not c:IsType(type1&key)  
+function s.thfilter(c,ctype)
+	return c:IsSetCard(0xBB8) and c:IsAbleToHand() and not c:IsType(ctype&key)  
 		--[[and not sg:IsExists(Card.IsType,1,nil,c:GetType()) ]]--
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
