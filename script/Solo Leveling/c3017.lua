@@ -26,6 +26,7 @@ function s.initial_effect(c)
 	e2:SetCountLimit(1,id+50)
 	e2:SetCost(s.poscost)
 	e2:SetCondition(s.poscon)
+	e2:SetTarget(s.postg)
 	e2:SetOperation(s.posop)
 	c:RegisterEffect(e2)
 	--Check if it was ritual summoned with DARK
@@ -66,9 +67,16 @@ function s.poscon(e)
 	local c=e:GetHandler()
 	return c:IsSummonType(SUMMON_TYPE_RITUAL) and c:GetFlagEffect(id)~=0
 end
-function s.posop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_ONFIELD,0,1,nil)
-	Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
+function s.postg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,0,0)
+end
+function s.posop(e,tp,eg,ep,ev,re,r,rp,chk)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
+	local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	if #g>0 then
+		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
+	end
 end
 function s.valcheck(e,c)
 	local g=c:GetMaterial()
