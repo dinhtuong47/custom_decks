@@ -54,8 +54,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if tc and tc:IsRelateToEffect(e) then
 		local g=Duel.SelectMatchingCard(tp,s.cffilter,tp,LOCATION_HAND,0,1,1,nil,tc:GetType())
 		if #g>0 and Duel.ConfirmCards(1-tp,g) then
-			local ogc=Duel.GetOperatedGroup():GetFirst()
-			if ogc:IsLocation(LOCATION_HAND) and c:IsRelateToEffect(e) then
 				--Search
 				local gth=Duel.GetMatchingGroup(s.tohandfilter,tp,LOCATION_DECK,0,nil,tc:GetType(),g:GetFirst():GetType())
 				if #gth>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
@@ -64,7 +62,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 					local sg=gth:Select(tp,1,1,nil)
 					Duel.SendtoHand(sg,nil,REASON_EFFECT)
 					Duel.ConfirmCards(1-tp,sg)
-				end
 			end
 		end
 	end
