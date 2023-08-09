@@ -37,7 +37,7 @@ function s.thfilter(c,ctype)
 		--[[and not sg:IsExists(Card.IsType,1,nil,c:GetType()) ]]--
 end
 function s.cfilter(c,tp)
-	return c:IsSetCard(0xBB8) and not c:IsPublic() and Duel.IsExistingMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
+	return c:IsSetCard(0xBB8) and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
 end
 --[[function s.rescon(sg,e,tp,mg)
 	return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,sg)
