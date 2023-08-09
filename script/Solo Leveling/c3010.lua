@@ -37,7 +37,7 @@ function s.rescon(sg,e,tp,mg)
 end
 function s.thfilter(c,e,tp,sg)
 	return c:IsSetCard(0xBB8) and c:IsAbleToHand()
-		and not sg:IsExists(Card.IsType,1,nil,c:GetType())
+		and not sg:IsExists(Card.IsType,TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP,1,nil,c:GetType())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
