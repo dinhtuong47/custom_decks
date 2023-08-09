@@ -22,6 +22,7 @@ function s.initial_effect(c)
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,0))
 	e4:SetType(EFFECT_TYPE_IGNITION)
+	e4:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e4:SetRange(LOCATION_FZONE)
 	e4:SetCountLimit(1,id)
@@ -45,7 +46,7 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.tohandfilter(c,type1,type2)
-	return c:IsSetCard(0xBB8) and not c:IsType(type1&key) and not c:IsType(type2&key) and not c:IsCode(id) and c:IsAbleToHand()
+	return c:IsSetCard(0xBB8) and not c:IsType(type1&key) and not c:IsType(type2&key) and c:IsAbleToHand()
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -56,7 +57,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		if #g>0 and Duel.ConfirmCards(1-tp,g) then
 				--Search
 				local gth=Duel.GetMatchingGroup(s.tohandfilter,tp,LOCATION_DECK,0,nil,tc:GetType(),g:GetFirst():GetType())
-				if #gth>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+				if #gth>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 					Duel.BreakEffect()
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 					local sg=gth:Select(tp,1,1,nil)
