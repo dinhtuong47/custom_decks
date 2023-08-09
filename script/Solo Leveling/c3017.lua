@@ -60,9 +60,7 @@ function s.immuop(e,tp,eg,ep,ev,re,r,rp)
 	local e3=e2:clone()
 	e3:SetType(EFFECT_TYPE_FIELD)
 	e3:SetCode(EFFECT_CANNOT_DISABLE)
-	e3:SetRange(LOCATION_MZONE)
 	e3:SetTargetRange(LOCATION_ONFIELD,0)
-	e3:SetTarget(s.distarget)
 	e:GetHandler():RegisterEffect(e3)
 end
 --quick eff
