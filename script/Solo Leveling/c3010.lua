@@ -32,7 +32,7 @@ function s.initial_effect(c)
 end
 --add
 local key=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
-function s.cfilter(c,ctype)
+function s.cfilter(c,tp)
 	return c:IsSetCard(0xBB8) and not c:IsPublic() and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
 end
 --[[function s.rescon(sg,e,tp,mg)
