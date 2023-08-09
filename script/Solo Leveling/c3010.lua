@@ -35,12 +35,9 @@ end
 function s.rescon(sg,e,tp,mg)
 	return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,sg)
 end
-function s.tpfilter(c)
-	return c:IsType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP)
-end
 function s.thfilter(c,e,tp,sg)
 	return c:IsSetCard(0xBB8) and c:IsAbleToHand()
-		and not sg:IsExists(s.tpfilter,1,nil,c:GetType())
+		and not sg:IsExists(Card.IsType,1,nil,c:GetType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP))
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
