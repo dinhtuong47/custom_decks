@@ -42,7 +42,7 @@ function s.thfilter(c,ctype)
 	return c:IsSetCard(0xBB8) and c:IsAbleToHand() and not c:IsType(ctype&key)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler(
+	local c=e:GetHandler()
 	if chk==0 then return Duel.IsExistingMatchingCard(s.cffilter1,tp,LOCATION_HAND,0,1,nil,tp) 
 			and Duel.IsExistingMatchingCard(s.cffilter2,tp,LOCATION_HAND,0,1,nil,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
