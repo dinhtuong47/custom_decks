@@ -67,6 +67,9 @@ function s.poscon(e)
 	local c=e:GetHandler()
 	return c:IsSummonType(SUMMON_TYPE_RITUAL) and c:GetFlagEffect(id)~=0
 end
+function s.posfilter(c)
+	return c:IsFaceup() and c:IsCanTurnSet()
+end
 function s.postg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,0,0)
