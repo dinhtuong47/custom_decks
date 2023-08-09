@@ -33,7 +33,7 @@ end
 --add
 local key=TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP
 function s.cfilter(c,tp)
-	return c:IsSetCard(0xBB8) and not c:IsPublic()  and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
+	return c:IsSetCard(0xBB8) and not c:IsPublic()  
 end
 function s.thfilter(c,ctype)
 	return c:IsSetCard(0xBB8) and c:IsAbleToHand() and not c:IsType(ctype&key)
