@@ -36,7 +36,7 @@ end
 function s.tgfilter(c,tp)
 	return c:IsFaceup() and c:IsSetCard(0xBB8) and Duel.IsExistingMatchingCard(s.togravefilter,tp,LOCATION_DECK,0,1,nil,c:GetType())
 end
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and s.tgfilter(chkc,tp) end
 	if chk==0 then return Duel.IsExistingTarget(s.tgfilter,tp,LOCATION_ONFIELD,0,1,nil,tp) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 
 		and e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false) end
@@ -49,7 +49,7 @@ end
 function s.tohandfilter(c,type1,type2)
 	return c:IsSetCard(0xBB8) and not c:IsType(type1&key) and not c:IsType(type2&key) and not c:IsCode(id) and c:IsAbleToHand()
 end
-function s.operation(e,tp,eg,ep,ev,re,r,rp)
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	--Send to GY and Special Summon
