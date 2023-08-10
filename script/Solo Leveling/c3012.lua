@@ -77,5 +77,6 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.SelectMatchingCard(tp,s.posfilter2,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
 	if #g>0 then
 		Duel.ChangePosition(g,POS_FACEUP_ATTACK)
+		end
 	end
 end
