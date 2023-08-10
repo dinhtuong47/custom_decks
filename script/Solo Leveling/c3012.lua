@@ -26,7 +26,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local b1=s.tg1(e,tp,eg,ep,ev,re,r,rp,0)
 	local b2=s.tg2(e,tp,eg,ep,ev,re,r,rp,0)
 	local b3=s.tg3(e,tp,eg,ep,ev,re,r,rp,0)
-	if chk==0 then return b1 or b2 end
+	if chk==0 then return b1 or b2 or b3 end
 	local op=Duel.SelectEffect(tp,
 		{b1,aux.Stringid(id,0)},
 		{b2,aux.Stringid(id,1)},
