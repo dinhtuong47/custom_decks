@@ -1,7 +1,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	--cannot be negated
+	--cannot be destroyed
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
@@ -49,15 +49,13 @@ end
 function s.immuop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e1:SetCode(EFFECT_CANNOT_INACTIVATE)
+	--[[e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)]]--
+	e1:SetCode(EFFECT_CANNOT_BE_DESTROY_EFFECT)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetValue(s.effectfilter)
+	e1:SetValue(aux.indoval)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 	e:GetHandler():RegisterEffect(e1)
-	local e2=e1:Clone()
-	e2:SetCode(EFFECT_CANNOT_DISEFFECT)
-	e:GetHandler():RegisterEffect(e2)
 end
 function s.effectfilter(e,ct)
 	local p=e:GetHandler():GetControler()
