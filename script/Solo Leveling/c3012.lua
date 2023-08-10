@@ -35,7 +35,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		e:SetProperty(0)
 		e:SetOperation(s.op1)
 		s.tg1(e,tp,eg,ep,ev,re,r,rp,1)
-	else
+	if op==2 then
 		e:SetProperty(0)
 		e:SetOperation(s.op2)
 		s.tg2(e,tp,eg,ep,ev,re,r,rp,1)
