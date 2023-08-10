@@ -43,7 +43,7 @@ function s.filter(c)
 	return c:IsFacedown() and c:IsCanChangePosition()
 end
 function s.filter2(c)
-	return c:IsFaceup() and c:IsCanChangePosition()
+	return c:IsFaceup() and c:IsCanTurnSet()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
