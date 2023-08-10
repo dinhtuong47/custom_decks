@@ -45,15 +45,14 @@ function s.initial_effect(c)
 	e3:SetOperation(s.setop)
 	c:RegisterEffect(e3)
 end	
---cannot neg
+--cannot des
 function s.immuop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	--[[e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)]]--
-	e1:SetCode(EFFECT_CANNOT_BE_DESTROY_EFFECT)
-	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetValue(aux.indoval)
+	e1:SetValue(1)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 	e:GetHandler():RegisterEffect(e1)
 end
