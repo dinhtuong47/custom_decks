@@ -10,15 +10,15 @@ function s.initial_effect(c)
 end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(s.smfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,e,tp) end
+		and Duel.IsExistingMatchingCard(s.smfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
 end
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_MZONE,0,1,nil,e,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_MZONE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,0,0)
 end
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter2,tp,LOCATION_MZONE,0,1,nil,e,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter2,tp,LOCATION_MZONE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,0,0)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -46,37 +46,36 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 end
 --set from hand
-function s.smfilter(c,e,tp)
+function s.smfilter(c)
 	return c:IsSetCard(0xBB8) and c:IsSummonable(true,nil)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local g=Duel.SelectMatchingCard(tp,s.smfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,s.smfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
 		Duel.MSet(tp,tc,true,nil)
 	end
 end
 --set from field
-function s.posfilter(c,e,tp)
+function s.posfilter(c)
 	return c:IsSetCard(0xBB8) and c:IsFaceup() and c:IsCanTurnSet()
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
-	local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil)
 	if #g>0 then
 		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
 	end
 end
 --flip
-function s.posfilter2(c,e,tp)
+function s.posfilter2(c)
 	return c:IsSetCard(0xBB8) and c:IsFacedown() and c:IsCanChangePosition()
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
-	local g=Duel.SelectMatchingCard(tp,s.posfilter2,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,s.posfilter2,tp,LOCATION_MZONE,0,1,1,nil)
 	if #g>0 then
-		Duel.ChangePosition(g,POS_FACEUP_ATTACK)
-		end
+		Duel.ChangePosition(g,POS_FACEUP_ATTACK) end
 	end
 end
