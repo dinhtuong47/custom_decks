@@ -46,7 +46,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 --set from field
 function s.posfilter(c)
-	return c:IsSetCard(0xBB8) and c:IsFaceup() and c:IsCanChangePosition()
+	return c:IsSetCard(0xBB8) and c:IsFaceup() and c:IsCanTurnSet()
 end
 function s.postg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_MZONE,0,1,nil) end
