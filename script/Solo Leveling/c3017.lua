@@ -52,9 +52,14 @@ function s.immuop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e1:SetCode(EFFECT_CANNOT_INACTIVATE+EFFECT_CANNOT_DISEFFECT)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetValue(1)
+	e1:SetValue(s.effectfilter)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 	e:GetHandler():RegisterEffect(e1)
+end
+function s.effectfilter(e,ct)
+	local p=e:GetHandler():GetControler()
+	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
+	return p==tp and te:GetHandler():IsSetCard(0xBB8) and loc&LOCATION_ONFIELD~=0
 end
 --quick eff
 function s.filter(c)
