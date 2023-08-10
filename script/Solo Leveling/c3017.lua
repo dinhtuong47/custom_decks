@@ -47,24 +47,14 @@ function s.initial_effect(c)
 end	
 --cannot neg
 function s.immuop(e,tp,eg,ep,ev,re,r,rp)
-	--inactivatable
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD)
-	e4:SetCode(EFFECT_CANNOT_INACTIVATE)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetValue(s.effectfilter)
-	c:RegisterEffect(e4)
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_FIELD)
-	e5:SetCode(EFFECT_CANNOT_DISEFFECT)
-	e5:SetRange(LOCATION_MZONE)
-	e5:SetValue(s.effectfilter)
-	c:RegisterEffect(e5)
-end
-function s.effectfilter(e,ct)
-	local p=e:GetHandler():GetControler()
-	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
-	return p==tp and te:GetHandler():IsSetCard(0xBB8) and loc&LOCATION_MZONE~=0
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e1:SetCode(EFFECT_CANNOT_INACTIVATE+EFFECT_CANNOT_DISEFFECT)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetValue(1)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
+	e:GetHandler():RegisterEffect(e1)
 end
 --quick eff
 function s.filter(c)
