@@ -46,11 +46,10 @@ end
 --draw
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) and rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) and rvg:GetClassCount(Card.GetCode)>=2 end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(1)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
 end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
@@ -62,15 +61,15 @@ function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.Draw(p,d,REASON_EFFECT)==0 then return end
 	Duel.ShuffleHand(tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,1,nil):GetFirst()
-	if sc then
-	        Duel.BreakEffect()
-		Duel.MSet(tp,sc,true,nil)
-        end
-end
-function s.ntcon(e,c,minc)
-	if c==nil then return true end
-	return minc==0 and c:GetLevel()>4 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
+	local sg1=Duel.GetMatchingGroup(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
+		if #sg1~=0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			Duel.ShuffleHand(tp)
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+			local sg2=sg1:Select(tp,1,1,nil):GetFirst()
+			Duel.MSet(tp,sg2,true,nil)
+		end
+	end
 end
 --change pos
 function s.filter(c)
