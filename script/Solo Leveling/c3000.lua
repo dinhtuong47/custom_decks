@@ -41,7 +41,7 @@ function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
 end	
 function s.nsfilter(c)
-	return c:IsSetCard(0xBB8) and c:IsSummonable(true,nil)
+	return c:IsType(TYPE_FLIP) and c:IsSummonable(true,nil)
 end
 --draw
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
