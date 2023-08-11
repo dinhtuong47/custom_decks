@@ -45,8 +45,8 @@ function s.nsfilter(c)
 end
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
+	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND+LOCATION_DECK|LOCATION_MZONE,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_DECK|LOCATION_MZONE)
 end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
@@ -55,7 +55,7 @@ function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	if #g<2 then return end
 	Duel.ConfirmCards(1-tp,g)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,1,nil):GetFirst()
+	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND+LOCATION_DECK|LOCATION_MZONE,0,1,1,nil):GetFirst()
 	if sc then
 	Duel.MSet(tp,sc,true,nil)
         end
