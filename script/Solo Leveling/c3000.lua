@@ -8,7 +8,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	local e1=Effect.CreateEffect(c)	
 	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_SUMMON)
+	e1:SetCategory(CATEGORY_DRAW+CATEGORY_SUMMON)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_SUMMON_SUCCESS)
@@ -43,9 +43,13 @@ end
 function s.nsfilter(c)
 	return c:IsSetCard(0xBB8) and c:IsSummonable(true,nil)
 end
+--draw
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) and rvg:GetClassCount(Card.GetCode)>=2 and Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil) end
+	Duel.SetTargetPlayer(tp)
+	Duel.SetTargetParam(1)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_MZONE)
 end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
@@ -54,10 +58,14 @@ function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	if #g<2 then return end
 	Duel.ConfirmCards(1-tp,g)
+	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+	if Duel.Draw(p,d,REASON_EFFECT)==0 then return end
+	Duel.ShuffleHand(tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
 	local sc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,1,nil):GetFirst()
 	if sc then
-	Duel.MSet(tp,sc,true,nil)
+	        Duel.BreakEffect()
+		Duel.MSet(tp,sc,true,nil)
         end
 end
 function s.ntcon(e,c,minc)
