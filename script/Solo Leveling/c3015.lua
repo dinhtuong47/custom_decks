@@ -39,7 +39,7 @@ end
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsReason(REASON_LOST_TARGET) and c:GetPreviousEquipTarget() 
-	and ( c:GetPreviousEquipTarget():IsLocation(LOCATION_MZONE,POS_FACEDOWN) or GetPreviousEquipTarget():IsLocation(LOCATION_HAND) )
+	and c:GetPreviousEquipTarget():IsLocation(LOCATION_HAND|LOCATION_MZONE,POS_FACEDOWN)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToHand() end
