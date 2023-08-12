@@ -5,7 +5,7 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_EQUIP)
 	e2:SetCode(EFFECT_UPDATE_ATTACK)
-	e2:SetValue(1000)
+	e2:SetValue(1200)
 	c:RegisterEffect(e2)
 	local e3=e2:Clone()
 	e3:SetCode(EFFECT_UPDATE_DEFENSE)
@@ -38,7 +38,8 @@ end
 --add
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_LOST_TARGET) and c:GetPreviousEquipTarget() and c:GetPreviousEquipTarget():IsLocation(LOCATION_MZONE,POS_FACEDOWN)
+	return c:IsReason(REASON_LOST_TARGET) and c:GetPreviousEquipTarget() 
+	and ( c:GetPreviousEquipTarget():IsLocation(LOCATION_MZONE,POS_FACEDOWN) or GetPreviousEquipTarget():IsLocation(LOCATION_HAND) )
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToHand() end
