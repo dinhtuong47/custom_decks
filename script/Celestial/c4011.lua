@@ -40,8 +40,9 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
 	if #g>0 then
-	Duel.SSet(tp,g:GetFirst())
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+		Duel.SSet(tp,g:GetFirst())
+		Duel.ShuffleDeck(tp)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g1=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
 	if #g1>0 then
 		Duel.BreakEffect()
