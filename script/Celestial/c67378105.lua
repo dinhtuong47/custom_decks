@@ -23,13 +23,13 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
-	--atk/def up
+	--def up
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCode(EFFECT_UPDATE_DEFENSE)
-	e2:SetValue(s.atkval)
+	e2:SetValue(s.defval)
 	c:RegisterEffect(e2)
 end
 --ss
@@ -81,11 +81,11 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
 	Duel.Destroy(tc,REASON_EFFECT)
 end
---gain atk/def
+--gain def
 function s.deffilter(c)
 	return c:GetBaseDefense()>=0 and c:IsFaceup()
 end
-function s.atkval(e,c)
-	local g=Duel.GetMatchingGroup(s.deffilter,1,LOCATION_MZONE,LOCATION_MZONE,c)
+function s.defval(e,c)
+	local g=Duel.GetMatchingGroup(s.deffilter,1,LOCATION_MZONE,0,c)
 	return g:GetSum(Card.GetBaseDefense)
 end
