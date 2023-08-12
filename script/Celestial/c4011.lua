@@ -46,6 +46,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	if #g1>0 then
 		Duel.BreakEffect()
 		Duel.SendtoDeck(g1,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+		end
 	end
 end
 --replace
