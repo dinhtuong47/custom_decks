@@ -86,6 +86,6 @@ function s.deffilter(c)
 	return c:GetBaseDefense()>=0 and c:IsFaceup()
 end
 function s.defval(e,c)
-	local g=Duel.GetMatchingGroup(s.deffilter,1,LOCATION_MZONE,0,c)
+	local g=Duel.GetMatchingGroup(s.deffilter,1,0,LOCATION_MZONE,c)
 	return g:GetSum(Card.GetBaseDefense)
 end
