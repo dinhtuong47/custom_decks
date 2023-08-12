@@ -41,10 +41,11 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
 	if #g>0 then
 		Duel.SSet(tp,g:GetFirst())
-		Duel.ShuffleDeck(tp)
+		if g:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g1=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
 	if #g1>0 then
+		Duel.DisableShuffleCheck()
 		Duel.BreakEffect()
 		Duel.SendtoDeck(g1,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 		end
