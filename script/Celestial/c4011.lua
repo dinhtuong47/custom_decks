@@ -35,20 +35,20 @@ function s.setfilter(c)
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
+        Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND+LOCATION_ONFIELD)
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
-	if #g>0 then
-		Duel.SSet(tp,g:GetFirst())
-		if g:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g1=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
-	if #g1>0 then
+	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil):GetFirst()
+	if not (tc and Duel.SSet(tc,nil,REASON_EFFECT)>0 and tc:IsLocation(LOCATION_SZONE)) then return end
+	Duel.ConfirmCards(1-tp,tc)
+	if tc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local td=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
+	if #td>0 then
 		Duel.DisableShuffleCheck()
 		Duel.BreakEffect()
-		Duel.SendtoDeck(g1,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
-		end
+		Duel.SendtoDeck(td,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end
 --replace
