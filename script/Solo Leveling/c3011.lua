@@ -57,5 +57,5 @@ function s.repval(e,c)
 	return s.repfilter(c,e:GetHandlerPlayer())
 end
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Remove(e:GetHandler(),tp,POS_FACEUP,REASON_EFFECT)
+	Duel.Remove(e:GetHandler(),nil,POS_FACEUP,REASON_EFFECT)
 end
