@@ -82,10 +82,10 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Destroy(tc,REASON_EFFECT)
 end
 --gain def
-function s.deffilter(c,tp)
-	return c:GetBaseDefense()>=0 and c:IsFaceup() and c:IsControler(tp)
+function s.deffilter(c)
+	return c:GetBaseDefense()>=0 and c:IsFaceup() 
 end
-function s.defval(e,c,tp)
-	local g=Duel.GetMatchingGroup(s.deffilter,1,LOCATION_MZONE,0,c)
-	return g:GetSum(Card.GetBaseDefense)
+function s.defval(e,c)
+	local g=Duel.GetMatchingGroup(s.deffilter,1,LOCATION_MZONE,LOCATION_MZONE,c)
+	return g:GetSum(Card.GetBaseDefense/2)
 end
