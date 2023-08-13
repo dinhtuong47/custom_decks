@@ -87,5 +87,5 @@ function s.deffilter(c)
 end
 function s.defval(e,c)
 	local g=Duel.GetMatchingGroup(s.deffilter,1,LOCATION_MZONE,LOCATION_MZONE,c)
-	return g:GetSum(Card.GetBaseDefense/2)
+	return g:GetSum(Card.GetBaseDefense)
 end
