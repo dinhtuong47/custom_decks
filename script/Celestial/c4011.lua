@@ -43,12 +43,13 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	if not (tc and Duel.SSet(tp,tc,REASON_EFFECT)>0 and tc:IsLocation(LOCATION_SZONE)) then return end
 	--[[Duel.ConfirmCards(1-tp,tc)]]--
 	if tc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local td=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
-	if #td>0 then
+	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
+	if #g==0 and not Duel.SelectYesNo(tp,aux.Stringid(id,0)) then return end
+	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
+	Duel.MoveSequence(tc,0)
+	Duel.ConfirmDecktop(tp,1)
+	if tc and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.DisableShuffleCheck()
-		Duel.BreakEffect()
-		Duel.SendtoDeck(td,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end
 --replace
