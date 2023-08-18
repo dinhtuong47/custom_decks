@@ -49,7 +49,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ConfirmCards(tp,g1)
 	local opt=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
 	if opt==1 then
-		Duel.MoveSequence(g1,opt)
+		Duel.MoveSequence(g1,0)
 	end
 end
 --replace
