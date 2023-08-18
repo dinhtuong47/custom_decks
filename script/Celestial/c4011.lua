@@ -45,11 +45,12 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
 	if #g==0 and not Duel.SelectYesNo(tp,aux.Stringid(id,0)) then return end
-	local tc=g:GetMinGroup(Card.GetSequence):GetFirst()
-	Duel.MoveSequence(tc,0)
-	Duel.ConfirmDecktop(tp,1)
-	if tc and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-		Duel.DisableShuffleCheck()
+	local g1=g:GetMinGroup(Card.GetSequence):GetFirst()
+	Duel.ConfirmCards(tp,g1)
+	local g2=g1:GetFirst()
+	local opt=Duel.SelectOption(tp,aux.Stringid(id,0),aux.Stringid(id,1))
+	if opt==1 then
+		Duel.MoveSequence(g2,opt)
 	end
 end
 --replace
