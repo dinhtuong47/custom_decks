@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
-	e2:SetCountLimit(1,id+50)
+	e2:SetCountLimit(1,id)
 	e2:SetCost(s.poscost)
 	e2:SetCondition(s.poscon)
 	e2:SetTarget(s.postg)
@@ -96,7 +96,7 @@ function s.valcheck(e,c)
 end
 --set all
 function s.setfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x58) and c:IsCanTurnSet()
+	return c:IsFaceup() and c:IsCanTurnSet()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,0,LOCATION_ONFIELD,1,nil) end
