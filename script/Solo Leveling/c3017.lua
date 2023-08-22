@@ -42,6 +42,7 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e3:SetCountLimit(1,id+50)
+	e3:SetTarget(s.setg)
 	e3:SetOperation(s.setop)
 	c:RegisterEffect(e3)
 end	
@@ -94,7 +95,17 @@ function s.valcheck(e,c)
 	end
 end
 --set all
+function s.setfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0x58) and c:IsCanTurnSet()
+end
+function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,0,LOCATION_ONFIELD,1,nil) end
+	local g=Duel.GetMatchingGroup(s.setfilter,tp,0,LOCATION_ONFIELD,nil)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,#g,0,0)
+end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
+	local g=Duel.GetMatchingGroup(s.setfilter,tp,0,LOCATION_ONFIELD,nil)
+	if #g>0 then
+		Duel.ChangePosition(g,POS_FACEDOWN)
+	end
 end
