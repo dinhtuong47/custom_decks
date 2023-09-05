@@ -1,11 +1,11 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	--cannot be destroyed
+	--cannot target
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
-	e0:SetOperation(s.immuop)
+	e0:SetOperation(s.imuop)
 	c:RegisterEffect(e0)
 	--Special Summon condition
 	local e1=Effect.CreateEffect(c)
@@ -61,14 +61,15 @@ function s.initial_effect(c)
 	e6:SetOperation(s.setop)
 	c:RegisterEffect(e6)
 end	
---cannot des
-function s.immuop(e,tp,eg,ep,ev,re,r,rp)
+--immu target
+function s.imuop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+	--[[e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)]]--
+	e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetValue(1)
+	e1:SetValue(aux.indoval)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 	e:GetHandler():RegisterEffect(e1)
 end
