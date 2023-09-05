@@ -6,6 +6,12 @@ function s.initial_effect(c)
 	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
 	e0:SetOperation(s.atkop)
 	c:RegisterEffect(e0)
+	--indes battle
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e4:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
+	e4:SetOperation(s.indesop)
+	c:RegisterEffect(e4)
 	--flip effect
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
@@ -49,6 +55,17 @@ function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	e2:SetCode(EFFECT_UPDATE_DEFENSE)
 	e2:SetValue(400)
 	e:GetHandler():RegisterEffect(e2)
+end
+--INDES
+function s.indesop(e,tp,eg,ep,ev,re,r,rp)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetValue(1)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
+	e:GetHandler():RegisterEffect(e1)
 end
 --add
 function s.flipop(e,tp,eg,ep,ev,re,r,rp)
