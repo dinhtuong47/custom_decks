@@ -1,6 +1,6 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	--control sw, cannot be banished
+	--cannot be banished
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e0:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
@@ -36,19 +36,15 @@ function s.initial_effect(c)
 	e3:SetOperation(s.posop)
 	c:RegisterEffect(e3)
 end
---cannot swith, cannot be banished
+--cannot be banished
 function s.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_CANNOT_CHANGE_CONTROL)
+	e1:SetCode(EFFECT_CANNOT_REMOVE)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetValue(1)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 	e:GetHandler():RegisterEffect(e1)
-	local e2=e1:Clone()
-	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e2:SetCode(EFFECT_CANNOT_REMOVE)
-	e:GetHandler():RegisterEffect(e2)
 end
 --add
 function s.flipop(e,tp,eg,ep,ev,re,r,rp)
