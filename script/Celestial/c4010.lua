@@ -28,6 +28,15 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetCode(EFFECT_PIERCE)
 	c:RegisterEffect(e2)
+	--atkup
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCode(EFFECT_UPDATE_ATTACK)
+	e3:SetCondition(s.atkcon)
+	e3:SetValue(600)
+	c:RegisterEffect(e3)
 end
 --send and gain atk
 function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
@@ -52,3 +61,12 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 		c:RegisterEffect(e1)
 	end
 end
+--gain ATK if attack defense monster
+function s.atkcon(e)
+	local ph=Duel.GetCurrentPhase()
+	if ph~=PHASE_DAMAGE and ph~=PHASE_DAMAGE_CAL then return false end
+	local a=Duel.GetAttacker()
+	local d=Duel.GetAttackTarget()
+	return e:GetHandler()==a and d and d:IsDefensePos()
+end
+
