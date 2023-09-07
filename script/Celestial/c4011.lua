@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e0:SetValue(aux.FALSE)
 	c:RegisterEffect(e0) 
-	--set gravelstorm and return 1 card to the Deck
+	--set gravelstorm
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TODECK)
@@ -40,8 +40,16 @@ end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil):GetFirst()
-	if not (tc and Duel.SSet(tp,tc,REASON_EFFECT)>0 and tc:IsLocation(LOCATION_SZONE)) then return end
-	--[[Duel.ConfirmCards(1-tp,tc)]]--
+	if tc and Duel.SSet(tp,tc)>0 then
+			--Can be activated this turn
+			local e1=Effect.CreateEffect(c)
+			e1:SetDescription(aux.Stringid(id,3))
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
+			sc:RegisterEffect(e1)
+		end
 	if tc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
 	if #g>0 then Duel.SelectYesNo(tp,aux.Stringid(id,0))
