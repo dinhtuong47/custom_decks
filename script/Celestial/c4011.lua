@@ -48,7 +48,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
 			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
-			sc:RegisterEffect(e1)
+			tc:RegisterEffect(e1)
 		end
 	if tc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
