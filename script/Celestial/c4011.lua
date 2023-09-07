@@ -52,7 +52,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	if sc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
-	if #g>0 then Duel.SelectYesNo(tp,aux.Stringid(id,0))
+	if #g<1 and Duel.SelectYesNo(tp,aux.Stringid(id,0))==0 then return end
 	local g1=g:GetMinGroup(Card.GetSequence):GetFirst()
 	Duel.ConfirmCards(tp,g1)
 	local opt=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
