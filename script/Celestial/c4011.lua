@@ -63,7 +63,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 end
 --replace
 function s.repfilter(c,tp)
-	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) and c:IsLevelAbove(6)
+	return c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD) 
 		and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT)
 end
 function s.repcfilter(c)
