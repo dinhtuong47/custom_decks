@@ -50,7 +50,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
 			sc:RegisterEffect(e1)
 		end
-	if tc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
+	if sc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
 	if #g>0 then Duel.SelectYesNo(tp,aux.Stringid(id,0))
 	local g1=g:GetMinGroup(Card.GetSequence):GetFirst()
