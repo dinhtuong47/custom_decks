@@ -39,8 +39,8 @@ function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil):GetFirst()
-	if tc and Duel.SSet(tp,tc)>0 then
+		local sc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,tp):GetFirst()
+		if sc and Duel.SSet(tp,sc)>0 then
 			--Can be activated this turn
 			local e1=Effect.CreateEffect(c)
 			e1:SetDescription(aux.Stringid(id,3))
@@ -48,7 +48,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
 			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
-			tc:RegisterEffect(e1)
+			sc:RegisterEffect(e1)
 		end
 	if tc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
