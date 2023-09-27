@@ -110,7 +110,7 @@ function s.activate2(e,tp,eg,ep,ev,re,r,rp)
 	    	tc:RegisterEffect(e1)
 	     	end
 	end
-end
+--[[end
 --Can only attack with 1 monster
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,2))
@@ -139,7 +139,7 @@ function s.limittg(e,c)
 end
 function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 	local fid=eg:GetFirst():GetFieldID()
-	e:GetLabelObject():SetLabel(fid)
+	e:GetLabelObject():SetLabel(fid)]]--
 end
 
 
