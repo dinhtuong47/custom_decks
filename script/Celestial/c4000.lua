@@ -54,7 +54,7 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 		if c:IsLocation(LOCATION_HAND) and c:IsSummonable(true,se) then
 			Duel.BreakEffect()
 			Duel.Summon(tp,c,true,se)
-		end
+		--[[end
 		local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -62,7 +62,7 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	e1:SetTargetRange(1,0)
-	Duel.RegisterEffect(e1,tp)
+	Duel.RegisterEffect(e1,tp)]]--
 	end
 end
 --Stack Topdeck
