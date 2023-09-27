@@ -54,8 +54,8 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 		if c:IsLocation(LOCATION_HAND) and c:IsSummonable(true,se) then
 			Duel.BreakEffect()
 			Duel.Summon(tp,c,true,se)
-		--[[end
-		local e1=Effect.CreateEffect(e:GetHandler())
+		end
+		--[[local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
