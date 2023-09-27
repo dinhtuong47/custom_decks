@@ -56,14 +56,14 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.BreakEffect()
 			Duel.Summon(tp,c,true,se)
 		end
-		local e1=Effect.CreateEffect(e:GetHandler())
+		--[[local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
 	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	e1:SetTargetRange(1,0)
-	Duel.RegisterEffect(e1,tp)
+	Duel.RegisterEffect(e1,tp)]]--
 	end
 end
 --place
