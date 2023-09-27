@@ -109,9 +109,9 @@ function s.activate2(e,tp,eg,ep,ev,re,r,rp)
 	    	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 	    	tc:RegisterEffect(e1)
 	     	end
-	--[[end
+	end
 end
---Can only attack with 1 monster
+--[[Can only attack with 1 monster
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,2))
 	e2:SetType(EFFECT_TYPE_FIELD)
