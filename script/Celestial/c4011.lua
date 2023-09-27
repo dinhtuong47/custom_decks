@@ -50,7 +50,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
 			sc:RegisterEffect(e1)
 		end
-	if sc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
+	--[[if sc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,0,LOCATION_DECK)
@@ -58,7 +58,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ConfirmCards(tp,g1)
 	local opt=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
 	if opt==1 then
-		Duel.MoveSequence(g1,0) end
+		Duel.MoveSequence(g1,0) end]]--
 	end
 end
 --replace
