@@ -29,38 +29,8 @@ function s.initial_effect(c)
 	e2:SetValue(s.repval)
 	c:RegisterEffect(e2)
 end
---set and return
-function s.setfilter(c)
-	return c:IsCode(67906797) and c:IsSSetable()
-end
-function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil) end       
-end
-function s.setop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-		local sc=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK,0,1,1,nil,tp):GetFirst()
-		if sc and Duel.SSet(tp,sc)>0 then
-			--Can be activated this turn
-			local e1=Effect.CreateEffect(c)
-			e1:SetDescription(aux.Stringid(id,3))
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
-			sc:RegisterEffect(e1)
-		end
-	--[[if sc:IsPreviousLocation(LOCATION_DECK) then Duel.ShuffleDeck(tp) end
-	local g=Duel.GetFieldGroup(tp,LOCATION_DECK,0)
-	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,0,LOCATION_DECK)
-        local g1=g:GetMinGroup(Card.GetSequence):GetFirst()
-	Duel.ConfirmCards(tp,g1)
-	local opt=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
-	if opt==1 then
-		Duel.MoveSequence(g1,0) end
-	end]]--
-end
+--set
+
 --replace
 function s.repfilter(c,tp)
 	return c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD) 
