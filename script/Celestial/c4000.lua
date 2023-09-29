@@ -69,7 +69,7 @@ end
 function s.tdfilter(c)
 	return c:IsSetCard(0xfa0) or c:IsSetCard(0x254a)
 end
-function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+--[[function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>1
 		and Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_DECK,0,1,nil) end
 end
@@ -82,5 +82,21 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmDecktop(tp,1)
    else Duel.ShuffleDeck(tp)
 		Duel.MoveSequence(tc,1)
+	end
+end]]--
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		local g=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_DECK,0,nil)
+		return aux.SelectUnselectGroup(g,e,tp,1,2,nil,chk)
+	end
+end
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_DECK,0,nil)
+	local rg=aux.SelectUnselectGroup(g,e,tp,1,2,nil,1,tp,aux.Stringid(id,1))
+	if #rg>0 then
+		Duel.ConfirmCards(1-tp,rg)
+		Duel.ShuffleDeck(tp)
+		Duel.MoveToDeckTop(rg)
+		Duel.SortDecktop(tp,tp,#rg)
 	end
 end
