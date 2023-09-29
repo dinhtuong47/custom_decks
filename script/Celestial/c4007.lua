@@ -19,6 +19,14 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
+        --
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e3:SetCode(EFFECT_SELF_TOGRAVE)
+	e3:SetRange(LOCATION_SZONE)
+	e3:SetCondition(s.tgcon)
+	c:RegisterEffect(e3)
 end
 --fusion
 function s.cfilter(c)
@@ -60,7 +68,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	if tc then Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP)
 	end
-	  local e1=Effect.CreateEffect(c)
+	 --[[ local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD)
 		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
 		e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
@@ -74,5 +82,11 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RegisterEffect(e2,tp)
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(0xFA0)  
+	return not c:IsSetCard(0xFA0) ]]--
+end
+--
+function s.tgcon(e)
+	local tp=e:GetHandlerPlayer()
+	return Duel.GetTurnPlayer()==tp and Duel.GetCurrentPhase()==PHASE_END
+		and not Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
 end
