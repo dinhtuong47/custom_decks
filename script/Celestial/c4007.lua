@@ -85,8 +85,11 @@ function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	return not c:IsSetCard(0xFA0) ]]--
 end
 --
+function s.cfilter2(c)
+	return c:IsFaceup() and c:IsSetCard(0xFA0)
+end
 function s.tgcon(e)
 	local tp=e:GetHandlerPlayer()
 	return Duel.GetTurnPlayer()==tp and Duel.GetCurrentPhase()==PHASE_END
-		and not Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
+		and not Duel.IsExistingMatchingCard(s.cfilter2,tp,LOCATION_MZONE,0,1,nil)
 end
