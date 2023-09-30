@@ -81,7 +81,7 @@ function s.sumcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(c,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 end
 function s.sumfilter(c)
-	return c:IsSetCard(0xFA0) and c:IsSummonableCard()
+	return c:IsSetCard(0x254a) and c:IsSummonableCard()
 end
 function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
