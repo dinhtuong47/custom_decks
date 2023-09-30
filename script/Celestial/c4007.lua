@@ -31,7 +31,7 @@ function s.initial_effect(c)
 end
 --fusion
 function s.cfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xFA0)
+	return c:IsFaceup() and c:IsSetCard(0x254a)
 end
 function s.fcondition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil) 
@@ -42,7 +42,7 @@ function s.tdfilter(c,e,tp)
 		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,att,c)
 end
 function s.spfilter(c,e,tp,att,sc)
-	return c:IsSetCard(0xFA0) and  c:GetAttribute()==att and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and Duel.GetLocationCountFromEx(tp,tp,sc,c)>0 
+	return c:IsSetCard(0x254a) and  c:GetAttribute()==att and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and Duel.GetLocationCountFromEx(tp,tp,sc,c)>0 
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(100)
