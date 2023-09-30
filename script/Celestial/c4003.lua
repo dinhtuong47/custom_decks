@@ -36,7 +36,7 @@ function s.ntcon(e,c,minc)
 	return minc==0 and Duel.CheckTribute(c,0)
 end
 function s.adfilter(c,tp)
-	return c:IsCode(4006) and c:IsAbleToHand() 
+	return c:IsCode(67906797) and c:IsAbleToHand() 
 end
 function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
