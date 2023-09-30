@@ -67,7 +67,7 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 end
 --Stack Topdeck
 function s.tdfilter(c)
-	return c:IsSetCard(0xfa0) or c:IsSetCard(0x254a)
+	return c:IsSetCard(0x254a)
 end
 --[[function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>1
