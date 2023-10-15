@@ -101,12 +101,11 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SortDecktop(tp,tp,#rg)
 	end
 end]]--		
-		Duel.ConfirmCards(1-tp,rg)
 		Duel.ShuffleDeck(tp)
 		Duel.MoveToDeckTop(rg)
 		Duel.SortDecktop(tp,tp,#rg)
    else Duel.ShuffleDeck(tp)
-		Duel.MoveSequence(rg)
+		Duel.MoveToDeckBottom(rg)
 		Duel.SortDeckbottom(tp,tp,#rg)
 	end
 end
