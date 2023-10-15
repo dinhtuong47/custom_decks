@@ -74,7 +74,7 @@ end
 		and Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_DECK,0,1,nil) end
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_DECK,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_DECK,0,1,2,nil)
 	local tc=g:GetFirst()
 	if tc and Duel.SelectOption(tp,aux.Stringid(id,0),aux.Stringid(id,1))==0 then
 		Duel.ShuffleDeck(tp)
@@ -93,10 +93,25 @@ end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_DECK,0,nil)
 	local rg=aux.SelectUnselectGroup(g,e,tp,1,2,nil,1,tp,aux.Stringid(id,1))
-	if #rg>0 then
-		Duel.ConfirmCards(1-tp,rg)
+	if #rg>0 and Duel.SelectOption(tp,aux.Stringid(id,0),aux.Stringid(id,1))==0 then
+
+		--[[Duel.ConfirmCards(1-tp,rg)
 		Duel.ShuffleDeck(tp)
 		Duel.MoveToDeckTop(rg)
 		Duel.SortDecktop(tp,tp,#rg)
 	end
+end]]--		
+		Duel.ShuffleDeck(tp)
+		Duel.MoveSequence(rg,0)
+		Duel.SortDecktop(tp,tp,#rg)
+   else Duel.ShuffleDeck(tp)
+		Duel.MoveSequence(rg,1)
+		Duel.SortDeckbottom(tp,tp,#rg)
+	end
 end
+		
+		
+
+
+
+
