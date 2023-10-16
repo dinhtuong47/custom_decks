@@ -36,10 +36,10 @@ local sc=Duel.GetMatchingGroup(Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirs
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local sc=Duel.GetMatchingGroup(tp,Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
-	local tc=sc:GetFirst()
+	local sc=Duel.GetMatchingGroup(Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
+	if Duel.Remove(sc,POS_FACEUP,REASON_EFFECT)==0 then return end
+	local tc=Duel.GetOperatedGroup():GetFirst()
 	if tc then
-		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		e1:SetRange(LOCATION_REMOVED)
