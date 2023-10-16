@@ -9,10 +9,10 @@ function s.initial_effect(c)
 	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e0:SetValue(aux.FALSE)
 	c:RegisterEffect(e0) 
-	--draw
+	--tohand
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_DRAW+CATEGORY_TODECK)
+	e1:SetCategory(CATEGORY_REMOVE)
 	e1:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EVENT_PHASE+PHASE_STANDBY)
@@ -29,24 +29,41 @@ function s.initial_effect(c)
 	e2:SetValue(s.repval)
 	c:RegisterEffect(e2)
 end
---draw
-function s.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
-	Duel.SetTargetPlayer(tp)
-	Duel.SetTargetParam(1)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,0,tp,1)
+function s.filter(c)
+	return c:IsSequence() and c:IsAbleToRemove()
 end
-function s.drop(e,tp,eg,ep,ev,re,r,rp)
-	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	if Duel.Draw(p,d,REASON_EFFECT)==0 then return end
-	Duel.ShuffleHand(tp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
-	if #g>0 then
-		Duel.BreakEffect()
-		Duel.SendtoDeck(g,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
+end
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK,0,1,1,nil)
+	local tc=g:GetFirst()
+	if tc then
+		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		e1:SetRange(LOCATION_REMOVED)
+		e1:SetCode(EVENT_PHASE+PHASE_STANDBY)
+		e1:SetCountLimit(1)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN,2)
+		e1:SetCondition(s.thcon)
+		e1:SetOperation(s.thop)
+		e1:SetLabel(0)
+		tc:RegisterEffect(e1)
 	end
+end
+function s.thcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()==tp
+end
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+	local ct=e:GetLabel()
+	e:GetHandler():SetTurnCounter(ct+1)
+	if ct==1 then
+		Duel.SendtoHand(e:GetHandler(),nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,e:GetHandler())
+	else e:SetLabel(1) end
 end
 --replace
 function s.repfilter(c,tp)
