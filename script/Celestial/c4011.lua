@@ -30,14 +30,14 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsSequence,tp,LOCATION_DECK,0,1,nil) end
-	e:SetCategory(CATEGORY_REMOVE)
+local sc=Duel.GetMatchingGroup(Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=1 and sc and sc:IsAbleToGrave() end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,Card.IsSequence,tp,LOCATION_DECK,0,1,1,nil)
-	local tc=g:GetFirst()
+	local sc=Duel.GetMatchingGroup(tp,Card.IsSequence,tp,LOCATION_DECK,0,nil,0):GetFirst()
+	local tc=sc:GetFirst()
 	if tc then
 		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 		local e1=Effect.CreateEffect(e:GetHandler())
