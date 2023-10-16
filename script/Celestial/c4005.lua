@@ -29,6 +29,10 @@ function s.initial_effect(c)
 	e3:SetCode(EVENT_MSET)
 	e3:SetCondition(s.spcon2)
 	c:RegisterEffect(e3)
+	local e5=e2:Clone()
+	e5:SetCode(EVENT_SSET)
+	e5:SetCondition(s.spcon2)
+	c:RegisterEffect(e5)
 	local e4=e2:Clone()
 	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e4:SetCondition(s.spcon2)
@@ -60,6 +64,18 @@ function s.fdop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --add from grave
+function s.filter1(c,tp)
+	return c:IsPreviousPosition(POS_FACEUP) and c:IsFacedown() 
+end
+function s.spcon1(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.filter1,1,nil,tp)
+end
+function s.filter2(c,tp)
+	return c:IsFacedown() 
+end
+function s.spcon2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.filter2,1,nil,tp)
+end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return c:IsAbleToDeck() end
