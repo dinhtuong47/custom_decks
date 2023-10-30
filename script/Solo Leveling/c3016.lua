@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_RELEASE)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	--[[e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)]]--
 	e1:SetTarget(s.target(Ritual.Target(rparams)))
 	e1:SetOperation(s.operation(Ritual.Target(rparams),Ritual.Operation(rparams)))
 	c:RegisterEffect(e1)
