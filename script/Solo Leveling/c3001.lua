@@ -62,15 +62,8 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if not sc then return end
 	if sc:IsMonster() then
 		Duel.SpecialSummon(sc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
-	elseif sc:IsTrap() and Duel.SSet(tp,sc)>0 then
-		--It can be activated this turn
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetDescription(aux.Stringid(id,3))
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-		e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-		e1:SetReset(RESET_EVENT|RESETS_STANDARD)
-		sc:RegisterEffect(e1)
+	elseif sc:IsType(TYPE_SPELL+TYPE_TRAP) then Duel.SSet(tp,sc)
+	
 	end
 end
 --set
