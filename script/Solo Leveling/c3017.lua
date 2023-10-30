@@ -99,7 +99,7 @@ function s.postg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.posop(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
-	local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,2,nil)
 	if #g>0 then
 		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
 	end
