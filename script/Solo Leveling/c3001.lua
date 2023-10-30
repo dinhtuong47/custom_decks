@@ -67,6 +67,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		local sc=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,tp):GetFirst()
 		if sc and Duel.SSet(tp,sc) end
 	end
+	end
 end
 --set
 function s.zfilter(c)
