@@ -40,7 +40,8 @@ function s.cfilter(c)
 	return c:IsSetCard(0xBB8) and not c:IsPublic()
 end	
 function s.filter(c,e,tp)
-	return c:IsCode(3000) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+	return (c:IsCode(3000) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE))
+	or (c:IsSetCard(0xBB8) and c:IsType(TYPE_SPELL+TYPE_TRAP))
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
@@ -60,6 +61,11 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
 		Duel.ConfirmCards(1-tp,g)
+	elseif Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
+	--set to field
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+		local sc=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,tp):GetFirst()
+		if sc and Duel.SSet(tp,sc)	
 	end
 end
 --set
