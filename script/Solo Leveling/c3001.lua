@@ -65,7 +65,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	--set to field
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 		local sc=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,tp):GetFirst()
-		if sc and Duel.SSet(tp,sc)	
+		if sc and Duel.SSet(tp,sc) end
 	end
 end
 --set
