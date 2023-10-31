@@ -47,12 +47,12 @@ function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local ft=Duel.GetMZoneCount(tp,c)
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_ONFIELD)>0 and rvg:GetClassCount(Card.GetCode)>=2
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE+LOCATION_SZONE)>0 and rvg:GetClassCount(Card.GetCode)>=2
 	and Duel.IsExistingMatchingCard(s.spsetfilter,tp,LOCATION_DECK,0,1,c,e,tp,ft) end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
-	local ft=Duel.GetLocationCount(tp,LOCATION_ONFIELD)
+	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE+LOCATION_SZONE)
 	local rvg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND,0,nil)
 	local g=aux.SelectUnselectGroup(rvg,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 	if #g<2 then return end
