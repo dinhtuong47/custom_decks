@@ -41,7 +41,7 @@ function s.spfilter(c,e,tp,eg,ep,ev,re,r,rp,rittg)
 end
 function s.target(rittg)
 	return function(e,tp,eg,ep,ev,re,r,rp,chk)
-		if chk==0 then return Duel.IsPlayerCanSpecialSummonCount(tp,2)
+		if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsPlayerCanSpecialSummonCount(tp,2)
 			and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,e,tp,eg,ep,ev,re,r,rp,rittg) end
 		rittg(e,tp,eg,ep,ev,re,r,rp,1)
 		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_HAND+LOCATION_GRAVE)
