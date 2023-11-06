@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
 	e2:SetCountLimit(1,id)
 	e2:SetCost(s.poscost)
-	e2:SetCondition(s.poscon)
+	--[[e2:SetCondition(s.poscon)]]--
 	e2:SetTarget(s.postg)
 	e2:SetOperation(s.posop)
 	c:RegisterEffect(e2)
@@ -44,12 +44,12 @@ function s.initial_effect(c)
 	e4:SetRange(LOCATION_MZONE)
 	e4:SetTargetRange(0,1)
 	c:RegisterEffect(e4)
-	--Check if it was ritual summoned with DARK
+	--[[Check if it was ritual summoned with DARK
 	local e5=Effect.CreateEffect(c)
 	e5:SetType(EFFECT_TYPE_SINGLE)
 	e5:SetCode(EFFECT_MATERIAL_CHECK)
 	e5:SetValue(s.valcheck)
-	c:RegisterEffect(e5)
+	c:RegisterEffect(e5)]]--
 	--flip
 	local e6=Effect.CreateEffect(c)
 	e6:SetDescription(aux.Stringid(id,1))
@@ -86,10 +86,10 @@ function s.poscost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND,0,1,nil) end
 	Duel.DiscardHand(tp,s.filter,1,1,REASON_COST+REASON_DISCARD)
 end
-function s.poscon(e)
+--[[function s.poscon(e)
 	local c=e:GetHandler()
 	return c:IsSummonType(SUMMON_TYPE_RITUAL) and c:GetFlagEffect(id)~=0
-end
+end]]--
 function s.posfilter(c)
 	return c:IsFaceup() and c:IsCanTurnSet()
 end
@@ -109,12 +109,12 @@ function s.aclimit(e,re,tp)
 	local rc=re:GetHandler()
 	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and rc:IsLocation(LOCATION_SZONE) and rc:IsFacedown()
 end
-function s.valcheck(e,c)
+--[[function s.valcheck(e,c)
 	local g=c:GetMaterial()
 	if g:IsExists(Card.IsAttribute,1,nil,ATTRIBUTE_DARK) then
 		c:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD&~(RESET_TOFIELD|RESET_LEAVE|RESET_TEMP_REMOVE),0,1)
 	end
-end
+end]]--
 --set all
 function s.setfilter(c)
 	return c:IsFaceup() and c:IsCanTurnSet()
