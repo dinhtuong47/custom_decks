@@ -1,8 +1,8 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--Ritual Summon
-	local e1=Ritual.AddProcGreater({handler=c,filter=s.ritualfil,extrafil=s.extrafil,location=LOCATION_HAND|LOCATION_GRAVE,extratg=s.extratg})
-end 
+	local e1=Ritual.AddProcGreater({handler=c,filter=s.ritualfil,lvtype=RITPROC_GREATER,sumpos=POS_FACEUP_ATTACK|POS_FACEDOWN_DEFENSE,location=LOCATION_HAND+LOCATION_GRAVE})
+end
 --should be removed in hardcode overhaul
 s.listed_names={3017}
 function s.ritualfil(c)
