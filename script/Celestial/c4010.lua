@@ -63,8 +63,8 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 end
 --gain ATK if attack defense monster
 function s.atkcon(e)
-	--[[local ph=Duel.GetCurrentPhase()
-	if ph~=PHASE_DAMAGE and ph~=PHASE_DAMAGE_CAL then return false end]]--
+	local ph=Duel.GetCurrentPhase()
+	if ph~=PHASE_DAMAGE and ph~=PHASE_DAMAGE_CAL then return false end
 	local a=Duel.GetAttacker()
 	local d=Duel.GetAttackTarget()
 	return e:GetHandler()==a and d and d:IsDefensePos()
