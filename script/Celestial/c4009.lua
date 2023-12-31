@@ -34,6 +34,23 @@ function s.initial_effect(c)
 end
 --place
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g1=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_ONFIELD,0,nil)
+	local g2=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
+	if chk==0 then return #g1>0 and #g2>0 end
+	g1:Merge(g2)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,2,0,0)
+end
+function s.check(sg,e,tp,mg)
+	return sg:GetClassCount(Card.GetControler)==#sg
+end
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetFieldGroup(tp,LOCATION_ONFIELD,LOCATION_ONFIELD)
+	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,s.check,1,tp,HINTMSG_TODECK)
+	if #sg==2 then
+		Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+	end
+end
+--[[function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
 	e:SetCategory(CATEGORY_TODECK)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,0,0)
@@ -43,7 +60,7 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SendtoDeck(g,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
-end
+end]]--
 --add
 function s.addcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
