@@ -63,5 +63,5 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 --cannot attack
 function s.limtg(e,c)
-	return c:IsStatus(STATUS_SUMMON_TURN|STATUS_FLIP_SUMMON_TURN|STATUS_SPSUMMON_TURN) and (not c:IsType(TYPE_FLIP))
+	return c:IsStatus(STATUS_SUMMON_TURN|STATUS_SPSUMMON_TURN) --[[and (not c:IsType(TYPE_FLIP)) |STATUS_FLIP_SUMMON_TURN]]--
 end
