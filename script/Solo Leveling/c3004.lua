@@ -94,12 +94,9 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 			e2:SetProperty(EFFECT_FLAG_CLIENT_HINT)
 			e2:SetType(EFFECT_TYPE_SINGLE)
 			e2:SetCode(EFFECT_IMMUNE_EFFECT)
-			e2:SetValue(s.efilter)
+			e2:SetValue(function(e,te) return te:IsActivated() and te:GetOwnerPlayer()~=e:GetHandlerPlayer() end)
 			e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 			e2:SetOwnerPlayer(tp)
 			tc:RegisterEffect(e2)
 		end
 	end
-function s.efilter(e,re)
-	return e:GetOwnerPlayer()~=re:GetOwnerPlayer()
-end
