@@ -26,7 +26,7 @@ function s.initial_effect(c)
 end
 --SS FROM GY
 function s.cfilter(c)
-	return c:IsFacedown() or not c:IsSetCard(0x2c) and not c:IsCode(id)
+	return c:IsFacedown() or not c:IsSetCard(0x2c) 
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)>0 and not Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
