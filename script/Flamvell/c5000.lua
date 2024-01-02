@@ -23,6 +23,13 @@ function s.initial_effect(c)
 	e2:SetTarget(s.postg)
 	e2:SetOperation(s.posop)
 	c:RegisterEffect(e2)
+	-- Can be treated as non-tuner for a Synchro Summon
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCode(EFFECT_NONTUNER)
+	c:RegisterEffect(e3)
 end
 --SS FROM GY
 function s.cfilter(c)
