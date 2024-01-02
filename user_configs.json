@@ -1,0 +1,15 @@
+{
+	"repos": [
+		{
+			"url": "https://github.com/dinhtuong47/custom_decks.git",
+			"repo_name": "dinhtuong47 Cards",
+			"repo_path": "./repositories/dinhtuong47-Cards",
+			"data_path": "",
+			"script_path": "script",
+			"should_update": true,
+			"should_read": true
+		}
+	],
+	"urls": [],
+	"servers": []
+}
