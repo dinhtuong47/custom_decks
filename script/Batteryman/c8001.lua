@@ -5,6 +5,15 @@ function s.initial_effect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
 	e0:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e0)
+	--indes
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_INDESTRUCTABLE_COUNT)
+	e3:SetRange(LOCATION_FZONE)
+	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e3:SetTarget(aux.TargetBoolFunction(Card.IsRace,RACE_THUNDER))
+	e3:SetValue(s.indct)
+	c:RegisterEffect(e3)
 	--to hand
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -29,6 +38,15 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_series={0x28}
+--indes
+function s.indct(e,re,r,rp)
+	if (r&REASON_BATTLE)~=0 then
+		return 1
+	else
+		return 0
+	end
+end
+--add
 function s.filter(c)
 	return c:IsCode(75967082) or c:IsCode(53077251) or c:IsCode(20529766) and c:IsAbleToHand()
 end
@@ -44,7 +62,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end
 end
---SEND AND DRAW
+--SEND to gy
 function s.spcfilter(c,tp)
 	return c:IsControler(tp) and c:IsRace(RACE_THUNDER) and c:IsAttribute(ATTRIBUTE_LIGHT)
 end
@@ -55,17 +73,13 @@ function s.filter2(c)
 	return c:IsSetCard(0x28) and c:IsLevelBelow(4) and c:IsAbleToGrave()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return --[[Duel.IsPlayerCanDraw(tp,1)]]--and 
-		Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND+LOCATION_DECK)
-	--[[Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)]]--
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.filter2,tp,LOCATION_DECK,0,1,1,nil)
 	if #g>0 then Duel.SendtoGrave(g,REASON_EFFECT)
-		--[[and g:GetFirst():IsLocation(LOCATION_GRAVE) then
-		Duel.Draw(tp,1,REASON_EFFECT)]]--
 	end
 end
