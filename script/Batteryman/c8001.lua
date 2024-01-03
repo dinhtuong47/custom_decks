@@ -46,7 +46,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 --SEND AND DRAW
 function s.spcfilter(c,tp)
-	return c:IsControler(tp) and c:IsRace(RACE_THUNDER)
+	return c:IsControler(tp) and c:IsRace(RACE_THUNDER) and c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 function s.sumcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.spcfilter,1,nil,tp)
