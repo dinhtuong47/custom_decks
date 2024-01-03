@@ -55,8 +55,8 @@ function s.filter2(c)
 	return c:IsSetCard(0x28) and c:IsLevelBelow(4) and c:IsAbleToGrave()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return --[[Duel.IsPlayerCanDraw(tp,1)]]--
-		and Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil) end
+	if chk==0 then return --[[Duel.IsPlayerCanDraw(tp,1)]]--and 
+		Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND+LOCATION_DECK)
 	--[[Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)]]--
 end
