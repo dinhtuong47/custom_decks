@@ -10,20 +10,20 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_FZONE)
-	e1:SetCountLimit(1)
+	e1:SetCountLimit(1,id)
 	e1:SetTarget(s.thtg)
 	e1:SetOperation(s.thop)
 	c:RegisterEffect(e1)
 	--Send to gy
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_TOGRAVE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCode(EVENT_SUMMON_SUCCESS)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCondition(s.sumcon)
-	e2:SetCountLimit(1)
+	e2:SetCountLimit(1,id+50)
 	e2:SetTarget(s.target)
 	e2:SetOperation(s.operation)
 	c:RegisterEffect(e2)
@@ -55,16 +55,17 @@ function s.filter2(c)
 	return c:IsSetCard(0x28) and c:IsLevelBelow(4) and c:IsAbleToGrave()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
+	if chk==0 then return --[[Duel.IsPlayerCanDraw(tp,1)]]--
 		and Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND+LOCATION_DECK)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	--[[Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)]]--
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SelectMatchingCard(tp,s.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,nil)
-	if #g>0 and Duel.SendtoGrave(g,REASON_EFFECT)~=0 and g:GetFirst():IsLocation(LOCATION_GRAVE) then
-		Duel.Draw(tp,1,REASON_EFFECT)
+	if #g>0 then Duel.SendtoGrave(g,REASON_EFFECT)
+		--[[and g:GetFirst():IsLocation(LOCATION_GRAVE) then
+		Duel.Draw(tp,1,REASON_EFFECT)]]--
 	end
 end
