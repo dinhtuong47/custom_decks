@@ -49,7 +49,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.HintSelection(sg)
 		Duel.SendtoGrave(sg,REASON_RULE)
 	end
-	if Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+	if Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
 	end
@@ -65,7 +65,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		if #rg then Duel.SSet(tp,rg)
 		end
 	elseif not tc:IsRace(RACE_DRAGON) and not tc:IsRace(RACE_PLANT) and tc:IsLocation(LOCATION_HAND)
-		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.IsMainPhase() and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.IsMainPhase() and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
 		Duel.SkipPhase(Duel.GetTurnPlayer(),Duel.GetCurrentPhase(),RESET_PHASE|PHASE_END,1)
 		end
