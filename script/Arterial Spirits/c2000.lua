@@ -65,8 +65,10 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		if #rg then Duel.SSet(tp,rg)
 		end
 	elseif not tc:IsRace(RACE_DRAGON) and not tc:IsRace(RACE_PLANT) and tc:IsLocation(LOCATION_HAND)
-		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.IsMainPhase() and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.IsMainPhase() and Duel.IsPlayerCanDraw(1-tp,1)
+		and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
+		Duel.Draw(1-tp,1,REASON_EFFECT)
 		Duel.SkipPhase(Duel.GetTurnPlayer(),Duel.GetCurrentPhase(),RESET_PHASE|PHASE_END,1)
 		end
 	end
