@@ -58,15 +58,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		if #sg==0 then return end
 		local ft=math.min(Duel.GetLocationCount(tp,LOCATION_SZONE),2)
 		local rg=aux.SelectUnselectGroup(sg,e,tp,1,ft,aux.dncheck,1,tp,HINTMSG_SET)
-		if #rg>0 and Duel.SSet(tp,rg)>0 then
-		--Can be activated this turn
-			local e1=Effect.CreateEffect(c)
-			e1:SetDescription(aux.Stringid(id,3))
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
-			rg:RegisterEffect(e1)
+		if #rg then Duel.SSet(tp,rg)
 		end
 	elseif not tc:IsRace(RACE_DRAGON) and not tc:IsRace(RACE_PLANT) and tc:IsLocation(LOCATION_HAND)
 		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
