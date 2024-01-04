@@ -42,11 +42,14 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	and tc:IsRelateToBattle() and Duel.GetAttackTarget()~=nil
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+	
+	local tp=e:GetHandlerPlayer()
 	local a=Duel.GetAttacker()
-	local b=a:GetBattleTarget()
+	local tc=a:GetBattleTarget()
+	if tc and tc:IsControler(1-tp) then a,tc=tc,a end
 	local dam=Duel.GetBattleDamage(tp)
-	if a:IsControler(1-tp) then a,b=b,a end
+	if not tc or dam<=0 then return 1 end
+	c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
 	if a:IsRelateToBattle() and not a:IsImmuneToEffect(e) then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
