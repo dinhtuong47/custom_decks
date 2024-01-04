@@ -4,7 +4,7 @@ function s.initial_effect(c)
 	--return to hand
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_TOGRAVE)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_TOGRAVE++CATEGORY_DRAW)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -49,6 +49,11 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.HintSelection(sg)
 		Duel.SendtoGrave(sg,REASON_RULE)
 	end
+	if Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+			Duel.ShuffleDeck(tp)
+			Duel.BreakEffect()
+			Duel.Draw(tp,1,REASON_EFFECT)
+	end
 	elseif tc:IsRace(RACE_DRAGON) and tc:IsLocation(LOCATION_HAND) and Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil,tp)
 	and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 	--set to field
@@ -61,7 +66,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		if #rg then Duel.SSet(tp,rg)
 		end
 	elseif not tc:IsRace(RACE_DRAGON) and not tc:IsRace(RACE_PLANT) and tc:IsLocation(LOCATION_HAND)
-		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.IsMainPhase() and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.IsMainPhase() and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 		Duel.BreakEffect()
 		Duel.SkipPhase(Duel.GetTurnPlayer(),Duel.GetCurrentPhase(),RESET_PHASE|PHASE_END,1)
 		end
