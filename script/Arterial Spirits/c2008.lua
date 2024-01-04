@@ -38,8 +38,7 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	if not tc then return false end
 	if tc:IsControler(1-tp) then tc=Duel.GetAttackTarget() end
 	e:SetLabelObject(tc)
-	return tc and tc~=e:GetHandler() and (tc:IsSetCard(0x7D0) and tc:IsLevel(4)) 
-	and tc:IsRelateToBattle() and Duel.GetAttackTarget()~=nil
+	return tc and tc~=e:GetHandler() and (tc:IsSetCard(0x7D0) and tc:IsLevel(4))  and tc:IsRelateToBattle() and Duel.GetAttackTarget()~=nil
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -60,13 +59,13 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 			e2:SetCode(EVENT_BATTLED)
 			e2:SetLabelObject(b)
 			e2:SetRange(LOCATION_MZONE)
-			e2:SetOperation(s.atkop)
+			e2:SetOperation(s.atkop1)
 			e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
 			b:RegisterEffect(e2)
 		end
 	end
 end
-function s.atkop(e,tp,eg,ep,ev,re,r,rp)
+function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 	local b=e:GetLabelObject()
 	if b:IsFaceup() then
 		local e1=Effect.CreateEffect(e:GetHandler())
