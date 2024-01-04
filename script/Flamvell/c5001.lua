@@ -37,7 +37,7 @@ function s.initial_effect(c)
 end
 function s.atkval(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*100
+	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*200
 end
 --act limit
 function s.actcon(e)
