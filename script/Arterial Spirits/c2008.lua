@@ -61,7 +61,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 			e2:SetRange(LOCATION_MZONE)
 			e2:SetOperation(s.atkop1)
 			e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
-			b:RegisterEffect(e2)
+			a:RegisterEffect(e2)
 		end
 	end
 end
@@ -73,7 +73,7 @@ function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
 		e1:SetValue(a:GetAttack()/2)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		b:RegisterEffect(e1)
+		a:RegisterEffect(e1)
 	end
 end
 --Reset a monster's ATK
