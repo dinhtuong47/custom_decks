@@ -29,7 +29,7 @@ end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc and tc:IsRelateToEffect(e) and Duel.SetLP(tp,Duel.GetLP(tp)+tc:GetDefense())~=0 then
-		Duel.ConfirmCards(1-tp,c)
+		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
 		local c=e:GetHandler()
 	end
