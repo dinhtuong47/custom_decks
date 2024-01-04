@@ -58,16 +58,16 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
 		a:RegisterEffect(e1)
 		if b:IsRelateToBattle() and not b:IsImmuneToEffect(e) then
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-			e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-			e2:SetCode(EVENT_BATTLED)
-			e2:SetLabelObject(a)
-			e2:SetRange(LOCATION_MZONE)
-			e2:SetOperation(s.atkop1)
-			e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
-			b:RegisterEffect(e2)
-		end
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e2:SetCode(EVENT_BATTLED)
+		e2:SetLabelObject(a)
+		e2:SetRange(LOCATION_MZONE)
+		e2:SetOperation(s.atkop1)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
+		b:RegisterEffect(e2)
+		
 	end
 end
 function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
