@@ -57,13 +57,14 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	elseif not tc:IsRace(RACE_WINGEDBEAST) and tc:IsLocation(LOCATION_HAND)
 		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
-		--Increase ATK
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
-		e1:SetValue(500)
-		c:RegisterEffect(e1)
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+		e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+		e1:SetTargetRange(LOCATION_ONFIELD,0)
+		e1:SetValue(1)
+		e1:SetReset(RESET_PHASE+PHASE_END)
+		Duel.RegisterEffect(e1,tp)
 		end
 	end
 end
