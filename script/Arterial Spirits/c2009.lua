@@ -23,7 +23,8 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
+	e2:SetTargetRange(LOCATION_ONFIELD,0)
+	e2:SetCondition(s.indcon)
 	e2:SetTarget(s.cannottgeff)
 	e2:SetValue(aux.tgoval)
 	c:RegisterEffect(e2)
@@ -44,6 +45,12 @@ function s.atkeff(e,c)
 	return c:IsLevel(6) and c:IsSetCard(0x7D0)
 end
 --immueff
+function s.indfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0X7D0) and c:IsLevel(4)
+end
+function s.indcon(e)
+	return Duel.IsExistingMatchingCard(s.indfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil)
+end
 function s.cannottgeff(e,c)
 	return c:IsFaceup()  
 end
