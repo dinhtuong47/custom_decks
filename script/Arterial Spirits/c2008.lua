@@ -46,8 +46,6 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 	local a=Duel.GetAttacker()
 	local b=a:GetBattleTarget()
 	if a:IsControler(1-tp) then a,b=b,a end
-	local dam=Duel.GetBattleDamage(tp)
-	if not a or dam<=0 then return 1 end
 	if a:IsRelateToBattle() and not a:IsImmuneToEffect(e) then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
@@ -70,6 +68,8 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local a=e:GetLabelObject()
+	local dam=Duel.GetBattleDamage(tp)
+	if not a or dam<=0 then return 1 end
 	if a:IsFaceup() then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
