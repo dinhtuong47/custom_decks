@@ -8,9 +8,14 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetHintTiming(0,TIMING_END_PHASE)
+	e1:SetCondition(s.condition)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
+end
+function s.condition(e,tp,eg,ep,ev,re,r,rp)
+	local ph=Duel.GetCurrentPhase()
+	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE 
 end
 function s.spfilter(c,e,tp)
 	return c:IsSetCard(0x7D0) and c:IsLevel(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
