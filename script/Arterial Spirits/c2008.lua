@@ -28,20 +28,6 @@ function s.initial_effect(c)
 	e3:SetOperation(s.atkop)
 	c:RegisterEffect(e3)
 end
---[[add
-function s.thfilter(c)
-	return c:IsMonster() and c:IsSetCard(0x7D0) and c:IsAbleToHand()
-end
-function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local g=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK,0,nil)
-	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local sg=g:Select(tp,1,1,nil)
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
-	end
-end]]--
 --indes
 function s.indescost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,500) end
@@ -59,6 +45,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local a=Duel.GetAttacker()
 	local b=a:GetBattleTarget()
+	local dam=Duel.GetBattleDamage(tp)
 	if a:IsControler(1-tp) then a,b=b,a end
 	if a:IsRelateToBattle() and not a:IsImmuneToEffect(e) then
 		local e1=Effect.CreateEffect(c)
@@ -82,9 +69,6 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 	local a=e:GetLabelObject()
-	local dam=Duel.GetBattleDamage(tp)
-	if a:IsFaceup() then
-	if dam<=0 then return 1 end
 	c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
 		local e3=Effect.CreateEffect(c)
 		e3:SetType(EFFECT_TYPE_SINGLE)
