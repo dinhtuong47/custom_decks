@@ -45,7 +45,7 @@ function s.atkeff(e,c)
 end
 --immueff
 function s.cannottgeff(e,c)
-	return c:IsLevel(4) and c:IsSetCard(0x7D0)
+	return c:IsFaceup()  
 end
 --reveal
 function s.cfilter(c,tp)
@@ -53,7 +53,7 @@ function s.cfilter(c,tp)
 		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,c:GetCode())
 end
 function s.thfilter(c,code)
-	return c:IsMonster() and c:IsSetCard(0x7D0) and c:IsLevel(6) and not c:IsCode(code) and c:IsAbleToHand()
+	return c:IsMonster() and c:IsSetCard(0x7D0) and not c:IsCode(code) and c:IsAbleToHand()
 end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND,0,1,nil,tp) end
