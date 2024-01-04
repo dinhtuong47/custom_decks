@@ -29,7 +29,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) and Duel.Recover(tp,Duel.GetLP(tp)+tc:GetDefense())~=0 then
+	if tc and tc:IsRelateToEffect(e) and Duel.SetLP(tp,Duel.GetLP(tp)+tc:GetDefense())~=0 then
 		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
 		local c=e:GetHandler()
