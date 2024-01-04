@@ -46,7 +46,7 @@ function s.atkeff(e,c)
 end
 --immueff
 function s.indfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0X7D0) and c:IsLevel(4)
+	return c:IsFaceup() and c:IsLevel(6) and c:IsSetCard(0X7D0) 
 end
 function s.indcon(e)
 	return Duel.IsExistingMatchingCard(s.indfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil)
