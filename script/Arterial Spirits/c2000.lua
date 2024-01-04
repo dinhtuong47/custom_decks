@@ -30,7 +30,6 @@ end
 
 function s.setfilter(c,tp)
 	return c:IsSetCard(0x7D0) and c:IsTrap() and c:IsSSetable()
-		and not Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,c:GetCode())
 end
 
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
