@@ -84,9 +84,12 @@ function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 	local a=e:GetLabelObject()
 	local dam=Duel.GetBattleDamage(tp)
 	if a:IsFaceup() then
-		local e3=Effect.CreateEffect(e:GetHandler())
+	if dam<=0 then return 1 end
+	c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+		local e3=Effect.CreateEffect(c)
 		e3:SetType(EFFECT_TYPE_SINGLE)
 		e3:SetCode(EFFECT_UPDATE_ATTACK)
+		e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 		e3:SetValue(dam)
 		e3:SetReset(RESET_EVENT+RESETS_STANDARD)
 		a:RegisterEffect(e3)
