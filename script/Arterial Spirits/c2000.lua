@@ -55,9 +55,12 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	--set to field
     	Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-		local sc=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK,0,1,1,nil,tp):GetFirst()
-		if sc and Duel.SSet(tp,sc)>0 then
-			--Can be activated this turn
+		local sg=Duel.GetMatchingGroup(s.setfilter,tp,LOCATION_DECK,0,nil)
+		if #sg==0 then return end
+		local ft=math.min(Duel.GetLocationCount(tp,LOCATION_SZONE),2)
+		local rg=aux.SelectUnselectGroup(sg,e,tp,1,ft,aux.dncheck,1,tp,HINTMSG_SET)
+		if #rg>0 and Duel.SSet(tp,rg)>0 then
+		--Can be activated this turn
 			local e1=Effect.CreateEffect(c)
 			e1:SetDescription(aux.Stringid(id,3))
 			e1:SetType(EFFECT_TYPE_SINGLE)
