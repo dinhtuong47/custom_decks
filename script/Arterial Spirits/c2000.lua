@@ -61,15 +61,9 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		if #rg then Duel.SSet(tp,rg)
 		end
 	elseif not tc:IsRace(RACE_DRAGON) and not tc:IsRace(RACE_PLANT) and tc:IsLocation(LOCATION_HAND)
-		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+		and c:IsFaceup() and c:IsRelateToEffect(e) and Duel.IsMainPhase() and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
-		--Increase ATK
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
-		e1:SetValue(500)
-		c:RegisterEffect(e1)
+		Duel.SkipPhase(1-tp,Duel.GetCurrentPhase(),RESET_PHASE+PHASE_END,1)
 		end
 	end
 end
