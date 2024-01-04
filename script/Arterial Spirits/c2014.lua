@@ -51,7 +51,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		if Duel.IsMainPhase() and tc:IsCode(2000) and tc:IsRelateToEffect(e) then
 		Duel.BreakEffect()
 		--end main phase
-		Duel.SkipPhase(1-tp,Duel.GetCurrentPhase(),RESET_PHASE+PHASE_END,1)
+		Duel.SkipPhase(Duel.GetTurnPlayer(),Duel.GetCurrentPhase(),RESET_PHASE|PHASE_END,1)
 	end
 end
 function s.etg(e,c)
