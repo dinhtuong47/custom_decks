@@ -79,6 +79,7 @@ function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 		e3:SetValue(dam)
 		e3:SetReset(RESET_EVENT+RESETS_STANDARD)
 		a:RegisterEffect(e3)
+		end
 	end
 end
 --Reset a monster's ATK
