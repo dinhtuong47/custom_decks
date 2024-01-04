@@ -43,42 +43,41 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if r & REASON_BATTLE ==0 then return 0 end
-	local tp=e:GetHandlerPlayer()
 	local a=Duel.GetAttacker()
-	local tc=a:GetBattleTarget()
-	if tc and tc:IsControler(1-tp) then a,tc=tc,a end
+	local b=a:GetBattleTarget()
+	if a:IsControler(1-tp) then a,b=b,a end
 	local dam=Duel.GetBattleDamage(tp)
-	if not tc or dam<=0 then return 1 end
-	c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+	if not a or dam<=0 then return 1 end
+	if a:IsRelateToBattle() and not a:IsImmuneToEffect(e) then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
 		e1:SetValue(1)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
 		a:RegisterEffect(e1)
-		if tc:IsRelateToBattle() and not tc:IsImmuneToEffect(e) then
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e2:SetCode(EVENT_BATTLED)
-		e2:SetLabelObject(a)
-		e2:SetRange(LOCATION_MZONE)
-		e2:SetOperation(s.atkop1)
-		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
-		tc:RegisterEffect(e2)
-		
+		if b:IsRelateToBattle() and not b:IsImmuneToEffect(e) then
+			local e2=Effect.CreateEffect(c)
+			e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+			e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+			e2:SetCode(EVENT_BATTLED)
+			e2:SetLabelObject(a)
+			e2:SetRange(LOCATION_MZONE)
+			e2:SetOperation(s.atkop)
+			e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
+			b:RegisterEffect(e2)
+		end
 	end
 end
-function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
+function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local a=e:GetLabelObject()
-		local e3=Effect.CreateEffect(c)
-		e3:SetType(EFFECT_TYPE_SINGLE)
-		e3:SetCode(EFFECT_UPDATE_ATTACK)
-		e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-		e3:SetValue(dam)
-		e3:SetReset(RESET_EVENT+RESETS_STANDARD)
-		a:RegisterEffect(e3)
+	if a:IsFaceup() then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
+		e1:SetValue(a:GetAttack()-dam)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		b:RegisterEffect(e1)
+	end
 end
 --Reset a monster's ATK
 function s.atkfilter(c)
