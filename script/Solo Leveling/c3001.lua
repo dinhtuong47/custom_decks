@@ -61,9 +61,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local sc=Duel.SelectMatchingCard(tp,s.spsetfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp,ft):GetFirst()
 	if not sc then return end
 	if sc:IsMonster() then
-		Duel.SpecialSummon(sc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
+		Duel.SpecialSummon(sc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE) 
+		Duel.ConfirmCards(1-tp,sc)
 	elseif sc:IsType(TYPE_SPELL+TYPE_TRAP) then Duel.SSet(tp,sc)
-	
+	Duel.ConfirmCards(1-tp,sc)
 	end
 end
 --set
