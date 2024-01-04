@@ -69,7 +69,6 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 	local a=e:GetLabelObject()
-	c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
 		local e3=Effect.CreateEffect(c)
 		e3:SetType(EFFECT_TYPE_SINGLE)
 		e3:SetCode(EFFECT_UPDATE_ATTACK)
