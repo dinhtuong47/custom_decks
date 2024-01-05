@@ -40,7 +40,7 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.PayLPCost(tp,500)
 end
 function s.codefilter(c,code)
-	return c:IsCode(code) and c:IsAbleToGrave()
+	return c:IsCode(code) and c:IsAbleToHand()
 end
 	--Activation legality
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -53,16 +53,17 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 		{b1,aux.Stringid(id,0)},
 		{b2,aux.Stringid(id,1)})
 	e:SetLabel(op)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 	--to hand based on monster
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOHAND)
 	if e:GetLabel()==1 then
 		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,88086137,aux.Stringid(id,0))
 	else
 		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,75967082,aux.Stringid(id,1))
 	end
-	if #g>0 then Duel.SendtoGrave(g,REASON_EFFECT) end
+	if #g>0 then Duel.SendtoHand(g,REASON_EFFECT) end
+	Duel.ConfirmCards(1-tp,g)
 end
