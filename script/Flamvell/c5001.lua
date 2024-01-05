@@ -37,13 +37,13 @@ function s.initial_effect(c)
 end
 function s.atkval(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*200
+	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*100
 end
 --act limit
 function s.actcon(e)
 	local gct=Duel.GetFieldGroupCount(e:GetHandler():GetControler(),0,LOCATION_GRAVE)
 	local ph=Duel.GetCurrentPhase()
-	if gct<=5 then return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE end
+	if gct<=6 then return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE end
 end
 
 
