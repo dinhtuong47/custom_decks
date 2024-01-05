@@ -64,6 +64,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	else
 		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,75967082,aux.Stringid(id,1))
 	end
-	if #g>0 then Duel.SendtoHand(g,REASON_EFFECT) end
+	if #g>0 then Duel.SendtoHand(g,nil,REASON_EFFECT) end
 	Duel.ConfirmCards(1-tp,g)
 end
