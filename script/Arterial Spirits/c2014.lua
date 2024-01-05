@@ -49,9 +49,10 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RegisterEffect(e2,tp)
 		end
 		Duel.BreakEffect()
-		if tc:IsCode(2000) and tc:IsRelateToEffect(e) then
+		if tc:IsCode(2000) and Duel.IsPlayerCanDraw(1-tp,1) and tc:IsRelateToEffect(e) then
 		Duel.BreakEffect()
 		--end main phase
+		Duel.Draw(1-tp,1,REASON_EFFECT)
 		Duel.SkipPhase(Duel.GetTurnPlayer(),Duel.GetCurrentPhase(),RESET_PHASE|PHASE_END,1)
 	end
 end
