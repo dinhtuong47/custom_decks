@@ -3,7 +3,7 @@ function s.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_CHAINING)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetHintTiming(0,TIMING_END_PHASE)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
@@ -14,8 +14,7 @@ function s.initial_effect(c)
 end
 s.listed_series={0x7D0}
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsMainPhase() 
-	and rp==1-tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
+	return Duel.IsMainPhase() and eg:IsExists(Card.IsSummonPlayer,1,nil,1-tp)
 end
 function s.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevel(4)
