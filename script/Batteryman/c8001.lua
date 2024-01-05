@@ -35,7 +35,11 @@ function s.indct(e,re,r,rp)
 	end
 end
 --add
-function s.cfilter(c)
+function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.CheckLPCost(tp,500) end
+	Duel.PayLPCost(tp,500)
+end
+--[[function s.cfilter(c)
 	return c:IsSetCard(0x28) and c:IsLevelBelow(4) and c:IsAbleToGraveAsCost()
 end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -46,7 +50,7 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.codefilter(c,code)
 	return c:IsCode(code) and c:IsAbleToHand()
-end
+end]]--
 	--Activation legality
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local light=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,20529766)
