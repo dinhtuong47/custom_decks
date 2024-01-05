@@ -47,11 +47,10 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil)
 	Duel.SendtoGrave(g,REASON_COST)
-end
+end]]--
 function s.codefilter(c,code)
 	return c:IsCode(code) and c:IsAbleToHand()
-end]]--
-	--Activation legality
+end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local light=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,20529766)
 	local dark=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,19441018)
