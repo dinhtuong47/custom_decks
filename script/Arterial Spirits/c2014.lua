@@ -14,8 +14,7 @@ function s.initial_effect(c)
 end
 s.listed_series={0x7D0}
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_MAIN_START and ph<=PHASE_MAIN 
+	return Duel.IsMainPhase() 
 	and rp==1-tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
 end
 function s.filter(c)
