@@ -58,7 +58,7 @@ end
 	--to hand based on monster
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOHAND)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	if e:GetLabel()==1 then
 		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,88086137,aux.Stringid(id,0))
 	else
