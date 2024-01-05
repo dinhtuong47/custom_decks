@@ -48,14 +48,14 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RegisterEffect(e2,tp)
 		end
 		Duel.BreakEffect()
-		if Duel.IsMainPhase() and tc:IsCode(2000) and tc:IsRelateToEffect(e) then
+		if tc:IsCode(2000) and tc:IsRelateToEffect(e) then
 		Duel.BreakEffect()
 		--end main phase
 		Duel.SkipPhase(Duel.GetTurnPlayer(),Duel.GetCurrentPhase(),RESET_PHASE|PHASE_END,1)
 	end
 end
 function s.etg(e,c)
-	return c:IsFaceup() 
+	return c:IsType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) 
 end
 function s.efilter(e,re)
 	return re==e:GetLabelObject()
