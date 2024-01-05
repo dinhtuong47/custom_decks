@@ -14,7 +14,9 @@ function s.initial_effect(c)
 end
 s.listed_series={0x7D0}
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
+	local ph=Duel.GetCurrentPhase()
+	return ph>=PHASE_MAIN_START and ph<=PHASE_MAIN 
+	and rp==1-tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
 end
 function s.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevel(4)
