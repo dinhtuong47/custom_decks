@@ -52,7 +52,7 @@ function s.indcon(e)
 	return Duel.IsExistingMatchingCard(s.indfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil)
 end
 function s.cannottgeff(e,c)
-	return c:IsFaceup()  
+	return c:IsType(TYPE_SPELL+TYPE_TRAP)  
 end
 --reveal
 function s.cfilter(c,tp)
