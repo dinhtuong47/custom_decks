@@ -36,15 +36,18 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(-500)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		tc:RegisterEffect(e1)
-        --Unaffected
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_FIELD)
-		e2:SetCode(EFFECT_IMMUNE_EFFECT)
-		e2:SetTargetRange(LOCATION_ONFIELD,0)
-		e2:SetTarget(s.etg)
-		e2:SetValue(s.efilter)
-		e2:SetLabelObject(re)
-		e2:SetReset(RESET_CHAIN)
+        	--The activation and effects of your Fish monsters on your field cannot be negated
+		local e1=Effect.CreateEffect(c)
+		e1:SetDescription(aux.Stringid(id,2))
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+		e1:SetCode(EFFECT_CANNOT_INACTIVATE)
+		e1:SetTargetRange(1,0)
+		e1:SetValue(s.effectfilter)
+		e1:SetReset(RESET_PHASE|PHASE_END)
+		Duel.RegisterEffect(e1,tp)
+		local e2=e1:Clone()
+		e2:SetCode(EFFECT_CANNOT_DISEFFECT)
 		Duel.RegisterEffect(e2,tp)
 		end
 		Duel.BreakEffect()
@@ -55,11 +58,10 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SkipPhase(Duel.GetTurnPlayer(),Duel.GetCurrentPhase(),RESET_PHASE|PHASE_END,1)
 	end
 end
-function s.etg(e,c)
-	return c:IsType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) 
-end
-function s.efilter(e,re)
-	return re==e:GetLabelObject()
+function s.effectfilter(e,ct)
+	local p=e:GetHandlerPlayer()
+	local tp,loc,level=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION,CHAININFO_TRIGGERING_LEVEL)
+	return p==tp and (loc&LOCATION_HAND)~=0 and level&LEVEL_6>0
 end
 
  
