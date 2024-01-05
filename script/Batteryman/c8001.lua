@@ -44,8 +44,8 @@ function s.codefilter(c,code)
 end
 	--Activation legality
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local light=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,20529766)
-	local dark=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,19441018)
+	local light=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,20529766)
+	local dark=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,19441018)
 	local b1=light and Duel.IsExistingMatchingCard(s.codefilter,tp,LOCATION_DECK,0,1,nil,88086137)
 	local b2=dark and Duel.IsExistingMatchingCard(s.codefilter,tp,LOCATION_DECK,0,1,nil,75967082)
 	if chk==0 then return b1 or b2 end
@@ -60,9 +60,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	if e:GetLabel()==1 then
-		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,BEWD)
+		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,88086137)
 	else
-		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,DM)
+		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,75967082)
 	end
 	if #g>0 then Duel.SendtoGrave(g,REASON_EFFECT) end
 end
