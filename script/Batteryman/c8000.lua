@@ -20,6 +20,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,id+50)
 	e2:SetCost(s.cost2)
+	e2:SetCondition(s.nscon)
 	e2:SetTarget(s.nstg)
 	e2:SetOperation(s.nsop)
 	c:RegisterEffect(e2)
@@ -89,17 +90,19 @@ end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	return not (c:IsRace(RACE_THUNDER) and c:IsAttribute(ATTRIBUTE_LIGHT))
 end
-function s.nsfilter(c)
-	return (c:IsRace(RACE_THUNDER) and c:IsAttribute(ATTRIBUTE_LIGHT)) and c:IsSummonable(true,nil)
+function s.nscon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsPlayerCanAdditionalSummon(tp)
 end
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
+	if chk==0 then return Duel.IsPlayerCanSummon(tp) end
 end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local g=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND,0,1,1,nil)
-	if #g>0 then
-		Duel.Summon(tp,g:GetFirst(),true,nil)
-	end
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetDescription(aux.Stringid(id,2))
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_EXTRA_SUMMON_COUNT)
+	e1:SetTargetRange(LOCATION_HAND+LOCATION_MZONE,0)
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsRace,RACE_THUNDER))
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	Duel.RegisterEffect(e1,tp)
 end
