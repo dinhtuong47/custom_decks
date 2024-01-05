@@ -62,7 +62,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g1)
 		Duel.ShuffleHand(tp)
 		Duel.BreakEffect()
-		Duel.DiscardHand(tp,aux.TRUE,1,1,REASON_EFFECT+REASON_DISCARD) end
+		Duel.DiscardHand(tp,aux.TRUE,1,1,REASON_EFFECT+REASON_DISCARD)
 	end
 end
 --prevent
