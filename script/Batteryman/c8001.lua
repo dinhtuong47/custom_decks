@@ -46,8 +46,8 @@ end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local light=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,20529766)
 	local dark=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,19441018)
-	local b1=light and Duel.IsExistingMatchingCard(s.codefilter,tp,LOCATION_DECK,0,1,nil,88086137)
-	local b2=dark and Duel.IsExistingMatchingCard(s.codefilter,tp,LOCATION_DECK,0,1,nil,75967082)
+	local b1=light and Duel.IsExistingMatchingCard(s.codefilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,88086137)
+	local b2=dark and Duel.IsExistingMatchingCard(s.codefilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,75967082)
 	if chk==0 then return b1 or b2 end
 	local op=Duel.SelectEffect(tp,
 		{b1,aux.Stringid(id,0)},
@@ -60,9 +60,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	if e:GetLabel()==1 then
-		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,88086137,aux.Stringid(id,0))
+		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,88086137,aux.Stringid(id,0))
 	else
-		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,75967082,aux.Stringid(id,1))
+		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,75967082,aux.Stringid(id,1))
 	end
 	if #g>0 then Duel.SendtoHand(g,nil,REASON_EFFECT) end
 	Duel.ConfirmCards(1-tp,g)
