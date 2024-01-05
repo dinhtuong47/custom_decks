@@ -41,7 +41,7 @@ function s.thcon(e)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
 end
 function s.thfilter2(c,tp)
-	return c:IsSetCard(0x28) and c:IsMonster() and c:IsAbleToHand()
+	return c:IsCode(20529766) or (c:IsSetCard(0x28) and c:IsMonster()) and c:IsAbleToHand()
 		and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_DECK,0,1,c)
 end
 function s.thfilter3(c)
@@ -61,19 +61,10 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(g1,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g1)
 		Duel.ShuffleHand(tp)
-		Duel.ShuffleDeck(tp)
 		Duel.BreakEffect()
-		Duel.DisableShuffleCheck()
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local td=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND,0,1,1,nil)
-	if #td>0 then
-		Duel.DisableShuffleCheck()
-		Duel.BreakEffect()
-		Duel.SendtoDeck(td,nil,SEQ_DECKBOTTOM,REASON_EFFECT) end
+		Duel.DiscardHand(tp,aux.TRUE,1,1,REASON_EFFECT+REASON_DISCARD) end
 	end
 end
-
-
 --prevent
 function s.disop(e,tp)
 	return e:GetLabel()
