@@ -35,9 +35,14 @@ function s.indct(e,re,r,rp)
 	end
 end
 --add
+function s.cfilter(c)
+	return c:IsSetCard(0x28) and c:IsLevelBelow(4) and c:IsAbleToGraveAsCost()
+end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,500) end
-	Duel.PayLPCost(tp,500)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil)
+	Duel.SendtoGrave(g,REASON_COST)
 end
 function s.codefilter(c,code)
 	return c:IsCode(code) and c:IsAbleToHand()
