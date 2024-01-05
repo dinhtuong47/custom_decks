@@ -60,8 +60,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.effectfilter(e,ct)
 	local p=e:GetHandlerPlayer()
-	local tp,loc,level=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION,CHAININFO_TRIGGERING_LEVEL)
-	return p==tp and (loc&LOCATION_HAND)~=0 and level&LEVEL_6>0
+	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
+	return p==tp and (loc&LOCATION_HAND)~=0 and te:GetHandler():IsSetCard(0x103)
 end
 
  
