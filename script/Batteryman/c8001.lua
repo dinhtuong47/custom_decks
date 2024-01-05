@@ -60,9 +60,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	if e:GetLabel()==1 then
-		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,88086137)
+		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,88086137,aux.Stringid(id,0))
 	else
-		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,75967082)
+		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK,0,1,1,nil,75967082,aux.Stringid(id,1))
 	end
 	if #g>0 then Duel.SendtoGrave(g,REASON_EFFECT) end
 end
