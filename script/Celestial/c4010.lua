@@ -28,13 +28,12 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetCode(EFFECT_PIERCE)
 	c:RegisterEffect(e2)
-	--atkup
+	--Can attack all monsters
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e3:SetRange(LOCATION_MZONE)
 	e3:SetCode(EFFECT_ATTACK_ALL)
-	e3:SetOperation(s.efop)
+	e3:SetTarget(s.atktg)
+	e3:SetValue(1)
 	c:RegisterEffect(e3)
 end
 --send and gain atk
@@ -60,28 +59,8 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 		c:RegisterEffect(e1)
 	end
 end
---Attack all def monsters
-function s.efop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local rc=c:GetReasonCard()
-	local e1=Effect.CreateEffect(rc)
-	e1:SetDescription(aux.Stringid(id,1))
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
-	e1:SetCode(EFFECT_ATTACK_ALL)
-	e1:SetValue(s.atkfilter)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-	rc:RegisterEffect(e1,true)
-	if not rc:IsType(TYPE_EFFECT) then
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetCode(EFFECT_ADD_TYPE)
-		e2:SetValue(TYPE_EFFECT)
-		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-		rc:RegisterEffect(e2,true)
-	end
-end
-function s.atkfilter(e,c)
+--attack all
+function s.atktg(e,c)
 	return c:IsPosition(POS_DEFENSE)
 end
 
