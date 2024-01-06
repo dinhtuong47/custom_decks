@@ -22,11 +22,11 @@ end
 function s.atkval(e,c)
 	local g=Duel.GetMatchingGroup(s.filter,c:GetControler(),LOCATION_MZONE,0,nil)
 	if g:IsExists(Card.IsDefensePos,1,nil) then return 0 end
-	return #g*500
+	return 500
 end
 function s.defval(e,c)
 	local g=Duel.GetMatchingGroup(s.filter,c:GetControler(),LOCATION_MZONE,0,nil)
 	if g:IsExists(Card.IsAttackPos,1,nil) then return 0 end
-	return #g*500
+	return 500
 end
 
