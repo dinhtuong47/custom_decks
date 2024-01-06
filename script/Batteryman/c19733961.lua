@@ -15,17 +15,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={id}
-function s.filter(c)
-	return c:IsFaceup() and c:IsCode(id)
+function s.atkfil(c)
+	return c:IsFaceup() and c:IsCode(19733961)  
 end
 function s.atkval(e,c)
-	local g=Duel.GetMatchingGroup(s.filter,c:GetControler(),LOCATION_MZONE,0,nil)
-	if g:IsExists(Card.IsDefensePos,1,nil) then return 0 end
-	return Duel.GetMatchingGroupCount(s.filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)*500
+	return Duel.GetMatchingGroupCount(s.atkfil,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)*500
 end
 function s.defval(e,c)
-	local g=Duel.GetMatchingGroup(s.filter,c:GetControler(),LOCATION_MZONE,0,nil)
-	if g:IsExists(Card.IsAttackPos,1,nil) then return 0 end
-	return Duel.GetMatchingGroupCount(s.filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)*500
+	return Duel.GetMatchingGroupCount(s.atkfil,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)*500
 end
 
