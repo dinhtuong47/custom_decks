@@ -1,9 +1,11 @@
+--E・HERO エアー・ネオス
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	Fusion.AddProcMix(c,true,true,s.ffilter,2)
+	Fusion.AddProcMix(c,true,true,4000,4002)
 	Fusion.AddContactProc(c,s.contactfil,s.contactop,s.splimit)
+	aux.EnableNeosReturn(c)
 	--atkup
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -13,11 +15,6 @@ function s.initial_effect(c)
 	e1:SetValue(s.atkval)
 	c:RegisterEffect(e1)
 end
---material
-function s.ffilter(c,fc,sumtype,sp,sub,mg,sg)
-	return c:IsSetCard(0x254a,fc,sumtype,sp) and (not sg or sg:FilterCount(aux.TRUE,c)==0 or not sg:IsExists(Card.IsAttribute,1,c,c:GetAttribute(),fc,sumtype,sp))
-end
---fus
 function s.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
