@@ -56,14 +56,17 @@ s.listed_names={CARD_DARK_FUSION}
 function s.condition2(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and Duel.GetFieldGroupCount(tp,0,LOCATION_MZONE)>0 
 end
+function s.desfilter(c)
+	return c:IsPosition(POS_FACEUP_ATTACK) and c:GetAttackAnnouncedCount()==0
+end
 function s.target2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	local g=Duel.GetMatchingGroup(aux.FilterEqualFunction(Card.GetAttackAnnouncedCount,0),tp,0,LOCATION_MZONE,e:GetHandler())
+	local g=Duel.GetMatchingGroup(s.desfilter,tp,0,LOCATION_MZONE,e:GetHandler())
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,#g,0,0)
 end
 function s.operation2(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) or e:GetHandler():IsFacedown() then return end
-	local g=Duel.GetMatchingGroup(aux.FilterEqualFunction(Card.GetAttackAnnouncedCount,0),tp,0,LOCATION_MZONE,e:GetHandler())
+	local g=Duel.GetMatchingGroup(s.desfilter,tp,0,LOCATION_MZONE,e:GetHandler())
 	Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 end
 --change type
