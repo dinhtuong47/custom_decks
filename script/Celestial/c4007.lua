@@ -42,7 +42,7 @@ function s.tdfilter(c,e,tp)
 		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,att,c)
 end
 function s.spfilter(c,e,tp,att,sc)
-	return c:IsSetCard(0x254a) and  c:GetAttribute()==att and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and Duel.GetLocationCountFromEx(tp,tp,sc,c)>0 
+	return c:IsSetCard(0x254a) and not c:IsCode(4012) and c:GetAttribute()==att and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and Duel.GetLocationCountFromEx(tp,tp,sc,c)>0 
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(100)
