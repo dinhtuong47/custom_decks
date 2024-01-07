@@ -18,11 +18,21 @@ function s.ffilter(c,fc,sumtype,sp,sub,mg,sg)
 	return c:IsSetCard(0x254a,fc,sumtype,sp) and (not sg or sg:FilterCount(aux.TRUE,c)==0 or not sg:IsExists(Card.IsAttribute,1,c,c:GetAttribute(),fc,sumtype,sp))
 end
 function s.contactfil(tp)
-	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
+	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
 end
-function s.contactop(g,tp)
+--[[function s.contactop(g,tp)
 	Duel.ConfirmCards(1-tp,g)
-	Duel.SendtoDeck(g,nil,SEQ_BOTTOM,REASON_COST+REASON_MATERIAL)
+	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_COST+REASON_MATERIAL)
+end]]--
+function s.contactop(e,tc,tp,sg)
+	local rg=sg:Filter(Card.IsFacedown,nil)
+	if #rg>0 then Duel.ConfirmCards(1-tp,rg) end
+	local gyrmg=sg:Filter(Card.IsLocation,nil,LOCATION_MZONE+LOCATION_GRAVE)
+	if #gyrmg>0 then Duel.HintSelection(gyrmg,true) end
+	Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
+	local ct=Duel.GetOperatedGroup():FilterCount(Card.IsLocation,nil,LOCATION_DECK)
+	if ct>0 then Duel.SortDeckbottom(tp,tp,ct) end
+	sg:Clear()
 end
 function s.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
