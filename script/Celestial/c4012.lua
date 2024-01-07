@@ -4,7 +4,6 @@ function s.initial_effect(c)
 	c:EnableReviveLimit()
 	Fusion.AddProcMix(c,true,true,s.ffilter,2)
 	Fusion.AddContactProc(c,s.contactfil,s.contactop,s.splimit)
-	aux.EnableNeosReturn(c)
 	--atkup
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
