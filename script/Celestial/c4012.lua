@@ -12,6 +12,13 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetValue(s.atkval)
 	c:RegisterEffect(e1)
+	--spsummon condition
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e2:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e2:SetValue(aux.fuslimit)
+	c:RegisterEffect(e2)
 end
 function s.ffilter(c,fc,sumtype,sp,sub,mg,sg)
 	return c:IsSetCard(0x254a,fc,sumtype,sp) and c:IsMonster() and (not sg or sg:FilterCount(aux.TRUE,c)==0 or not sg:IsExists(Card.IsAttribute,1,c,c:GetAttribute(),fc,sumtype,sp))
