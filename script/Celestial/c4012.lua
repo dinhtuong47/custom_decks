@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	Fusion.AddProcMixN(c,true,true,s.ffilter,2)
+	Fusion.AddProcMixN(c,true,true,s.ffilter,4)
 	Fusion.AddContactProc(c,s.contactfil,s.contactop,s.splimit)
 	--atkup
 	local e1=Effect.CreateEffect(c)
@@ -20,26 +20,17 @@ end
 function s.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
 end
---[[function s.contactop(g,tp)
+function s.contactop(g,tp)
 	Duel.ConfirmCards(1-tp,g)
 	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_COST+REASON_MATERIAL)
-end]]--
-function s.contactop(e,tc,tp,sg)
-	local rg=sg:Filter(Card.IsFacedown,nil)
-	if #rg>0 then Duel.ConfirmCards(1-tp,rg) end
-	local gyrmg=sg:Filter(Card.IsLocation,nil,LOCATION_MZONE+LOCATION_GRAVE)
-	if #gyrmg>0 then Duel.HintSelection(gyrmg,true) end
-	Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
-	local ct=Duel.GetOperatedGroup():FilterCount(Card.IsLocation,nil,LOCATION_DECK)
-	if ct>0 then Duel.SortDeckbottom(tp,tp,ct) end
-	sg:Clear()
 end
 function s.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
+function s.vfilter(c)
+	return c:IsFaceup() 
+end
 function s.atkval(e,c)
-	local lps=Duel.GetLP(c:GetControler())
-	local lpo=Duel.GetLP(1-c:GetControler())
-	if lps>=lpo then return 0
-	else return lpo-lps end
+	local g=Duel.GetMatchingGroup(s.vfilter,c:GetControler(),LOCATION_MZONE,LOCATION_MZONE,c)
+	return g:GetSum(Card.GetBaseAttack)
 end
