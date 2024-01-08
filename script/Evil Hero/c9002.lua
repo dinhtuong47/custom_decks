@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e3)
 	-- Fusion Summon
-	local fusparam=aux.FilterBoolFunction(Card.IsSetCard,0x173)
+	local fusparam=aux.FilterBoolFunction(Card.IsSetCard,0x6008)
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,2))
 	e4:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
