@@ -40,7 +40,7 @@ function s.initial_effect(c)
 end
 --INDES
 function s.infilter(e,c)
-	return c:IsLevelBelow(4) and c:IsRace(RACE_REPTILE) and c:IsSetCard(0x3e)
+	return c:IsLevelBelow(4) and c:IsRace(RACE_REPTILE) and c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 --pos
 function s.cfilter(c,tp)
