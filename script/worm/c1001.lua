@@ -38,7 +38,7 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
 end
 function s.costfilter(c)
-	return c:IsSetCard(0x3e) and c:IsDiscardable()
+	return  c:IsDiscardable() --[[c:IsSetCard(0x3e) and]]--
 end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.costfilter,tp,LOCATION_HAND,0,1,nil) 
@@ -66,7 +66,24 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0x3e))
 		e1:SetReset(RESET_PHASE+PHASE_END)
 		Duel.RegisterEffect(e1,tp)
+		local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,3))
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_SUMMON_PROC)
+	e1:SetTargetRange(LOCATION_HAND,0)
+	e1:SetCondition(s.ntcon)
+	e1:SetTarget(aux.FieldSummonProcTg(s.nttg))
+	e1:SetReset(RESET_PHASE|PHASE_END)
+	Duel.RegisterEffect(e1,tp)
+	aux.RegisterClientHint(c,0,tp,1,0,aux.Stringid(id,4))
 	end
+end
+function s.ntcon(e,c,minc)
+	if c==nil then return true end
+	return minc==0 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
+end
+function s.nttg(e,c)
+	return c:IsSetCard(0x3e) and c:IsLevelAbove(5)
 end
 --ss
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
