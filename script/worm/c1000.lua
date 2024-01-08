@@ -44,7 +44,7 @@ function s.infilter(e,c)
 end
 --pos
 function s.cfilter(c,tp)
-	return c:IsMonster() and c:IsRace(RACE_REPTILE) and not c:IsPublic()  
+	return c:IsMonster() and c:IsRace(RACE_REPTILE) and c:IsAttribute(ATTRIBUTE_LIGHT) and not c:IsPublic()  
 end
 function s.poscost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND,0,1,nil,tp) end
