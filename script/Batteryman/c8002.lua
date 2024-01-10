@@ -46,7 +46,7 @@ function s.thfilter2(c,tp)
 		and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,c)
 end
 function s.thfilter3(c)
-	return ( c:IsRace(RACE_THUNDER) and c:IsAttribute(ATTRIBUTE_LIGHT) ) and c:IsAbleToHand()
+	return ( c:IsRace(RACE_THUNDER) and c:IsAttribute(ATTRIBUTE_LIGHT) ) and c:IsLevelAbove(5) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter2,tp,LOCATION_DECK,0,1,nil,tp) end
