@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tgtg)
 	e2:SetValue(500)
 	c:RegisterEffect(e2)
-	--to hand
+	--broken line
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_IGNITION)
@@ -23,6 +23,12 @@ function s.initial_effect(c)
 	e1:SetTarget(s.thtg)
 	e1:SetOperation(s.thop)
 	c:RegisterEffect(e1)
+        --short circuit
+        local e3=e1:Clone()
+	e1:SetTarget(s.thtg2)
+	e1:SetOperation(s.thop2)
+	--Normal Summon/set
+        local e4=e1:Clone()
 end
 s.listed_series={0x28}
 --indes
