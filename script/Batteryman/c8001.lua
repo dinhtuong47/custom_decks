@@ -5,14 +5,6 @@ function s.initial_effect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
 	e0:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e0)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_UPDATE_ATTACK)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
-	e2:SetTarget(s.tgtg)
-	e2:SetValue(500)
-	c:RegisterEffect(e2)
 	--broken line
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -45,11 +37,6 @@ function s.initial_effect(c)
 	e5:SetOperation(s.thop4)
 	c:RegisterEffect(e5)
 end
-s.listed_series={0x28}
---indes
-function s.tgtg(e,c)
-	c:IsRace(RACE_THUNDER)
-end
 --add
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,500) end
@@ -63,6 +50,9 @@ function s.scfilter(c)
 end
 function s.sumfilter(c)
 	return c:IsRace(RACE_THUNDER) and c:CanSummonOrSet(true,nil)
+end
+function s.gyfilter(c)
+	return c:IsRace(RACE_THUNDER) and c:IsLevelAbove(5) and c:IsAbleToHand()
 end
 --broken line
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -105,10 +95,6 @@ function s.thop3(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --recycle
-function s.gyfilter(c)
-	return c:IsRace(RACE_THUNDER) and c:IsLevelAbove(5) and c:IsAbleToHand()
-end
---broken line
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_GRAVE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
