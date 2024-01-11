@@ -3,7 +3,7 @@ function s.initial_effect(c)
 	--Must be properly summoned before reviving
 	c:EnableReviveLimit()
 	Link.AddProcedure(c,s.matfilter,2,2)
-	--Add from Deck or GY to hand
+	--Add from Deck to hand
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -25,12 +25,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tgtg)
 	e2:SetValue(1)
 	c:RegisterEffect(e2)
-	--Increase ATK of monsters it points to
-	local e3=e2:Clone()
-	e3:SetProperty(0)
-	e3:SetCode(EFFECT_UPDATE_ATTACK)
-	e3:SetValue(500)
-	c:RegisterEffect(e3)
 end
 	--Requires monsters
 function s.matfilter(c,scard,sumtype,tp)
