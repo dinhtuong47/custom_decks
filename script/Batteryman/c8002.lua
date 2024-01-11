@@ -74,10 +74,10 @@ end
 function s.splimit(e,c)
 	return not c:IsSetCard(0x28)
 end
---prevent
+--[[prevent
 function s.disop(e,tp)
 	return e:GetLabel()
-end
+end]]--
 function s.tgtg(e,c)
 	return e:GetHandler():GetLinkedGroup():IsContains(c) and c:IsRace(RACE_THUNDER)
 end
