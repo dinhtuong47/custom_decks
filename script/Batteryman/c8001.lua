@@ -5,15 +5,14 @@ function s.initial_effect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
 	e0:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e0)
-	--indes
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_INDESTRUCTABLE_COUNT)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e3:SetTarget(aux.TargetBoolFunction(Card.IsRace,RACE_THUNDER))
-	e3:SetValue(s.indct)
-	c:RegisterEffect(e3)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_UPDATE_ATTACK)
+	e2:SetRange(LOCATION_FZONE)
+	e2:SetTargetRange(LOCATION_MZONE,0)
+	e2:SetTarget(s.tgtg)
+	e2:SetValue(500)
+	c:RegisterEffect(e2)
 	--to hand
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -27,12 +26,8 @@ function s.initial_effect(c)
 end
 s.listed_series={0x28}
 --indes
-function s.indct(e,re,r,rp)
-	if (r&REASON_BATTLE)~=0 then
-		return 1
-	else
-		return 0
-	end
+function s.tgtg(e,c)
+	c:IsRace(RACE_THUNDER)
 end
 --add
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
