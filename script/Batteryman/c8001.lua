@@ -55,7 +55,7 @@ function s.scfilter(c)
 	return c:IsCode(75967082) and c:IsAbleToHand()
 end
 function s.sumfilter(c)
-	return c:IsRace(RACE_THUNDER) 
+	return c:IsRace(RACE_THUNDER) and c:CanSummonOrSet(true,nil)
 end
 --broken line
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -83,5 +83,17 @@ function s.thop2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
+	end
+end
+--SummonOrSet
+function s.thtg3(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.sumfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
+end
+function s.thop3(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+	local tc=Duel.SelectMatchingCard(tp,s.sumfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil):GetFirst()
+	if tc then
+		Duel.SummonOrSet(tp,tc,true,nil)
 	end
 end
