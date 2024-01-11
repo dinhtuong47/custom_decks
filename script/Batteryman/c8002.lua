@@ -35,16 +35,16 @@ function s.thcon(e)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
 end
 function s.thfilter2(c,tp)
-	return  c:IsCode(61181383) or c:IsCode(99995595) or c:IsCode(49479374) 
-		or c:IsCode(8001) or c:IsCode(35100834) or c:IsCode(61840587) and c:IsAbleToHand()
-		and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,c)
+	return ( c:IsRace(RACE_THUNDER) and c:IsAttribute(ATTRIBUTE_LIGHT) ) and c:IsLevelAbove(5) and c:IsAbleToHand()
+		and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_DECK,0,1,c)
 end
 function s.thfilter3(c)
-	return ( c:IsRace(RACE_THUNDER) and c:IsAttribute(ATTRIBUTE_LIGHT) ) and c:IsLevelAbove(5) and c:IsAbleToHand()
+	return  c:IsCode(61181383) or c:IsCode(99995595) or c:IsCode(49479374) 
+		or c:IsCode(8001) or c:IsCode(35100834) or c:IsCode(61840587) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter2,tp,LOCATION_DECK,0,1,nil,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -53,7 +53,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.SelectMatchingCard(tp,s.thfilter2,tp,LOCATION_DECK,0,1,1,nil,tp)
 	if #g1>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g2=Duel.SelectMatchingCard(tp,s.thfilter3,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,g1:GetFirst())
+		local g2=Duel.SelectMatchingCard(tp,s.thfilter3,tp,LOCATION_DECK,0,1,1,g1:GetFirst())
 		g1:Merge(g2)
 		Duel.SendtoHand(g1,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g1)
