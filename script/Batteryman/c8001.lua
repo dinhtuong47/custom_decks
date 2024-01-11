@@ -34,39 +34,40 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,500) end
 	Duel.PayLPCost(tp,500)
 end
---[[function s.cfilter(c)
-	return c:IsSetCard(0x28) and c:IsLevelBelow(4) and c:IsAbleToGraveAsCost()
+function s.blfilter(c)
+	return c:IsCode(88086137) and c:IsAbleToHand()
 end
-function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil)
-	Duel.SendtoGrave(g,REASON_COST)
-end]]--
-function s.codefilter(c,code)
-	return c:IsCode(code) and c:IsAbleToHand()
+function s.scfilter(c)
+	return c:IsCode(75967082) and c:IsAbleToHand()
 end
+function s.sumfilter(c)
+	return c:IsRace(RACE_THUNDER) 
+end
+--broken line
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local light=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,20529766)
-	local dark=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,19441018)
-	local b1=light and Duel.IsExistingMatchingCard(s.codefilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,88086137)
-	local b2=dark and Duel.IsExistingMatchingCard(s.codefilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,75967082)
-	if chk==0 then return b1 or b2 end
-	local op=Duel.SelectEffect(tp,
-		{b1,aux.Stringid(id,0)},
-		{b2,aux.Stringid(id,1)})
-	e:SetLabel(op)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,20529766)
+			and Duel.IsExistingMatchingCard(s.blfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
-	--to hand based on monster
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	local g
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	if e:GetLabel()==1 then
-		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,88086137,aux.Stringid(id,0))
-	else
-		g=Duel.SelectMatchingCard(tp,s.codefilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,75967082,aux.Stringid(id,1))
+	local g=Duel.SelectMatchingCard(tp,s.blfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
 	end
-	if #g>0 then Duel.SendtoHand(g,nil,REASON_EFFECT) end
-	Duel.ConfirmCards(1-tp,g)
+end
+--Short Circuit
+function s.thtg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,19441018)
+			and Duel.IsExistingMatchingCard(s.scfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+end
+function s.thop2(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,s.scfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
+	end
 end
