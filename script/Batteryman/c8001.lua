@@ -37,6 +37,13 @@ function s.initial_effect(c)
         e4:SetTarget(s.thtg3)
 	e4:SetOperation(s.thop3)
 	c:RegisterEffect(e4)
+        --add from GY
+	local e5=e1:Clone()
+        e5:SetDescription(aux.Stringid(id,3))
+	e5:SetCategory(CATEGORY_TOHAND)
+        e5:SetTarget(s.thtg4)
+	e5:SetOperation(s.thop4)
+	c:RegisterEffect(e5)
 end
 s.listed_series={0x28}
 --indes
@@ -95,5 +102,22 @@ function s.thop3(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,s.sumfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil):GetFirst()
 	if tc then
 		Duel.SummonOrSet(tp,tc,true,nil)
+	end
+end
+--recycle
+function s.gyfilter(c)
+	return c:IsRace(RACE_THUNDER) and c:IsLevelAbove(5) and c:IsAbleToHand()
+end
+--broken line
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
+end
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,s.gyfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
 	end
 end
