@@ -15,6 +15,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--broken line
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,1))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_FZONE)
@@ -25,10 +26,17 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
         --short circuit
         local e3=e1:Clone()
-	e1:SetTarget(s.thtg2)
-	e1:SetOperation(s.thop2)
+	e3:SetDescription(aux.Stringid(id,2))
+	e3:SetTarget(s.thtg2)
+	e3:SetOperation(s.thop2)
+        c:RegisterEffect(e3)
 	--Normal Summon/set
         local e4=e1:Clone()
+        e4:SetDescription(aux.Stringid(id,3))
+	e4:SetCategory(CATEGORY_SUMMON)
+        e4:SetTarget(s.thtg3)
+	e4:SetOperation(s.thop3)
+	c:RegisterEffect(e4)
 end
 s.listed_series={0x28}
 --indes
