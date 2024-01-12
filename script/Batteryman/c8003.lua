@@ -16,6 +16,7 @@ function s.initial_effect(c)
 	local e3=e2:Clone()
         e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_TOHAND)
+        e3:SetCost(s.thcost2)
         e3:SetTarget(s.thtg2)
 	e3:SetOperation(s.thop2)
 	c:RegisterEffect(e3)
@@ -60,7 +61,7 @@ function s.thop2(e,tp,eg,ep,ev,re,r,rp)
 end
 --change name
 function s.tgfilter(c)
-	return c:IsFaceup() and Duel.IsExistingMatchingCard(s.cfilter,c:GetControler(),LOCATION_DECK,0,1,nil,c)
+	return c:IsFaceup() and c:IsRace(RACE_THUNDER) and Duel.IsExistingMatchingCard(s.cfilter,c:GetControler(),LOCATION_DECK,0,1,nil,c)
 end
 function s.cfilter(c,tc)
 	return c:IsSetCard(0x28) and not c:IsCode(tc:GetCode()) and c:IsMonster() and c:IsAbleToGrave()
