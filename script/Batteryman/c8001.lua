@@ -11,6 +11,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e1:SetRange(LOCATION_FZONE)
+        e1:SetTargetRange(LOCATION_MZONE,0)
         e1:SetTarget(s.tgtg)
 	e1:SetValue(s.tglimit)
 	c:RegisterEffect(e1)
@@ -47,6 +48,9 @@ function s.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 --untarget 
+
+       c:IsSetCard(0x80)
+end
 function s.tglimit(e,re,rp)
 	return rp~=e:GetHandlerPlayer() and re:IsActiveType(TYPE_MONSTER) 
 end
