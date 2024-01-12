@@ -13,11 +13,18 @@ function s.initial_effect(c)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
   --add from GY
+	local e3=e2:Clone()
+        e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_TOHAND)
+        e3:SetTarget(s.thtg2)
+	e3:SetOperation(s.thop2)
+	c:RegisterEffect(e3)
+--change name
 	local e5=e2:Clone()
-        e5:SetDescription(aux.Stringid(id,1))
-	e5:SetCategory(CATEGORY_TOHAND)
-        e5:SetTarget(s.thtg2)
-	e5:SetOperation(s.thop2)
+        e5:SetDescription(aux.Stringid(id,2))
+	e5:SetCategory(CATEGORY_TOGRAVE)
+        e5:SetTarget(s.target)
+	e5:SetOperation(s.activate)
 	c:RegisterEffect(e5)
 end
 --SummonOrSet
