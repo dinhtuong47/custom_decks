@@ -52,12 +52,6 @@ end
 function s.scfilter(c)
 	return c:IsCode(75967082) and c:IsAbleToHand()
 end
-function s.sumfilter(c)
-	return c:IsRace(RACE_THUNDER) and c:CanSummonOrSet(true,nil)
-end
-function s.gyfilter(c)
-	return c:IsRace(RACE_THUNDER) and c:IsLevelAbove(5) and c:IsAbleToHand()
-end
 --broken line
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,20529766)
