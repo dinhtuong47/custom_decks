@@ -10,7 +10,8 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
-	e2:SetRange(LOCATION_FZONE)
+	e1:SetRange(LOCATION_FZONE)
+        e1:SetTarget(s.tgtg)
 	e1:SetValue(s.tglimit)
 	c:RegisterEffect(e1)
 	--broken line
@@ -44,6 +45,10 @@ function s.initial_effect(c)
         e5:SetTarget(s.thtg4)
 	e5:SetOperation(s.thop4)
 	c:RegisterEffect(e5)
+end
+--untarget 
+function s.tglimit(e,re,rp)
+	return rp~=e:GetHandlerPlayer() and re:IsActiveType(TYPE_MONSTER) 
 end
 --add
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
