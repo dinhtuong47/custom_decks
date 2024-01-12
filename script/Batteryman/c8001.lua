@@ -48,8 +48,8 @@ function s.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 --untarget 
-
-       c:IsSetCard(0x80)
+function s.tgtg(e,c)
+	return c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_THUNDER)
 end
 function s.tglimit(e,re,rp)
 	return rp~=e:GetHandlerPlayer() and re:IsActiveType(TYPE_MONSTER) 
