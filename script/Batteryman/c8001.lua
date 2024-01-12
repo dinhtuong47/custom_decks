@@ -32,21 +32,7 @@ function s.initial_effect(c)
         e3:SetCountLimit(1,id+20)
 	e3:SetTarget(s.thtg2)
 	e3:SetOperation(s.thop2)
-        c:RegisterEffect(e3)
-	--Normal Summon/set
-        local e4=e2:Clone()
-        e4:SetDescription(aux.Stringid(id,2))
-	e4:SetCategory(CATEGORY_SUMMON)
-        e4:SetTarget(s.thtg3)
-	e4:SetOperation(s.thop3)
-	c:RegisterEffect(e4)
-        --add from GY
-	local e5=e2:Clone()
-        e5:SetDescription(aux.Stringid(id,3))
-	e5:SetCategory(CATEGORY_TOHAND)
-        e5:SetTarget(s.thtg4)
-	e5:SetOperation(s.thop4)
-	c:RegisterEffect(e5)
+        c:RegisterEffect(e3)	
 end
 --untarget 
 function s.tgtg(e,c)
@@ -100,28 +86,4 @@ function s.thop2(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end
 end
---SummonOrSet
-function s.thtg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.sumfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
-end
-function s.thop3(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local tc=Duel.SelectMatchingCard(tp,s.sumfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil):GetFirst()
-	if tc then
-		Duel.SummonOrSet(tp,tc,true,nil)
-	end
-end
---recycle
-function s.thtg4(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_GRAVE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
-end
-function s.thop4(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.gyfilter,tp,LOCATION_GRAVE,0,1,1,nil)
-	if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
-	end
-end
+
