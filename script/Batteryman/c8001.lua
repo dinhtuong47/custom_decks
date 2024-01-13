@@ -22,7 +22,7 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1,id)
-	e2:SetCost(s.thcost)
+	--[[e2:SetCost(s.thcost)]]--
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
@@ -42,10 +42,10 @@ function s.tglimit(e,re,rp)
 	return rp~=e:GetHandlerPlayer() and re:IsActiveType(TYPE_MONSTER) 
 end
 --add
-function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
+--[[function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,500) end
 	Duel.PayLPCost(tp,500)
-end
+end]]--
 function s.blfilter(c)
 	return c:IsCode(88086137) and c:IsAbleToHand()
 end
