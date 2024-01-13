@@ -12,24 +12,25 @@ function s.initial_effect(c)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
-  --add from GY
-	local e3=e2:Clone()
+--change name
+	local e1=e2:Clone()
+        e1:SetDescription(aux.Stringid(id,1))
+	e1:SetCategory(CATEGORY_TOGRAVE)
+        e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+        e1:SetTarget(s.target)
+	e1:SetOperation(s.activate)
+	c:RegisterEffect(e1)
+	 --add from GY
+	local e3=Effect.CreateEffect(c)
         e3:SetDescription(aux.Stringid(id,2))
 	e3:SetCategory(CATEGORY_TOHAND)
         e3:SetRange(LOCATION_GRAVE)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetCost(aux.bfgcost)
 	e3:SetCountLimit(1,id+20)
         e3:SetTarget(s.thtg2)
 	e3:SetOperation(s.thop2)
 	c:RegisterEffect(e3)
---change name
-	local e5=e2:Clone()
-        e5:SetDescription(aux.Stringid(id,1))
-	e5:SetCategory(CATEGORY_TOGRAVE)
-        e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
-        e5:SetTarget(s.target)
-	e5:SetOperation(s.activate)
-	c:RegisterEffect(e5)
 end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -50,22 +51,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,s.sumfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil):GetFirst()
 	if tc then
 		Duel.SummonOrSet(tp,tc,true,nil)
-	end
-end
---recycle
-function s.gyfilter(c)
-	return c:IsLevelAbove(5) and c:IsRace(RACE_THUNDER)
-end
-function s.thtg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_GRAVE,0,1,nil,e:GetHandler()) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
-end
-function s.thop2(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.gyfilter,tp,LOCATION_GRAVE,0,1,1,nil,e:GetHandler())
-	if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
 	end
 end
 --change name
@@ -94,5 +79,26 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetValue(gc:GetCode())
 			tc:RegisterEffect(e1)
 		end
+	end
+end
+--add from gy
+function s.thfilter(c)
+	return c:IsLevelAbove(5) and c:IsRace(RACE_THUNDER) and c:IsAbleToHand()
+end
+	--Activation legality
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsNegatableMonster() and chkc~=c end
+	if chk==0 then return Duel.IsExistingTarget(s.thfilter,tp,LOCATION_GRAVE,1,c) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectTarget(tp,s.thfilter,tp,LOCATION_GRAVE,1,1,c)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
+end
+	--Add  from GY to hand
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	if tc:IsRelateToEffect(e) then
+		Duel.SendtoHand(tc,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,tc)
 	end
 end
