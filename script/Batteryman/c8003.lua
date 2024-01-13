@@ -37,6 +37,9 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
 end
 --SummonOrSet
+function s.sumfilter(c)
+	return c:IsRace(RACE_THUNDER)
+end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.sumfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
@@ -49,6 +52,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --recycle
+function s.gyfilter(c)
+	return not c:IsCode(id) and c:IsLevelAbove(5) and c:IsRace(RACE_THUNDER)
+end
 function s.thtg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_GRAVE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
