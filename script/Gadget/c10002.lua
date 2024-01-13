@@ -26,6 +26,8 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCode(EFFECT_UPDATE_ATTACK)
+	e2:SetTargetRange(LOCATION_MZONE,0)
+        e2:SetTarget(s.tgtg)
 	e2:SetValue(s.val)
 	c:RegisterEffect(e2)
 end
@@ -66,6 +68,9 @@ function s.eqlimit(e,c)
 	return c==e:GetLabelObject()
 end
 --gains atk
+function s.tgtg(e,c)
+	return c:IsSetCard(0x51)
+end
 function s.val(e,c)
-	return c:GetEquipCount()*1000
+	return c:GetEquipCount()*500
 end
