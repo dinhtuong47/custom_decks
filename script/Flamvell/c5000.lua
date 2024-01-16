@@ -79,8 +79,8 @@ function s.posop(e,tp,ev,eg,ev,re,r,rp)
 		if tc:IsPosition(POS_FACEUP_DEFENSE) then
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_UPDATE_DEFENSE)
-			e1:SetValue(-500)
+			e1:SetCode(EFFECT_SET_DEFENSE_FINAL)
+			e1:SetValue(200)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 			tc:RegisterEffect(e1)
 		end
