@@ -36,15 +36,11 @@ function s.initial_effect(c)
         --Double damage
 	local e5=e3:Clone()
 	e5:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
-	e5:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e5:SetTargetRange(LOCATION_MZONE,0)
 	e5:SetCondition(s.actcon2)
 	e5:SetTarget(s.damtg)
 	e5:SetValue(aux.ChangeBattleDamage(1,DOUBLE_DAMAGE))
 	c:RegisterEffect(e5)
-end
-function s.atkval(e,c)
-	local tp=e:GetHandlerPlayer()
-	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*100
 end
 --act limit
 function s.actcon(e)
@@ -55,8 +51,7 @@ end
 --double dmg
 function s.actcon2(e)
 	local gct=Duel.GetFieldGroupCount(e:GetHandler():GetControler(),0,LOCATION_GRAVE)
-	local ph=Duel.GetCurrentPhase()
-	if gct<=5 then return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE end
+	if gct<=5 then return true end
 end
 function s.damtg(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c) and c:GetBattleTarget()~=nil
@@ -64,8 +59,11 @@ end
 --atk boost
 function s.actcon3(e)
 	local gct=Duel.GetFieldGroupCount(e:GetHandler():GetControler(),0,LOCATION_GRAVE)
-	local ph=Duel.GetCurrentPhase()
-	if gct<=7 then return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE end
+	if gct<=7 then return true end
+end
+function s.atkval(e,c)
+	local tp=e:GetHandlerPlayer()
+	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*100
 end
 
 
