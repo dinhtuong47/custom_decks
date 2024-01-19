@@ -35,6 +35,11 @@ function s.initial_effect(c)
 	e3:SetTarget(s.damtg)
 	e3:SetValue(aux.ChangeBattleDamage(1,DOUBLE_DAMAGE))
 	c:RegisterEffect(e3)
+	-- can make up to 2 attacks on monsters
+	local e5==e3:Clone()
+	e5:SetCode(EFFECT_EXTRA_ATTACK_MONSTER)
+	e5:SetValue(1)
+	c:RegisterEffect(e5)
 	--atk boost
 	local e4=Effect.CreateEffect(c)
 	e4:SetCode(EFFECT_UPDATE_ATTACK)
