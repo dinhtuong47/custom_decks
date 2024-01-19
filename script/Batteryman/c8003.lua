@@ -1,25 +1,17 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--discard
-  --Normal Summon/set
         local e0=Effect.CreateEffect(c)
 	e0:SetDescription(aux.Stringid(id,0))
-	e0:SetCategory(CATEGORY_SUMMON)
+	e0:SetCategory(CATEGORY_TOGRAVE)
+	e0:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e0:SetType(EFFECT_TYPE_IGNITION)
 	e0:SetRange(LOCATION_HAND)
 	e0:SetCountLimit(1,id)
 	e0:SetCost(s.sumcost)
-	e0:SetTarget(s.sumtg)
-	e0:SetOperation(s.sumop)
+        e0:SetTarget(s.target)
+	e0:SetOperation(s.activate)
 	c:RegisterEffect(e0)
---change name
-	local e1=e0:Clone()
-        e1:SetDescription(aux.Stringid(id,1))
-	e1:SetCategory(CATEGORY_TOGRAVE)
-        e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-        e1:SetTarget(s.target)
-	e1:SetOperation(s.activate)
-	c:RegisterEffect(e1)
 	 --add from GY
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
@@ -38,7 +30,7 @@ function s.sumcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return c:IsDiscardable() end
 	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
 end
---SummonOrSet
+--[[SummonOrSet
 function s.sumfilter(c)
 	return c:IsRace(RACE_THUNDER) and c:IsSummonable(true,nil)
 end
@@ -53,7 +45,7 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	if tc then
 		Duel.SummonOrSet(tp,tc,true,nil)
 	end
-end
+end]]--
 --change name
 function s.tgfilter(c)
 	return c:IsFaceup() and c:IsRace(RACE_THUNDER) and Duel.IsExistingMatchingCard(s.cfilter,c:GetControler(),LOCATION_DECK,0,1,nil,c)
