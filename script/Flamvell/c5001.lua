@@ -49,7 +49,7 @@ function s.actcon(e)
 	if gct<=3 then return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE end
 end
 --double dmg
-function s.actcon2(e)
+function s.actcon2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_GRAVE)
 	return ct<=5
 end
@@ -57,7 +57,7 @@ function s.damtg(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c) and c:GetBattleTarget()~=nil
 end
 --atk boost
-function s.actcon3(e)
+function s.actcon3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_GRAVE)
 	return ct<=7
 end
