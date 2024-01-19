@@ -50,16 +50,16 @@ function s.actcon(e)
 end
 --double dmg
 function s.actcon2(e)
-	local gct=Duel.GetFieldGroupCount(e:GetHandler():GetControler(),0,LOCATION_GRAVE)
-	return gct<=5
+	local local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_GRAVE)
+	return ct<=5
 end
 function s.damtg(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c) and c:GetBattleTarget()~=nil
 end
 --atk boost
 function s.actcon3(e)
-	local gct=Duel.GetFieldGroupCount(e:GetHandler():GetControler(),0,LOCATION_GRAVE)
-	return gct<=7
+	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_GRAVE)
+	return ct<=7
 end
 function s.atkval(e,c)
 	local tp=e:GetHandlerPlayer()
