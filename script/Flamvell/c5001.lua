@@ -36,25 +36,25 @@ function s.initial_effect(c)
 	e3:SetValue(aux.ChangeBattleDamage(1,DOUBLE_DAMAGE))
 	c:RegisterEffect(e3)
 	-- can make up to 2 attacks on monsters
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetCode(EFFECT_EXTRA_ATTACK_MONSTER)
+	e4:SetRange(LOCATION_MZONE)
+	e4:SetTargetRange(LOCATION_MZONE,0)
+	e4:SetCondition(s.atcon3)
+	e4:SetTarget(s.damtg2)
+	e4:SetValue(1)
+	c:RegisterEffect(e4)
+	--atk boost
 	local e5=Effect.CreateEffect(c)
-	e5:SetCode(EFFECT_EXTRA_ATTACK_MONSTER)
+	e5:SetCode(EFFECT_UPDATE_ATTACK)
 	e5:SetType(EFFECT_TYPE_FIELD)
 	e5:SetRange(LOCATION_SZONE)
 	e5:SetTargetRange(LOCATION_MZONE,0)
-	e5:SetCondition(s.atcon2)
-	e5:SetTarget(s.damtg)
-	e5:SetValue(1)
+	e5:SetTarget(aux.TargetBoolFunction(Card.IsAttribute,ATTRIBUTE_FIRE))
+	e5:SetCondition(s.atcon4)
+	e5:SetValue(s.atkval)
 	c:RegisterEffect(e5)
-	--atk boost
-	local e4=Effect.CreateEffect(c)
-	e4:SetCode(EFFECT_UPDATE_ATTACK)
-	e4:SetType(EFFECT_TYPE_FIELD)
-	e4:SetRange(LOCATION_SZONE)
-	e4:SetTargetRange(LOCATION_MZONE,0)
-	e4:SetTarget(aux.TargetBoolFunction(Card.IsAttribute,ATTRIBUTE_FIRE))
-	e4:SetCondition(s.atcon3)
-	e4:SetValue(s.atkval)
-	c:RegisterEffect(e4)
 end
 --act limit
 function s.actcon(e)
@@ -69,8 +69,15 @@ end
 function s.damtg(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c) and c:GetBattleTarget()~=nil
 end
---atk boost
+--attack 2 on monsters
 function s.atcon3(e)
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<6
+end
+function s.damtg2(e,c)
+	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c)  
+end
+--atk boost
+function s.atcon4(e)
 	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<8
 end
 function s.atkval(e,c)
