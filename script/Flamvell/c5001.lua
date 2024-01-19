@@ -50,7 +50,7 @@ function s.actcon(e)
 end
 --double dmg
 function s.actcon2(e)
-	local local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_GRAVE)
+	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_GRAVE)
 	return ct<=5
 end
 function s.damtg(e,c)
