@@ -25,14 +25,6 @@ function s.initial_effect(c)
 	e3:SetCondition(s.actcon)
 	e3:SetValue(1)
 	c:RegisterEffect(e3)
-	--atk boost
-	local e1=e3:Clone()
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetTarget(aux.TargetBoolFunction(Card.IsAttribute,ATTRIBUTE_FIRE))
-	e1:SetCondition(s.actcon3)
-	e1:SetValue(s.atkval)
-	c:RegisterEffect(e1)
         --Double damage
 	local e5=e3:Clone()
 	e5:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
@@ -41,6 +33,14 @@ function s.initial_effect(c)
 	e5:SetTarget(s.damtg)
 	e5:SetValue(aux.ChangeBattleDamage(1,DOUBLE_DAMAGE))
 	c:RegisterEffect(e5)
+	--atk boost
+	local e1=e3:Clone()
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetTargetRange(LOCATION_MZONE,0)
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsAttribute,ATTRIBUTE_FIRE))
+	e1:SetCondition(s.actcon3)
+	e1:SetValue(s.atkval)
+	c:RegisterEffect(e1)
 end
 --act limit
 function s.actcon(e)
@@ -49,17 +49,15 @@ function s.actcon(e)
 	if gct<=3 then return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE end
 end
 --double dmg
-function s.actcon2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_GRAVE)
-	return ct<=5
+function s.atcon2(e)
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<6
 end
 function s.damtg(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c) and c:GetBattleTarget()~=nil
 end
 --atk boost
-function s.actcon3(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_GRAVE)
-	return ct<=7
+function s.atcon3(e)
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<8
 end
 function s.atkval(e,c)
 	local tp=e:GetHandlerPlayer()
