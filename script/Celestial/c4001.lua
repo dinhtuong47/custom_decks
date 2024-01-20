@@ -67,23 +67,21 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --place
-function s.tdfilter(c,tp)
+function s.tdfilter(c)
 	return c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:IsAbleToDeck() 
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tdfilter(chkc) end
-	if chk==0 then return true end
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
-	local tc=g:GetFirst()
-	if tc and tc:IsAbleToDeck() then
-		Duel.SetOperationInfo(0,CATEGORY_TODECK,tc,1,0,0)
-	end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) then
-		Duel.SendtoDeck(tc,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
-	end
+	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+	local sg=tg:Filter(Card.IsRelateToEffect,nil,e)
+	if #sg>0 then
+		Duel.SendtoDeck(sg,nil,0,REASON_EFFECT)
+    end	
 end
 
