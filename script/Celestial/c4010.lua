@@ -61,6 +61,6 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 end
 --attack all
 function s.atktg(e,c)
-	return c:IsPosition(POS_DEFENSE)
+	return c:IsPosition(POS_DEFENSE) and not c:IsPosition(POS_ATTACK)
 end
 
