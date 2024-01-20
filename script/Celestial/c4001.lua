@@ -80,7 +80,7 @@ end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
 	local tg=g:Filter(s.tdfilter,nil,e)
-	if #tg>0 and tg:IsRelateToEffect(e) then
+	if #tg>0 and g:IsLocation(LOCATION_MZONE) then
 		Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end
