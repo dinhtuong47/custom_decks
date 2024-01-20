@@ -28,12 +28,11 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetCode(EFFECT_PIERCE)
 	c:RegisterEffect(e2)
-	--Can attack all monsters
+	--Can attack all def monsters
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetCode(EFFECT_ATTACK_ALL)
-	e3:SetTarget(s.atktg)
-	e3:SetValue(1)
+	e3:SetValue(s.atkfilter)
 	c:RegisterEffect(e3)
 end
 --send and gain atk
@@ -60,7 +59,7 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --attack all
-function s.atktg(e,c)
-	return c:IsPosition(POS_DEFENSE) and not c:IsPosition(POS_ATTACK)
+function s.atkfilter(e,c)
+	return c:IsPosition(POS_DEFENSE)
 end
 
