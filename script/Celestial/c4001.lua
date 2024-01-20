@@ -71,7 +71,7 @@ function s.tdfilter(c,tp)
 	return c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:IsAbleToDeck() 
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tdfilter(chkc) end
 	if chk==0 then return true end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
