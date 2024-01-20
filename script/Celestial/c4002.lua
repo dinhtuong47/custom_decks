@@ -72,17 +72,19 @@ function s.tdfilter(c,tp)
 	return c:IsFacedown() and c:IsAbleToDeck() 
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+	if chkc then return chkc:IsOnField() end
+	if chk==0 then return true end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+	local tc=g:GetFirst()
+	if tc and tc:IsAbleToDeck() then
+		Duel.SetOperationInfo(0,CATEGORY_TODECK,tc,1,0,0)
+	end
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	local tg=g:Filter(s.tdfilter,nil,e)
-	if #tg>0 then
-		Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+	local tc=Duel.GetFirstTarget()
+	if tc and tc:IsRelateToEffect(e) then
+		Duel.SendtoDeck(tc,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end
 
