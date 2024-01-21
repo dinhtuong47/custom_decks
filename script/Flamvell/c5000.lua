@@ -42,7 +42,7 @@ function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and s.rmfilter(chkc) and chkc:IsControler(1-tp) end
-	if chk==0 then return Duel.IsExistingTarget(s.s.rmfilter,tp,0,LOCATION_GRAVE,1,nil,ft)
+	if chk==0 then return Duel.IsExistingTarget(s.rmfilter,tp,0,LOCATION_GRAVE,1,nil,ft)
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectTarget(tp,s.rmfilter,tp,0,LOCATION_GRAVE,1,1,nil,ft)
