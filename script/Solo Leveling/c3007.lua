@@ -83,5 +83,15 @@ local c=e:GetHandler()
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
 		--[[Duel.ChangePosition(c,POS_FACEUP_DEFENSE)]]--
+		if Duel.IsExistingMatchingCard(Card.IsCanChangePosition,tp,LOCATION_MZONE,0,1,nil)
+			and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
+			local g=Duel.SelectMatchingCard(tp,Card.IsCanChangePosition,tp,LOCATION_MZONE,0,1,1,nil)
+			if #g==0 then return end
+			Duel.HintSelection(g,true)
+			Duel.BreakEffect()
+			Duel.ChangePosition(g,POS_FACEUP_DEFENSE,0,POS_FACEUP_ATTACK,POS_FACEUP_ATTACK)
+		end
+
 	end
 end
