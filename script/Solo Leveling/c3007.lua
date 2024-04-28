@@ -82,7 +82,6 @@ local c=e:GetHandler()
 	if #g>0 and c:IsRelateToEffect(e) then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
-		--[[Duel.ChangePosition(c,POS_FACEUP_DEFENSE)]]--
 		if Duel.IsExistingMatchingCard(Card.IsCanChangePosition,tp,LOCATION_MZONE,0,1,nil)
 			and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
