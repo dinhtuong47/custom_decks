@@ -17,7 +17,7 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE and (ph~=PHASE_DAMAGE or not Duel.IsDamageCalculated())
 end
 function s.filter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevel(6) 
+	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevelAbove(6) 
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.filter(chkc) end
