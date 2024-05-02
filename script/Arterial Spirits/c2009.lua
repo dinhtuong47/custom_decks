@@ -42,7 +42,7 @@ function s.initial_effect(c)
 end
 --gain 500 atk
 function s.atkeff(e,c)
-	return c:IsLevel(6) and c:IsSetCard(0x7D0)
+	return c:IsLevelAbove(6) and c:IsSetCard(0x7D0)
 end
 --immueff
 function s.indfilter(c)
