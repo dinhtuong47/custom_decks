@@ -19,7 +19,7 @@ function s.initial_effect(c)
 	--change ATK
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
-	e3:SetCategory(CATEGORY_ATKCHANGE)
+	e3:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_DRAW)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_FZONE)
@@ -98,5 +98,8 @@ function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(tc:GetBaseAttack())
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		tc:RegisterEffect(e1)
+	if Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+		Duel.BreakEffect()
+		Duel.Draw(tp,1,REASON_EFFECT) end
 	end
 end
