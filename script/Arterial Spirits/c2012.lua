@@ -17,7 +17,7 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE and (ph~=PHASE_DAMAGE or not Duel.IsDamageCalculated())
 end
 function s.rmfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevel(6) and c:GetAttack()>0
+	return c:IsFaceup() and c:IsSetCard(0x7D0) and c:IsLevelAbove(6) and c:GetAttack()>0
 		and Duel.IsExistingMatchingCard(s.thfilter,tp,0,LOCATION_MZONE,1,nil,c)
 end
 function s.thfilter(c,rc)
