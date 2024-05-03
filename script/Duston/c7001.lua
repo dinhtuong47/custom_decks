@@ -18,10 +18,10 @@ function s.initial_effect(c)
 	e3:SetCode(EFFECT_CANNOT_BE_MATERIAL)
 	e3:SetValue(aux.cannotmatfilter(SUMMON_TYPE_FUSION,SUMMON_TYPE_SYNCHRO,SUMMON_TYPE_XYZ))
 	c:RegisterEffect(e3)
-	--banish
+	--shuffle
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,0))
-	e4:SetCategory(CATEGORY_REMOVE)
+	e4:SetCategory(CATEGORY_TODECK)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 	e4:SetCode(EVENT_DESTROYED)
 	e4:SetCondition(s.rmcon)
@@ -40,23 +40,20 @@ function s.initial_effect(c)
 	e5:SetOperation(s.operation)
 	c:RegisterEffect(e5)
 end
---banish ex
-function s.rmcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:IsReason(REASON_DESTROY) and c:IsPreviousLocation(LOCATION_ONFIELD)
+--shuffle
+function s.tdfilter(c)
+	return c:IsAbleToDeck()
 end
-function s.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	local pre=e:GetHandler():GetPreviousControler()
-	Duel.SetTargetPlayer(pre)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,pre,LOCATION_EXTRA)
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_REMOVED,0,1,nil) end
+	local g=Duel.GetMatchingGroup(s.filter,tp,LOCATION_REMOVED,0,nil)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
 end
-function s.rmop(e,tp,eg,ep,ev,re,r,rp)
-	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
-	local g=Duel.GetFieldGroup(p,LOCATION_EXTRA	,0)
-	if #g==0 then return end
-	local sg=g:Select(p,1,1,nil)
-	Duel.Remove(sg,POS_FACEDOWN,REASON_EFFECT)
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.filter,tp,LOCATION_REMOVED,0,nil)
+	if #g>0 then
+		Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	end
 end
 --draw
 function s.filter(c)
