@@ -18,16 +18,16 @@ function s.initial_effect(c)
 	e3:SetCode(EFFECT_CANNOT_BE_MATERIAL)
 	e3:SetValue(aux.cannotmatfilter(SUMMON_TYPE_FUSION,SUMMON_TYPE_SYNCHRO,SUMMON_TYPE_XYZ))
 	c:RegisterEffect(e3)
-	--return
+	--pos
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,0))
-	e4:SetCategory(CATEGORY_TOGRAVE)
+	e4:SetCategory(CATEGORY_POSITION)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e4:SetCode(EVENT_DESTROYED)
-	e4:SetCondition(s.retcon)
-	e4:SetTarget(s.rettg)
-	e4:SetOperation(s.retop)
+	e4:SetCondition(s.poscon)
+	e4:SetTarget(s.postg)
+	e4:SetOperation(s.posop)
 	c:RegisterEffect(e4)
 	-- Set 1 s/t
 	local e5=Effect.CreateEffect(c)
@@ -40,26 +40,20 @@ function s.initial_effect(c)
 	e5:SetOperation(s.setop)
 	c:RegisterEffect(e5)
 end
-function s.retcon(e,tp,eg,ep,ev,re,r,rp)
+function s.poscon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsReason(REASON_DESTROY) and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
-function s.filter(c)
-	return c:IsFacedown() and c:IsAbleToDeck()
+function s.posfilter(c)
+	return c:IsDefensePos() or c:IsFacedown()
 end
-function s.rettg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local prec=e:GetHandler():GetPreviousControler()
-	if chkc then return chkc:IsControler(prec) and chkc:IsLocation(LOCATION_REMOVED) and s.filter(chkc) end
-	if chk==0 then return true end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectTarget(prec,s.filter,prec,LOCATION_REMOVED,0,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,#g,0,0)
+function s.postg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_MZONE,0,1,nil) end
 end
-function s.retop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) then
-		Duel.SendtoGrave(tc,2,REASON_EFFECT)
-	end
+function s.posop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.posfilter,tp,LOCATION_MZONE,0,nil)
+	if #g==0 then return end
+	Duel.ChangePosition(g,POS_FACEUP_ATTACK)
 end
 --set
 function s.setcost(e,tp,eg,ep,ev,re,r,rp,chk)
