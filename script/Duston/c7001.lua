@@ -48,13 +48,17 @@ end
 function s.tdfilter(c)
 	return c:IsAbleToDeck()
 end
-function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_REMOVED,0,1,nil) end
-	local g=Duel.GetMatchingGroup(s.filter,tp,LOCATION_REMOVED,0,nil)
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local prec=e:GetHandler():GetPreviousControler()
+	if chkc then return chkc:IsControler(prec) and chkc:IsLocation(LOCATION_REMOVED) and s.tdfilter(chkc) end
+	if chk==0 then return true end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectTarget(prec,s.tdfilter,prec,LOCATION_REMOVED,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
 end
+
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.filter,tp,LOCATION_REMOVED,0,nil)
+	local g=Duel.GetMatchingGroup(prec,s.tdfilter,prec,LOCATION_REMOVED,0,nil)
 	if #g>0 then
 		Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
