@@ -41,6 +41,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 --shuffle
+function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	return c:IsReason(REASON_DESTROY) and c:IsPreviousLocation(LOCATION_ONFIELD)
+end
 function s.tdfilter(c)
 	return c:IsAbleToDeck()
 end
