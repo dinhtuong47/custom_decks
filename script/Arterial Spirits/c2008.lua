@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e2:SetTargetRange(LOCATION_MZONE,0)
 	e2:SetTarget(s.indtg)
 	e2:SetValue(s.indct)
-	c:RegisterEffect(e2
+	c:RegisterEffect(e2)
 	--change ATK
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
