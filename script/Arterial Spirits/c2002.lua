@@ -71,4 +71,3 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummonComplete()
 		end
 	end
-end
