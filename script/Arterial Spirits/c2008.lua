@@ -26,10 +26,10 @@ function s.initial_effect(c)
 	e3:SetOperation(s.atkop)
 	c:RegisterEffect(e3)
 end
+--indes
 function s.indtg(e,c)
 	return c:IsSetCard(0x7D0) and c:IsLevel(4)
 end
---indes
 function s.indct(e,re,r,rp)
 	local c=e:GetHandler()
 	if r & REASON_BATTLE ==0 then return 0 end
@@ -48,7 +48,7 @@ function s.indct(e,re,r,rp)
 	e1:SetValue(-dam)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 	tc:RegisterEffect(e1)
-	--[[Reset
+	--Reset
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_ADJUST)
@@ -61,7 +61,7 @@ function s.indct(e,re,r,rp)
 	end)
 	e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 	tc:RegisterEffect(e2)
-	return 1]]--
+	return 1
 end
 --[[function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetAttacker()
