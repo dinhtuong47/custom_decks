@@ -45,22 +45,22 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(-500)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		tc:RegisterEffect(e1)
-		--Cannot be destroyed by battle
-		local e2=Effect.CreateEffect(c)
-		e2:SetDescription(3000)
-		e2:SetProperty(EFFECT_FLAG_CLIENT_HINT+EFFECT_FLAG_CANNOT_DISABLE)
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-		e2:SetValue(1)
-		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-		tc:RegisterEffect(e2)
+	--Prevent effect target
+	local e3=Effect.CreateEffect(c)
+	e3:SetProperty(EFFECT_FLAG_CLIENT_HINT+EFFECT_FLAG_CANNOT_DISABLE)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e3:SetValue(aux.tgoval)
+	e3:SetReset(RESET_EVENT+RESETS_STANDARD)
+	tc:RegisterEffect(e3)
 	end
 	Duel.SpecialSummonComplete()
 end
 
 --add
 function s.thfilter(c)
-	return  c:IsSetCard(0x7D0) and c:IsAbleToHand()
+	return  c:IsSetCard(0x7D0) and not c:IsCode(id) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
