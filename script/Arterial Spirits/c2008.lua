@@ -7,15 +7,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--indes
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_ATKCHANGE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_INDESTRUCTABLE_COUNT)
 	e2:SetRange(LOCATION_FZONE)
-	e2:SetCost(s.indescost)
-	e2:SetCondition(s.condition)
-	e2:SetOperation(s.operation)
-	c:RegisterEffect(e2)
+	e2:SetTargetRange(LOCATION_MZONE,0)
+	e2:SetTarget(s.indtg)
+	e2:SetValue(s.indct)
+	c:RegisterEffect(e2
 	--change ATK
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
@@ -28,12 +26,44 @@ function s.initial_effect(c)
 	e3:SetOperation(s.atkop)
 	c:RegisterEffect(e3)
 end
---indes
-function s.indescost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,500) end
-	Duel.PayLPCost(tp,500)
+function s.indtg(e,c)
+	return c:IsSetCard(0x7D0) and c:IsLevel(4)
 end
-function s.condition(e,tp,eg,ep,ev,re,r,rp)
+--indes
+function s.indct(e,re,r,rp)
+	local c=e:GetHandler()
+	if r & REASON_BATTLE ==0 then return 0 end
+	local tp=e:GetHandlerPlayer()
+	local a=Duel.GetAttacker()
+	local tc=a:GetBattleTarget()
+	if tc and tc:IsControler(1-tp) then a,tc=tc,a end
+	local dam=Duel.GetBattleDamage(tp)
+	if not tc or dam<=0 then return 1 end
+	c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetValue(-dam)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+	tc:RegisterEffect(e1)
+	--[[Reset
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2:SetCode(EVENT_ADJUST)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetOperation(function (e)
+		if c:GetFlagEffect(id)==0 then
+			e1:Reset()
+			e:Reset()
+		end
+	end)
+	e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+	tc:RegisterEffect(e2)
+	return 1]]--
+end
+--[[function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetAttacker()
 	if not tc then return false end
 	if tc:IsControler(1-tp) then tc=Duel.GetAttackTarget() end
@@ -76,7 +106,7 @@ function s.atkop1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		a:RegisterEffect(e1)
 	end
-end
+end]]--
 --Reset a monster's ATK
 function s.atkfilter(c)
 	return c:IsFaceup() and c:GetAttack()<c:GetBaseAttack()
