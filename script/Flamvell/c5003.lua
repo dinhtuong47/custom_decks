@@ -40,15 +40,16 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			if c:GetLevel()==1 then
-				Duel.SelectOption(tp,aux.Stringid(id,1))
-			else
-				sel=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
-			end
-			if sel==1 then ct=-ct end
+		local b1=true
+	        local b2=c:IsLevelAbove(2)
+		local op=Duel.SelectEffect(tp,
+		{b1,aux.Stringid(id,2)}, --Increase its Level by 1
+		{b2,aux.Stringid(id,3)}) --Decrease its Level by 1
+	        local value=(op==1 and op) or -1
 			local e1=Effect.CreateEffect(c)
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_UPDATE_LEVEL)
-			e1:SetValue(ct)
+			e1:SetValue(value)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 			c:RegisterEffect(e1)
 		end
