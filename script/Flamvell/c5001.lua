@@ -74,29 +74,30 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
---act limit
-function s.actcon(e)
-	local gct=Duel.GetFieldGroupCount(e:GetHandler():GetControler(),0,LOCATION_GRAVE)
-	local ph=Duel.GetCurrentPhase()
-	if gct<=3 then return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE end
+--immu target
+function s.atcon(e)
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<8
+end
+function s.imtg(e,c)
+	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c)  
 end
 --double dmg
 function s.atcon2(e)
-	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<6
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<4
 end
 function s.damtg(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c) and c:GetBattleTarget()~=nil
 end
 --attack 2 on monsters
 function s.atcon3(e)
-	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<6
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<4
 end
 function s.damtg2(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c)  
 end
 --atk boost
 function s.atcon4(e)
-	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<8
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<6
 end
 function s.atkval(e,c)
 	local tp=e:GetHandlerPlayer()
