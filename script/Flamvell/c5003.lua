@@ -38,7 +38,18 @@ function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+	if c:IsRelateToEffect(e) then 
+		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+		if not Duel.SelectYesNo(tp,aux.Stringid(id,2)) then return end
+		Duel.BreakEffect()
+		--Increase its Level by 1
+		local e2=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e2:SetProperty(0)
+		e2:SetCode(EFFECT_UPDATE_LEVEL)
+		e2:SetValue(1)
+		e2:SetReset(RESET_EVENT|RESETS_STANDARD_DISABLE)
+		c:RegisterEffect(e2)
 	end
 end
 
