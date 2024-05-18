@@ -47,13 +47,18 @@ end
 function s.posfilter(c)
 	return c:IsDefensePos() or c:IsFacedown()
 end
-function s.postg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_MZONE,0,1,nil) end
+function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local prec=e:GetHandler():GetPreviousControler()
+	if chkc then return chkc:IsControler(prec) and chkc:IsOnField() and s.filter(chkc) end
+	if chk==0 then return true end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CHANGEPOS)
+	local g=Duel.SelectTarget(prec,s.posfilter,prec,LOCATION_MZONE,0,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,#g,0,0)
 end
 function s.posop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.posfilter,tp,LOCATION_MZONE,0,nil)
-	if #g==0 then return end
-	Duel.ChangePosition(g,POS_FACEUP_ATTACK)
+	local tc=Duel.GetFirstTarget()
+	if tc and tc:IsRelateToEffect(e) then
+	Duel.ChangePosition(tc,POS_FACEUP_ATTACK)
 end
 --set
 function s.setcost(e,tp,eg,ep,ev,re,r,rp,chk)
