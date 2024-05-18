@@ -24,9 +24,9 @@ function s.initial_effect(c)
 	e4:SetCategory(CATEGORY_TODECK)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 	e4:SetCode(EVENT_DESTROYED)
-	e4:SetCondition(s.tdcon)
-	e4:SetTarget(s.tdtg)
-	e4:SetOperation(s.tdop)
+	e4:SetCondition(s.retcon)
+	e4:SetTarget(s.rettg)
+	e4:SetOperation(s.retop)
 	c:RegisterEffect(e4)
 	--draw
 	local e5=Effect.CreateEffect(c)
@@ -41,26 +41,25 @@ function s.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 --shuffle
-function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
+function s.retcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsReason(REASON_DESTROY) and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
-function s.tdfilter(c)
+function s.rtfilter(c)
 	return c:IsAbleToDeck()
 end
-function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.rettg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local prec=e:GetHandler():GetPreviousControler()
-	if chkc then return chkc:IsControler(prec) and chkc:IsLocation(LOCATION_REMOVED) and s.tdfilter(chkc) end
+	if chkc then return chkc:IsControler(prec) and chkc:IsLocation(LOCATION_REMOVED) and s.rtfilter(chkc) end
 	if chk==0 then return true end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(prec,s.tdfilter,prec,LOCATION_REMOVED,0,1,1,nil)
+	local g=Duel.SelectTarget(prec,s.rtfilter,prec,LOCATION_REMOVED,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
 end
-
-function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(prec,s.tdfilter,prec,LOCATION_REMOVED,0,nil)
-	if #g>0 then
-		Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+function s.retop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	if tc and tc:IsRelateToEffect(e) then
+		Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)
 	end
 end
 --draw
