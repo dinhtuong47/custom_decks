@@ -33,7 +33,7 @@ function s.initial_effect(c)
 	local e5=Effect.CreateEffect(c)
 	e5:SetDescription(aux.Stringid(id,1))
 	e5:SetType(EFFECT_TYPE_IGNITION)
-	e5:SetRange(LOCATION_HAND)
+	e5:SetRange(LOCATION_HAND+LOCATION_MZONE)
 	e5:SetCountLimit(1)
 	e5:SetCost(s.setcost)
 	e5:SetTarget(s.settg)
@@ -61,10 +61,10 @@ function s.posop(e,tp,eg,ep,ev,re,r,rp)
 end
 --set
 function s.setcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsDiscardable() end
-	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
+	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end
+	Duel.SendtoGrave(e:GetHandler(),REASON_COST)
 end
+
 function s.setfilter(c)
 	return c:IsSpellTrap() and c:IsSetCard(0x80) and c:IsSSetable()
 end
