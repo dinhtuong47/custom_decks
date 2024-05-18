@@ -51,7 +51,6 @@ function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local prec=e:GetHandler():GetPreviousControler()
 	if chkc then return chkc:IsControler(prec) and chkc:IsOnField() and s.filter(chkc) end
 	if chk==0 then return true end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CHANGEPOS)
 	local g=Duel.SelectTarget(prec,s.posfilter,prec,LOCATION_MZONE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,#g,0,0)
 end
