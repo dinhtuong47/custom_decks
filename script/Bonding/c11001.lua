@@ -17,7 +17,6 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id+50)
 	e2:SetCondition(s.setcon)
-	e2:SetCost(s.setcost)
 	e2:SetTarget(s.settg)
 	e2:SetOperation(s.setop)
 end
