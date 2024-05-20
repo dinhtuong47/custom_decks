@@ -21,12 +21,9 @@ end
 function s.isfit(c,mc)
 	return (mc.fit_monster and c:IsCode(table.unpack(mc.fit_monster))) or mc:ListsCode(c:GetCode())
 end
-
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.thfilter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
-	if chk==0 then return #g>=2 and Duel.IsExistingMatchingCard(s.thfilter1,tp,LOCATION_HAND,0,1,nil,tp) 
-		and aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,0) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK+LOCATION_GRAVE)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter1,tp,LOCATION_HAND,0,1,nil,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE) 
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
@@ -34,14 +31,13 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if not rc then return end
 	Duel.ConfirmCards(1-tp,rc)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK,0,nil)
-	if #g<2 then return end
-	local thg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
-	if #thg>0 then
-		Duel.SendtoHand(thg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,thg)
+	local tc=Duel.SelectMatchingCard(tp,s.thfilter2,tp,LOCATION_DECK,0,2,2,aux.dncheck,nil,rc):GetFirst()
+	if tc and Duel.SendtoHand(tc,nil,REASON_EFFECT)>0 then
+		Duel.ConfirmCards(1-tp,tc)
 	end
 end
+
+
 
 
 
