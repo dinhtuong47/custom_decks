@@ -39,7 +39,7 @@ s.listed_series={0x100}
 s.listed_names={62397231}
 --special summon
 function s.thcfilter(c,tp)
-	return ( c:IsRace(RACE_SEASERPENT) and c:IsLevelAbove(8) ) or c:IsCode(62397231) and c:IsAbleToDeckAsCost()
+	return c:IsRace(RACE_SEASERPENT) or c:IsCode(62397231) and c:IsAbleToDeckAsCost()
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thcfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,tp) end
@@ -67,22 +67,16 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --draw
-function s.tdfilter1(c)
-	return c:IsSetCard(0x100) and c:IsFaceup() and c:IsAbleToDeck()
-end
-function s.tdfilter2(c)
+function s.tdfilter(c)
 	return c:IsRace(RACE_DINOSAUR) and c:IsAbleToDeck()
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE|LOCATION_REMOVED) and c:IsControler(tp) and s.tdfilter1(chkc) and s.tdfilter2(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter1,tp,LOCATION_REMOVED,0,1,nil)
-	and Duel.IsExistingTarget(s.tdfilter2,tp,LOCATION_GRAVE,0,1,nil) and Duel.IsPlayerCanDraw(tp,1)  end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and c:IsControler(tp) and s.tdfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE,0,1,nil) and Duel.IsPlayerCanDraw(tp,1) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g1=Duel.SelectTarget(tp,s.tdfilter1,tp,LOCATION_REMOVED,0,1,1,nil)
-	local g2=Duel.SelectTarget(tp,s.tdfilter2,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_GRAVE,0,1,3,nil)
 	
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,#g1,tp,0)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g2,#g2,tp,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,tp,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
