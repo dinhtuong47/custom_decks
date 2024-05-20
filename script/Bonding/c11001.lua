@@ -16,7 +16,7 @@ function s.spcfilter(c,e,tp,mc)
 		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp,mc,c)
 end
 function s.thfilter(c,e,tp,mc,sc)
-	return c:IsRace(RACE_DINOSAUR) and c:ListsCode(sc:GetCode()) and c:IsAbleToHand()
+	return c:IsRace(RACE_DINOSAUR) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
