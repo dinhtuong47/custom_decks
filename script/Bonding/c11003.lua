@@ -34,7 +34,7 @@ end
 function s.thfilter2(c,tp)
 	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND) and c:IsCode(22587018) and c:IsAbleToGrave()
 	--[[and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,c)]]--
-		and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_HAND+LOCATION_MZONE,0,1,c)
+		and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_HAND+LOCATION_MZONE,0,1,c) end
 end
 function s.thfilter3(c)
 	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND) and c:IsCode(58071123) and c:IsAbleToGrave()
