@@ -80,8 +80,9 @@ function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g1=Duel.SelectTarget(tp,s.tdfilter1,tp,LOCATION_REMOVED,0,1,1,nil)
 	local g2=Duel.SelectTarget(tp,s.tdfilter2,tp,LOCATION_GRAVE,0,1,1,nil)
-
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,tp,0)
+	
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,#g1,tp,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g2,#g2,tp,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
