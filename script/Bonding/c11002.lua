@@ -37,7 +37,7 @@ function s.filter1(c)
 	return c:IsFaceup() and c:IsRace(RACE_DINOSAUR)
 end
 function s.filter2(c)
-	return ( c:IsRace(RACE_SEASERPENT) and c:IsLevelAbove(8) ) or ( c:IsSetCard(0x100) and (c:IsNormalSpell() or c:IsNormalTrap()) ) and c:IsAbleToGrave()
+	return ( c:IsSetCard(0x100) and (c:IsNormalSpell() or c:IsNormalTrap()) ) and c:IsAbleToGrave()
 end
 function s.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() end
@@ -58,7 +58,7 @@ function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_UPDATE_ATTACK)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			e1:SetValue(800)
+			e1:SetValue(600)
 			tc:RegisterEffect(e1)
 		end
 	end
