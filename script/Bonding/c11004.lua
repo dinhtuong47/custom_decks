@@ -14,22 +14,12 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetRange(LOCATION_SZONE)
+	e3:SetCountLimit(1,id)
 	e3:SetCost(s.cost)
 	e3:SetTarget(s.sptg)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
-	--to deck
-	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(id,1))
-	e4:SetCategory(CATEGORY_TODECK)
-	e4:SetType(EFFECT_TYPE_QUICK_O)
-	e4:SetCode(EVENT_FREE_CHAIN)
-	e4:SetRange(LOCATION_SZONE)
-	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e4:SetCost(s.cost)
-	e4:SetTarget(s.tdtg)
-	e4:SetOperation(s.tdop)
-	c:RegisterEffect(e4)
+	
 end
 s.listed_series={0x100}
 s.listed_names={62397231}
