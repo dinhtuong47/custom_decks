@@ -42,9 +42,9 @@ function s.thcfilter(c,tp)
 	return ( c:IsRace(RACE_SEASERPENT) and c:IsLevelAbove(8) ) or c:IsCode(62397231) and c:IsAbleToDeckAsCost()
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.thcfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.thcfilter,tp,LOCATION_HAND+LOCATION_MZONE+LOCATION_GRAVE,0,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local tc=Duel.SelectMatchingCard(tp,s.thcfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,tp):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,s.thcfilter,tp,LOCATION_HAND+LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil,tp):GetFirst()
 	Duel.ConfirmCards(1-tp,tc)
 	Duel.ShuffleHand(tp)
 	Duel.SendtoDeck(tc,nil,SEQ_DECKSHUFFLE,REASON_COST)
