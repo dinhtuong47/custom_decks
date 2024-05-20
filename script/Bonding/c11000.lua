@@ -86,7 +86,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_GRAVE,0,1,2,nil,e,tp)
 	if #g>0 then
-		Duel.ToHand(g,nil,REASON_EFFECT)
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
 	end
 end
 
