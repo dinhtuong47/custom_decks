@@ -27,7 +27,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 local rc=Duel.SelectMatchingCard(tp,s.spcfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp,c):GetFirst()
 	if not rc then return end
 	Duel.ConfirmCards(1-tp,rc)
-	local sc=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp,c,rc):GetFirst()
+	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp,c,rc):GetFirst()
 	
 	if #g<2 then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
