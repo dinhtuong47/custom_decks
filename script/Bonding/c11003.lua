@@ -25,18 +25,18 @@ function s.initial_effect(c)
 end
 s.listed_names={58071123,85066822,22587018,45898858} 
 function s.cfilter(c)
-	return c:IsCode(45898858) or c:IsCode(458988580) and c:IsAbleToRemoveAsCost()
+	return c:IsCode(45898858) and c:IsAbleToRemoveAsCost()
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function s.thfilter2(c,tp)
 	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND+LOCATION_DECK)) and c:IsCode(22587018) and c:IsAbleToGrave()
+	--[[and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,c)]]--
 		and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE,0,1,c)
-		--[[and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,c)]]--
 end
 function s.thfilter3(c)
 	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND+LOCATION_DECK)) and c:IsCode(58071123) and c:IsAbleToGrave()
