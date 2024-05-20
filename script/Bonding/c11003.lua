@@ -32,7 +32,7 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function s.thfilter2(c,tp)
-	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND+LOCATION_DECK) and c:IsCode(22587018)) and c:IsAbleToGrave()
+	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND+LOCATION_DECK)) and c:IsCode(22587018) and c:IsAbleToGrave()
 	--[[and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,c)]]--
 		and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE,0,1,c)
 end
