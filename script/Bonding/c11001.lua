@@ -11,30 +11,36 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 --add
-function s.spcfilter(c,e,tp,mc)
-	return c:IsSetCard(0x100) and not c:IsPublic()
-		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp,mc,c)
+function s.thfilter1(c,tp)
+	return c:IsSetCard(0x100) and not c:IsPublic() 
+		and Duel.IsExistingMatchingCard(s.thfilter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,c)
 end
-function s.thfilter(c,e,tp,mc,sc)
-	return c:IsRace(RACE_DINOSAUR) and c:IsAbleToHand()
+function s.thfilter2(c,mc)
+	return c:IsRace(RACE_DINOSAUR) and c:IsAbleToHand() and s.isfit(c,mc)
+end
+function s.isfit(c,mc)
+	return (mc.fit_monster and c:IsCode(table.unpack(mc.fit_monster))) or mc:ListsCode(c:GetCode())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
-	if chk==0 then return aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,0) and Duel.IsExistingMatchingCard(s.spcfilter,tp,LOCATION_HAND,0,1,nil,e,tp,c) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK+LOCATION_GRAVE)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter1,tp,LOCATION_HAND,0,1,nil,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-local rc=Duel.SelectMatchingCard(tp,s.spcfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp,c):GetFirst()
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
+	local rc=Duel.SelectMatchingCard(tp,s.thfilter1,tp,LOCATION_HAND,0,1,1,nil,tp):GetFirst()
 	if not rc then return end
 	Duel.ConfirmCards(1-tp,rc)
-	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp,c,rc):GetFirst()
-	
-	if #g<2 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
-	if #sg>0 then
-		Duel.SendtoHand(sg,tp,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local tc=Duel.SelectMatchingCard(tp,s.thfilter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,rc):GetFirst()
+	if #tc<2 then return end
+	local stc=aux.SelectUnselectGroup(tc,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
+	if #stc>0 then
+		Duel.SendtoHand(tc,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,stc)
 	end
 end
+
+
 
 
