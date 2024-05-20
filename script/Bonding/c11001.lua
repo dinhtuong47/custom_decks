@@ -31,9 +31,10 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if not rc then return end
 	Duel.ConfirmCards(1-tp,rc)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local tc=Duel.SelectMatchingCard(tp,s.thfilter2,tp,LOCATION_DECK,0,2,2,aux.dncheck,nil,rc):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,s.thfilter2,tp,LOCATION_DECK,0,1,1,nil,rc):GetFirst()
 	if tc and Duel.SendtoHand(tc,nil,REASON_EFFECT)>0 then
 		Duel.ConfirmCards(1-tp,tc)
+		Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
 end
 
