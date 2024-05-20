@@ -20,13 +20,15 @@ function s.initial_effect(c)
     --negate
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_NEGATE)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetCategory(CATEGORY_DISABLE)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_CHAINING)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetTarget(s.distg)
-	e2:SetOperation(s.disop)
+	e2:SetCountLimit(2,id)
+	e2:SetCost(s.negcost)
+	e2:SetCondition(s.negcon)
+	e2:SetTarget(s.negtg)
+	e2:SetOperation(function(_,_,_,_,ev) Duel.NegateEffect(ev) end)
 	c:RegisterEffect(e2)
     --spsummon
 	local e3=Effect.CreateEffect(c)
@@ -44,24 +46,18 @@ end
 --negate
 s.listed_series={0x100}
 s.listed_names={45898858}
-function s.distg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsNegatable,tp,0,LOCATION_SZONE,1,nil) end
-end
-function s.disop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsNegatable,tp,0,LOCATION_SZONE,nil)
+function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	for tc in aux.Next(g) do
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_DISABLE)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		tc:RegisterEffect(e1)
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetCode(EFFECT_DISABLE_EFFECT)
-		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-		tc:RegisterEffect(e2)
-	end
+	if chk==0 then return c:GetFlagEffect(id)==0 end
+	c:RegisterFlagEffect(id,RESET_CHAIN,0,1)
+end
+function s.negcon(e,tp,eg,ep,ev,re,r,rp)
+	local loc=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)
+	return ep==1-tp and loc&LOCATION_ONFIELD>0 and re:IsSpellTrapEffect() and Duel.IsChainDisablable(ev)
+end
+function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
 end
 --spsummon
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
