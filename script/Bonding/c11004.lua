@@ -32,11 +32,19 @@ function s.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 s.listed_series={0x100}
+s.listed_names={62397231}
 --special summon
-function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:GetFlagEffect(1002270280)==0 end
-	c:RegisterFlagEffect(1002270280,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
+function s.thcfilter(c,tp)
+	return ( c:IsRace(RACE_SEASERPENT) and c:IsLevelAbove(8) ) or c:IsCode(62397231) and c:IsAbleToDeckAsCost()
+end
+function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.thcfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local tc=Duel.SelectMatchingCard(tp,s.thcfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,tp):GetFirst()
+	Duel.ConfirmCards(1-tp,tc)
+	Duel.ShuffleHand(tp)
+	Duel.SendtoDeck(tc,nil,SEQ_DECKSHUFFLE,REASON_COST)
+	e:SetLabel(tc:GetCode())
 end
 function s.spfilter(c,e,tp)
 	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND+LOCATION_GRAVE)) and c:IsRace(RACE_DINOSAUR) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
