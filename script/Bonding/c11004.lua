@@ -66,5 +66,28 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
+--draw
+function s.tdfilter(c)
+	return c:IsSetCard(0x100) and c:IsFaceup() and c:IsAbleToDeck()
+end
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE|LOCATION_REMOVED) and c:IsControler(tp) and s.tdfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil)
+	and Duel.IsPlayerCanDraw(tp,1)  end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,2,nil)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,tp,0)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+end
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetTargetCards(e)
+	if #g==0 or Duel.SendtoDeck(g,nil,SEQ_DECKBOTTOM,REASON_EFFECT)==0 then return end
+	local ct=g:FilterCount(Card.IsLocation,nil,LOCATION_DECK)
+	if ct>1 then
+		Duel.SortDeckbottom(tp,tp,ct)
+	end
+	Duel.BreakEffect()
+	Duel.Draw(tp,1,REASON_EFFECT)
+end
 
 
