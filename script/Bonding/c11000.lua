@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	e2:SetCost(s.negcost)
 	e2:SetCondition(s.negcon)
 	e2:SetTarget(s.negtg)
-	e2:SetOperation(function(_,_,_,_,ev) Duel.NegateEffect(ev) end)
+	e2:SetOperation(s.negop)
 	c:RegisterEffect(e2)
     --spsummon
 	local e3=Effect.CreateEffect(c)
@@ -46,7 +46,7 @@ end
 s.listed_series={0x100}
 s.listed_names={45898858}
 function s.cfilter(c)
-	return c:IsSetCard(100) and c:IsDiscardable()
+	return c:IsSetCard(0x100) and c:IsDiscardable()
 end
 function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND,0,1,nil) end
@@ -59,6 +59,9 @@ end
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
+end
+function s.negop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.NegateEffect(ev)
 end
 --spsummon
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
