@@ -32,7 +32,7 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.thfilter1(c,tp)
 	return c:IsSetCard(0x100) and not c:IsPublic() 
-		and Duel.IsExistingMatchingCard(s.thfilter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,2,nil,c)
+		and Duel.IsExistingMatchingCard(s.thfilter2,tp,LOCATION_DECK,0,2,nil,c)
 end
 function s.thfilter2(c,mc)
 	return c:IsRace(RACE_DINOSAUR) and c:IsAbleToHand() and s.isfit(c,mc)
@@ -42,7 +42,7 @@ function s.isfit(c,mc)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter1,tp,LOCATION_HAND,0,1,nil,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK+LOCATION_GRAVE) 
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK) 
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
