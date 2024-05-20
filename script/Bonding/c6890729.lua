@@ -41,7 +41,7 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(g1,nil,2,REASON_COST)
 end
 function s.filter(c,e,tp)
-	return c:IsCode(6022371) or c:IsCode(85066822) and c:IsCanBeSpecialSummoned(e,0,tp,true,true)
+	return c:IsCode(6022371) and c:IsCanBeSpecialSummoned(e,0,tp,true,true)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
