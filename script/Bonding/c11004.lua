@@ -67,15 +67,19 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --draw
-function s.tdfilter(c)
+function s.tdfilter1(c)
 	return c:IsSetCard(0x100) and c:IsFaceup() and c:IsAbleToDeck()
 end
+function s.tdfilter2(c)
+	return c:IsRace(RACE_DINOSAUR) and c:IsAbleToDeck()
+end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE|LOCATION_REMOVED) and c:IsControler(tp) and s.tdfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil)
-	and Duel.IsPlayerCanDraw(tp,1)  end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE|LOCATION_REMOVED) and c:IsControler(tp) and s.tdfilter1(chkc) and s.tdfilter2(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter1,tp,LOCATION_REMOVED,0,1,nil)
+	and Duel.IsExistingTarget(s.tdfilter2,tp,LOCATION_GRAVE,0,1,nil) and Duel.IsPlayerCanDraw(tp,1)  end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,2,nil)
+	local g1=Duel.SelectTarget(tp,s.tdfilter1,tp,LOCATION_REMOVED,0,1,1,nil)
+	local g2=Duel.SelectTarget(tp,s.tdfilter2,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,tp,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
