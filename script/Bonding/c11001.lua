@@ -29,7 +29,7 @@ local rc=Duel.SelectMatchingCard(tp,s.spcfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp,
 	Duel.ConfirmCards(1-tp,rc)
 	local g=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp,c,rc):GetFirst()
 	if #g<2 then return end
-	local sg=aux.SelectUnselectGroup(sc,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
+	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
 	if #sg>0 then
 		Duel.SendtoHand(sg,tp,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
