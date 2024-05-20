@@ -37,7 +37,7 @@ s.listed_names={62397231}
 function s.thcfilter(c,tp)
 	return ( c:IsRace(RACE_SEASERPENT) and c:IsLevelAbove(8) ) or c:IsCode(62397231) and c:IsAbleToDeckAsCost()
 end
-function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thcfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local tc=Duel.SelectMatchingCard(tp,s.thcfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,tp):GetFirst()
