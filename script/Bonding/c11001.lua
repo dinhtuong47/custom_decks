@@ -13,12 +13,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--Set
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_RELEASE)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id+50)
-	e2:SetCondition(s.setcon)
+	e2:SetCost(aux.bfgcost)
 	e2:SetTarget(s.settg)
 	e2:SetOperation(s.setop)
 	c:RegisterEffect(e2)
@@ -64,31 +62,23 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP) end
 end
 --set
-function s.setconfilter(c)
-	return c:IsMonster() or c:GetPreviousTypeOnField()&TYPE_MONSTER==TYPE_MONSTER
-end
-function s.setcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.setconfilter,1,nil)
+function s.setfilter(c)
+	return c:IsSetCard(0x100) and not c:IsCode(id) and c:IsSSetable() and not c:IsForbidden()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsSSetable() end
-	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,c,1,0,0)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+		and Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil) end
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and c:IsSSetable() and Duel.SSet(tp,c)>0 then
-		--Banish it when it leaves the field
-		local e1=Effect.CreateEffect(c)
-		e1:SetDescription(3300)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
-		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
-		e1:SetValue(LOCATION_REMOVED)
-		e1:SetReset(RESET_EVENT|RESETS_REDIRECT)
-		c:RegisterEffect(e1)
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)<1 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+	local g=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then
+		Duel.SSet(tp,g)
 	end
 end
+
 
 
 
