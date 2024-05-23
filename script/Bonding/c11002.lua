@@ -46,7 +46,7 @@ end
 s.listed_series={0x100}
 --sent and gain atk
 function s.filter1(c)
-	return c:IsFaceup() and c:IsRace(RACE_DINOSAUR)
+	return c:IsFaceup() and (c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT))
 end
 function s.filter2(c)
 	return ( c:IsSetCard(0x100) and (c:IsNormalSpell() or c:IsNormalTrap()) ) and c:IsAbleToGrave()
