@@ -12,17 +12,17 @@ function s.initial_effect(c)
         e0:SetTarget(s.target)
 	e0:SetOperation(s.activate)
 	c:RegisterEffect(e0)
-	 --add from GY
+	 --FLIP
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TOHAND)
+	e2:SetCategory(CATEGORY_POSITION)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCost(aux.bfgcost)
-	e2:SetTarget(s.thtg)
-	e2:SetOperation(s.thop)
+	e2:SetTarget(s.postg)
+	e2:SetOperation(s.posop)
 	c:RegisterEffect(e2)
 end
 function s.sumcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -74,21 +74,20 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
---add from gy
-function s.thfilter(c)
-	return c:IsLevelAbove(5) and c:IsRace(RACE_THUNDER) and c:IsAbleToHand()
+--change pos
+function s.posfilter(c)
+	return c:IsFacedown() and c:IsDefensePos() and c:IsRace(RACE_THUNDER)  and c:IsCanChangePosition()
 end
-function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.posfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.posfilter,tp,LOCATION_MZONE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEDOWNDEFENSE)
+	Duel.SelectTarget(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil)
+end
+function s.posop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.thfilter(chkc) and chkc~=c end
-	if chk==0 then return Duel.IsExistingTarget(s.thfilter,tp,LOCATION_GRAVE,0,1,c) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectTarget(tp,s.thfilter,tp,LOCATION_GRAVE,0,1,1,c)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,#g,0,0)
-end
-function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) then
-		Duel.SendtoHand(tc,nil,REASON_EFFECT)
+	if tc and tc:IsRelateToEffect(e) then Duel.ChangePosition(tc,POS_FACEUP_ATTACK)
+
 	end
 end
