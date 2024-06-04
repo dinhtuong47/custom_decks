@@ -59,6 +59,33 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
+
+function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and chkc:IsControler(tp) and s.rmfilter(chkc,tp) end
+	if chk==0 then return Duel.IsExistingTarget(s.rmfilter,tp,LOCATION_GRAVE,0,1,nil,tp)
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+		and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,5004,0,TYPES_TOKEN,1500,1500,4,RACE_PYRO,ATTRIBUTE_FIRE,POS_FACEUP,1-tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g=Duel.SelectTarget(tp,s.rmfilter,tp,LOCATION_MZONE,0,1,1,nil,tp)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVED,g,1,tp,0)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,tp,0)
+end
+function s.spop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	local c=e:GetHandler()
+	if tc:IsRelateToEffect(e) and Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)>0
+		and tc:IsLocation(LOCATION_GRAVE) and c:IsRelateToEffect(e)
+		and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 
+		and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,5004,0,TYPES_TOKEN,1500,1500,4,RACE_PYRO,ATTRIBUTE_FIRE,POS_FACEUP,1-tp) then
+		local token=Duel.CreateToken(tp,5004)
+		Duel.BreakEffect()
+		Duel.SpecialSummon(token,0,tp,1-tp,false,false,POS_FACEUP)
+	end
+end
+
 --add
 function s.thfilter(c)
 	return c:IsSetCard(0x2c) and c:IsSpellTrap() and c:IsAbleToHand()
