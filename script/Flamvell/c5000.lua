@@ -54,7 +54,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	local c=e:GetHandler()
 	if tc:IsRelateToEffect(e) and Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)>0
-		and tc:IsLocation(LOCATION_GRAVE) and c:IsRelateToEffect(e)
+		and tc:IsLocation(LOCATION_REMOVED) and c:IsRelateToEffect(e)
 		and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 
 		and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,5004,0,TYPES_TOKEN,1500,1500,4,RACE_PYRO,ATTRIBUTE_FIRE,POS_FACEUP,1-tp) then
