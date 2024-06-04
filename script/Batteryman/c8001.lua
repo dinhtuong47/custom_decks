@@ -15,6 +15,18 @@ function s.initial_effect(c)
         e1:SetTarget(s.tgtg)
 	e1:SetValue(s.tglimit)
 	c:RegisterEffect(e1)
+	--atk up
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetCode(EFFECT_UPDATE_ATTACK)
+	e4:SetRange(LOCATION_FZONE)
+	e4:SetTargetRange(LOCATION_MZONE,0)
+	e4:SetTarget(s.atkeff)
+	e4:SetValue(300) 
+	c:RegisterEffect(e4)
+	local e5=e4:Clone()
+	e5:SetCode(EFFECT_UPDATE_DEFENSE)
+	c:RegisterEffect(e5)
 	--broken line
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
@@ -40,6 +52,10 @@ function s.tgtg(e,c)
 end
 function s.tglimit(e,re,rp)
 	return rp~=e:GetHandlerPlayer() and re:IsActiveType(TYPE_MONSTER) 
+end
+--atk up
+function s.atkeff(e,c)
+	return c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_THUNDER)
 end
 --add
 function s.cfilter(c)
