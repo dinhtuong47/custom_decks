@@ -62,9 +62,8 @@ function s.cfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x28)
 end
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,3,nil)
+	return Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)>Duel.GetFieldGroupCount(tp,LOCATION_ONFIELD,0)
 end
-
 function s.blfilter(c)
 	return c:IsCode(88086137) and c:IsAbleToHand()
 end
