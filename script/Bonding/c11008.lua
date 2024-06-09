@@ -23,15 +23,15 @@ function s.initial_effect(c)
 end
 s.listed_names={58071123,15981690,11005,11006,62397231}
 function s.cfilter(c,code)
-	return c:IsCode(code) and c:IsAbleToDeckAsCost()
+	return c:IsCode(code) and (c:IsLocation(LOCATION_HAND+LOCATION_GRAVE) or c:IsFaceup()) and c:IsAbleToDeckAsCost()
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,15981690)
-		and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,2,nil,58071123) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,15981690)
+		and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,2,nil,58071123) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g2=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,15981690)
+	local g2=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,15981690)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g3=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,2,2,nil,58071123)
+	local g3=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,2,2,nil,58071123)
 	g2:Merge(g3)
 	Duel.ConfirmCards(1-tp,g1)
 	Duel.SendtoDeck(g1,nil,2,REASON_COST)
