@@ -71,5 +71,5 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 	Duel.BreakEffect()
-	Duel.SendtoGrave(g,nil,REASON_EFFECT)
+	Duel.SendtoGrave(g,REASON_EFFECT)
 end
