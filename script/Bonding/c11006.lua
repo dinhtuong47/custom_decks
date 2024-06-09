@@ -3,11 +3,28 @@ local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--cannot special summon
+	local e0=Effect.CreateEffect(c)
+	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
+	c:RegisterEffect(e0)
+	--atkchange
 	local e1=Effect.CreateEffect(c)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_SET_ATTACK)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetTargetRange(0,LOCATION_MZONE)
+	e1:SetTarget(s.atfilter)
 	c:RegisterEffect(e1)
+	--cannot activate set s/t
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e2:SetCode(EFFECT_CANNOT_ACTIVATE)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetTargetRange(0,1)
+	e2:SetValue(s.aclimit)
+	c:RegisterEffect(e2)
 	--ss
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
@@ -19,6 +36,15 @@ function s.initial_effect(c)
 	e3:SetTarget(s.sptg)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
+end
+--set atk
+function s.atfilter(e,c)
+	return c:IsType(TYPE_SPECIAL_SUMMON)
+end
+--cannot activate set s/t
+function s.aclimit(e,re,tp)
+	local rc=re:GetHandler()
+	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and rc:IsLocation(LOCATION_SZONE) and rc:IsFacedown()
 end
 --ss
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
