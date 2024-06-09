@@ -71,7 +71,5 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 	Duel.BreakEffect()
-	Duel.SendtoGrave(g,tp,REASON_EFFECT)
-	--[[Duel.MoveToDeckBottom(g,tp)
-	Duel.SortDeckbottom(tp,tp,4)]]--
+	Duel.SendtoGrave(g,nil,REASON_EFFECT)
 end
