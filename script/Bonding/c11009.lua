@@ -12,14 +12,14 @@ function s.initial_effect(c)
 end
 s.listed_names={22587018,58071123,15981690,62397231}
 function s.flipcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=5
+	return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=4
 		and Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,62397231),tp,LOCATION_ONFIELD,0,1,nil)
 end
 function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,id)
-	Duel.ConfirmDecktop(tp,5)
+	Duel.ConfirmDecktop(tp,4)
 	local c=e:GetHandler()
-	local g=Duel.GetDecktopGroup(tp,5)
+	local g=Duel.GetDecktopGroup(tp,4)
 	local break_chk=false
 	--"Carbonnedon": 1 "Hyozanryu" you control gains 1000 ATK
 	if g:IsExists(Card.IsCode,1,nil,15981690) then
