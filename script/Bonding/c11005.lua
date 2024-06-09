@@ -75,10 +75,9 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		local sg1=g1:Select(tp,1,1,nil)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg2=g2:Select(tp,1,1,nil)
-		sg1:Merge(sg2) end
-	
-        if Duel.SpecialSummon(sg1,0,tp,tp,true,false,POS_FACEUP)~0
-		and Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil)
+		sg1:Merge(sg2)
+                Duel.SpecialSummon(sg1,0,tp,tp,true,false,POS_FACEUP) end
+		if Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil)
 		and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 		local sg=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK,0,1,1,nil)
