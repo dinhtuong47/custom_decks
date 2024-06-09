@@ -80,7 +80,7 @@ end
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return tp~=Duel.GetTurnPlayer()
 end
-function s.thfilter(c)
+function s.thdfilter(c)
 	return  c:IsSetCard(0x100) and c:IsFaceup()  and (c:IsAbleToHand() or c:IsAbleToDeck())
 end
 function s.thdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
