@@ -49,7 +49,7 @@ function s.filter1(c)
 	return c:IsFaceup() and (c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT))
 end
 function s.filter2(c)
-	return ( c:IsSetCard(0x100) and (c:IsNormalSpell() or c:IsNormalTrap()) ) and c:IsAbleToGrave()
+	return c:IsSetCard(0x100) and c:IsAbleToGrave()
 end
 function s.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() end
