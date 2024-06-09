@@ -52,7 +52,7 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 			e2:SetProperty(EFFECT_FLAG_CLIENT_HINT)
 			e2:SetCode(EFFECT_IMMUNE_EFFECT)
 			e2:SetReset(RESET_EVENT|RESETS_STANDARD|RESET_PHASE|PHASE_END)
-			e2:SetValue(function(e,te)  te:GetOwnerPlayer()==1-e:GetHandlerPlayer() end) --[[and return te:IsMonsterEffect()]]--
+			e2:SetValue(function(e,te) return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() end) --[[and te:IsMonsterEffect()]]--
 			sc:RegisterEffect(e2)
 		end
 	end
