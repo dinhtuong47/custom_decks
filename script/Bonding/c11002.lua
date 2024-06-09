@@ -80,20 +80,31 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return tp~=Duel.GetTurnPlayer()
 end
 function s.thfilter(c)
-	return  c:IsSetCard(0x100) and c:IsFaceup() and c:IsAbleToHand()
+	return  c:IsSetCard(0x100) and c:IsFaceup()  and (c:IsAbleToHand() or c:IsAbleToDeck())
 end
-function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_REMOVED,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_REMOVED)
+function s.thdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return false end
+	local rg=Duel.GetMatchingGroup(s.thdfilter,tp,LOCATION_REMOVED,0,nil,e)
+	if chk==0 then return aux.SelectUnselectGroup(rg,e,tp,2,2,nil,0) end
+	local g=aux.SelectUnselectGroup(rg,e,tp,2,2,nil,1,tp,aux.Stringid(id,1))
+	Duel.SetTargetCard(g)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
 end
-function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_REMOVED,0,1,1,nil)
-	if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
+function s.thdop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetTargetCards(e)
+	if #g==2 then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+		local hg=g:FilterSelect(tp,Card.IsAbleToHand,1,1,nil)
+		if #hg==0 or Duel.SendtoHand(hg,nil,REASON_EFFECT)==0 then return end
+		Duel.ConfirmCards(1-tp,hg)
+		local dg=g-hg
+		if #dg==0 then return end
+		Duel.HintSelection(dg,true)
+		Duel.SendtoDeck(dg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end
+
 --immu
 function s.effectfilter(e,ct)
 	local p=e:GetHandler():GetControler()
