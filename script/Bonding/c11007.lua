@@ -58,19 +58,17 @@ end
 function s.con(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,62397231),tp,LOCATION_ONFIELD,0,1,nil)
 end
-function s.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.thfilter,1,nil)
+function s.stfilter(c)
+	return c:IsCode(11009) and c:IsSSetable()
 end
-function s.thfilter(c)
-	return (c:IsCode(85066822) or c:IsCode(6022371)) and c:IsPreviousLocation(LOCATION_ONFIELD)
+function s.tftg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+		and Duel.IsExistingMatchingCard(s.stfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
 end
-function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,0,0)
-end
-function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		Duel.SendtoHand(c,nil,REASON_EFFECT)
+function s.tfop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+	local g=Duel.SelectMatchingCard(tp,s.stfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+	if #g>0 then
+		Duel.SSet(tp,g:GetFirst())
 	end
 end
