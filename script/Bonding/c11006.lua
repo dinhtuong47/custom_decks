@@ -39,7 +39,7 @@ function s.initial_effect(c)
 end
 --set atk
 function s.atfilter(e,c)
-	return c:IsType(TYPE_SPECIAL_SUMMON)
+	return c:IsSummonType(SUMMON_TYPE_SPECIAL)
 end
 --cannot activate set s/t
 function s.aclimit(e,re,tp)
