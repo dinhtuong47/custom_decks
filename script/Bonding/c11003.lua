@@ -17,8 +17,9 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetCost(aux.bfgcost)
-	e2:SetTarget(s.target)
-	e2:SetOperation(s.activate)
+	e2:SetHintTiming(0,TIMING_END_PHASE)
+	e2:SetTarget(s.attg)
+	e2:SetOperation(s.atop)
 	c:RegisterEffect(e2)
 end
 s.listed_names={58071123,85066822,22587018,45898858} 
@@ -89,16 +90,18 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Destroy(e:GetLabelObject(),REASON_EFFECT)
 end
 --race change
-function s.chfilter(c)
-	return c:IsFaceup()  
+function s.atfilter(c)
+	return c:IsFaceup() and not (c:IsAttribute(ATTRIBUTE_FIRE) or c:IsRace(RACE_PYRO))
 end
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.chfilter,tp,0,LOCATION_MZONE,1,nil) end
+function s.attg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.atfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.atfilter,tp,0,LOCATION_MZONE,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	local g=Duel.SelectTarget(tp,s.atfilter,tp,0,LOCATION_MZONE,1,1,nil)
 end
-function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.chfilter,tp,0,LOCATION_MZONE,nil)
-	local tc=g:GetFirst()
-	for tc in aux.Next(g) do
+function s.atop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)	
 	e1:SetCode(EFFECT_CHANGE_ATTRIBUTE)
