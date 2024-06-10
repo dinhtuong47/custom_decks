@@ -16,9 +16,8 @@ function s.initial_effect(c)
 end
 function s.con(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-        return c:IsFacedown() 
+        return c:IsFacedown() and aux.exccon(e)
 end
-
 function s.spfilter(c,e,tp)
 	return c:IsSetCard(0x7D0) and c:IsLevel(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
