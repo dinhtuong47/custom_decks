@@ -77,10 +77,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		local sg2=g2:Select(tp,1,1,nil)
 		sg1:Merge(sg2)
                 Duel.SpecialSummon(sg1,0,tp,tp,true,false,POS_FACEUP) end
-		if Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil)
+		if Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil)
 		and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-		local sg=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK,0,1,1,nil)
+		local sg=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
 		if #sg>0 then
 			Duel.BreakEffect()
 			Duel.SSet(tp,sg)
