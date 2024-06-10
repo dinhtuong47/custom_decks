@@ -9,10 +9,15 @@ function s.initial_effect(c)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetHintTiming(0,TIMING_END_PHASE)
 	e1:SetRange(LOCATION_REMOVED)
+	e1:SetCondition(s.con)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
 end
+function s.con(e,tp,eg,ep,ev,re,r,rp)
+	return c:IsFacedown()
+end
+
 function s.spfilter(c,e,tp)
 	return c:IsSetCard(0x7D0) and c:IsLevel(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
