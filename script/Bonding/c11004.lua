@@ -59,13 +59,13 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 --draw
 function s.tdfilter(c)
-	return c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT) and c:IsAbleToDeck()
+	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT) and c:IsAbleToDeck()
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and c:IsControler(tp) and s.tdfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE,0,3,nil) and Duel.IsPlayerCanDraw(tp,1) end
+	if chkc then return (chkc:IsLocation(LOCATION_GRAVE) or chkc:IsFaceup()) and c:IsControler(tp) and s.tdfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,nil) and Duel.IsPlayerCanDraw(tp,1) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_GRAVE,0,3,3,nil)
+	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,3,nil)
 	
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,tp,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
