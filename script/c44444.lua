@@ -42,9 +42,9 @@ function s.drop(e,tp,eg,ep,ev,re,r,rp)
 	local d=Duel.GetMatchingGroupCount(s.drfilter,tp,LOCATION_MZONE,0,nil)
 	Duel.Draw(p,d,REASON_EFFECT)
 end
---DES 
+--DES and recover
 function s.thfilter(c)
-	return c:IsSetCard(0x14e) and aux.SpElimFilter(c,true,true) and c:IsFaceup()
+	return c:IsSetCard(0x14e) and c:IsFaceup()
 end
 	--Activation legality
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -60,7 +60,7 @@ end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) and Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)>0
+	if tc and tc:IsRelateToEffect(e) and Duel.Destroy(tc,REASON_EFFECT)>0
 		and c:IsRelateToEffect(e) then
 		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end
