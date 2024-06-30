@@ -14,12 +14,14 @@ function s.initial_effect(c)
 	e1:SetCondition(s.gycon)
 	e1:SetTarget(s.rettg)
 	e1:SetOperation(s.retop)
+	e1:SetCountLimit(1,id)
 	c:RegisterEffect(e1)
 	local e2=e1:Clone()
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetCondition(s.retcon)
+	--[[e2:SetCondition(s.retcon)]]--
+	e2:SetCountLimit(1,id+1)
 	c:RegisterEffect(e2)
 	--Special Summon
 	local e3=Effect.CreateEffect(c)
@@ -27,7 +29,7 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCode(EVENT_PHASE+PHASE_END)
-	e3:SetCountLimit(1,id)
+	e3:SetCountLimit(1,id+2)
 	e3:SetTarget(s.sptg)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
@@ -56,10 +58,10 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Draw(1-tp,1,REASON_EFFECT)
 	end
 end
--- syn cond
+--[[syn cond
 function s.retcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
-end
+end]]--
 --ss from deck
 function s.filter(c,e,tp)
 	return c:IsSetCard(0x2c) --[[c:IsDefenseBelow(200) and c:IsAttribute(ATTRIBUTE_FIRE)]]-- 
