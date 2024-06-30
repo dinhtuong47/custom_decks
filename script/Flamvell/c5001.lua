@@ -100,6 +100,9 @@ end]]--
 function s.atcon4(e)
 	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<11
 end
+function s.damtg2(e,c)
+	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c)  
+end
 function s.atkval(e,c)
 	local tp=e:GetHandlerPlayer()
 	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*200
