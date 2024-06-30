@@ -35,7 +35,7 @@ function s.initial_effect(c)
 	e3:SetTarget(s.damtg)
 	e3:SetValue(aux.ChangeBattleDamage(1,DOUBLE_DAMAGE))
 	c:RegisterEffect(e3)
-	-- can make up to 2 attacks on monsters
+	--[[ can make up to 2 attacks on monsters
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)
 	e4:SetCode(EFFECT_EXTRA_ATTACK_MONSTER)
@@ -44,7 +44,7 @@ function s.initial_effect(c)
 	e4:SetCondition(s.atcon3)
 	e4:SetTarget(s.damtg2)
 	e4:SetValue(1)
-	c:RegisterEffect(e4)
+	c:RegisterEffect(e4)]]--
 	--atk boost
 	local e5=Effect.CreateEffect(c)
 	e5:SetCode(EFFECT_UPDATE_ATTACK)
@@ -77,32 +77,32 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 end
 --immu target
 function s.atcon(e)
-	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<8
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<16
 end
 function s.imtg(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c)  
 end
 --double dmg
 function s.atcon2(e)
-	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<4
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<6
 end
 function s.damtg(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c) and c:GetBattleTarget()~=nil
 end
---attack 2 on monsters
+--[[attack 2 on monsters
 function s.atcon3(e)
-	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<4
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<6
 end
 function s.damtg2(e,c)
 	return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x2c)  
-end
+end]]--
 --atk boost
 function s.atcon4(e)
-	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<6
+	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_GRAVE)<11
 end
 function s.atkval(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*100
+	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_REMOVED)*200
 end
 
 
