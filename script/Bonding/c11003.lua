@@ -79,7 +79,20 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCondition(s.descon)
 		e1:SetOperation(s.desop)
 		Duel.RegisterEffect(e1,tp)
+		--Unaffected by opponent's card effects
+			local e2=Effect.CreateEffect(c)
+			e2:SetDescription(3110)
+			e2:SetType(EFFECT_TYPE_SINGLE)
+			e2:SetCode(EFFECT_IMMUNE_EFFECT)
+			e2:SetRange(LOCATION_MZONE)
+			e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CLIENT_HINT)
+			e2:SetValue(s.uefilter)
+			e2:SetOwnerPlayer(tp)
+			e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+			Duel.RegisterEffect(e2,true)
+			Duel.CompleteProcedure()
 	end
+    Duel.SpecialSummonComplete()	
 end
 function s.descon(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
@@ -90,6 +103,9 @@ function s.descon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Destroy(e:GetLabelObject(),REASON_EFFECT)
+end
+function s.uefilter(e,re)
+	return e:GetOwnerPlayer()~=re:GetOwnerPlayer()
 end
 --search
 function s.thfilter(c)
