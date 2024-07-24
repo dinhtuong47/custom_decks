@@ -80,7 +80,7 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetOperation(s.desop)
 		Duel.RegisterEffect(e1,tp)
 		--Unaffected by opponent's card effects
-			local e2=Effect.CreateEffect(c)
+			local e2=Effect.CreateEffect(e:GetHandler())
 			e2:SetDescription(3110)
 			e2:SetType(EFFECT_TYPE_SINGLE)
 			e2:SetCode(EFFECT_IMMUNE_EFFECT)
