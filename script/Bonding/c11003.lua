@@ -90,7 +90,6 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 			e2:SetOwnerPlayer(tp)
 			e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 			Duel.RegisterEffect(e2,tp)
-			Duel.CompleteProcedure()
 	end
     Duel.SpecialSummonComplete()	
 end
