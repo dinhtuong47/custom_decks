@@ -48,22 +48,40 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tc)
 	end
-	local og=Duel.GetOperatedGroup():Filter(Card.IsSummonable,rc,ic,true,nil)
+		if #rc==0 or #tc==0 then return end
 
-		if #og>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-			and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+
+	local g=rc:Select(tp,1,1,nil)
+
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+
+	local gg=tc:Select(tp,1,1,nil)
+
+	g:Merge(gg)
+
+	if #g==2 and Duel.SendtoHand(g,nil,REASON_EFFECT)>0 then
+
+		Duel.ConfirmCards(1-tp,g)
+
+		local og=Duel.GetOperatedGroup():Filter(Card.IsSummonable,nil,true,nil)
+
+		if #og>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 
 			Duel.BreakEffect()
 
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
 
 			local sg=og:Select(tp,1,1,nil):GetFirst()
 
-			Duel.SpecialSummon(tp,sg,true,nil)
+			Duel.Summon(tp,sg,true,nil)
+
+		end
 
 	end
 
 end
+
 --send
 function s.tgfilter(c)
 	return  c:IsLevelAbove(8) and c:IsRace(RACE_SEASERPENT) and c:IsAbleToGrave()
