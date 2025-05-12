@@ -58,25 +58,33 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --draw
-function s.tdfilter(c)
-	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT) and c:IsAbleToDeck()
-end
-function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return (chkc:IsLocation(LOCATION_GRAVE) or chkc:IsFaceup()) and c:IsControler(tp) and s.tdfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil)
-	
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,tp,0)
-end
-function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetTargetCards(e)
-	if #g==0 or Duel.SendtoDeck(g,nil,SEQ_DECKBOTTOM,REASON_EFFECT)==0 then return end
-	local ct=g:FilterCount(Card.IsLocation,nil,LOCATION_DECK)
-	if ct>1 then
-		Duel.SortDeckbottom(tp,tp,ct)
-	end
-	Duel.BreakEffect()
+function s.tdfilter(c,e)
+	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT) 
+		and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck()
+
 end
 
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+
+	if chkc then return false end
+
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e) end
+
+	local g=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
+
+	Duel.SetTargetCard(g)
+
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
+
+end
+
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+
+	local tg=Duel.GetTargetCards(e)
+
+	if #tg==0 then return end
+
+	Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+
+end
 
