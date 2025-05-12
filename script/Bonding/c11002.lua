@@ -85,11 +85,6 @@ function s.stg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingTarget(s.setfilter,tp,LOCATION_REMOVED,0,1,nil) end
 
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-
-	local tc=Duel.SelectTarget(tp,s.setfilter,tp,LOCATION_REMOVED,0,1,1,nil)
-
-	Duel.SetOperationInfo(0,CATEGORY_LEAVE_REMOVED,tc,1,0,0)
-
 end
 
 function s.sop(e,tp,eg,ep,ev,re,r,rp)
