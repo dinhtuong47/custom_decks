@@ -82,8 +82,6 @@ end
 
 		end
 
-	end
-
 end
 
 --send
