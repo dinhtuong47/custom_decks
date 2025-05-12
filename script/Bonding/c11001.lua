@@ -49,20 +49,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,tc)
 	end
 
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-
-	local g=rc:Select(tp,1,1,nil)
-
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-
-	local gg=tc:Select(tp,1,1,nil)
-
-	g:Merge(gg)
-
-	if #g==2 and Duel.SendtoHand(g,nil,REASON_EFFECT)>0 then
-
-		Duel.ConfirmCards(1-tp,g)
-
 		local og=Duel.GetOperatedGroup():Filter(Card.IsSummonable,nil,true,nil)
 
 		if #og>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
