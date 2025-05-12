@@ -26,7 +26,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={58071123,85066822,22587018,45898858} 
-function s.cfilter(c)
+--[[function s.cfilter(c)
 	return c:IsCode(45898858) and c:IsAbleToRemoveAsCost()
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -34,7 +34,7 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
-end
+end]]--
 function s.thfilter2(c,tp)
 	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND+LOCATION_DECK)) and c:IsCode(22587018) and c:IsAbleToGrave()
 	--[[and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,c)]]--
@@ -48,7 +48,7 @@ function s.filter(c,e,tp)
 end
 function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-	and Duel.IsExistingMatchingCard(s.thfilter2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE,0,2,nil,tp)
+	and Duel.IsExistingMatchingCard(s.thfilter2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE,0,1,nil,tp)
 	and Duel.IsExistingMatchingCard(s.thfilter3,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE,0,1,nil,tp)
 	and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE)
@@ -56,7 +56,7 @@ function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g1=Duel.SelectMatchingCard(tp,s.thfilter2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE,0,2,2,nil,tp)
+	local g1=Duel.SelectMatchingCard(tp,s.thfilter2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE,0,1,2,nil,tp)
 	if #g1>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 		local g2=Duel.SelectMatchingCard(tp,s.thfilter3,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE,0,1,1,g1:GetFirst())
@@ -107,15 +107,15 @@ function s.uefilter(e,re)
 end
 --search
 function s.thfilter(c)
-	return c:IsCode(45898858) and c:IsAbleToHand() and (c:IsLocation(LOCATION_DECK) or c:IsFaceup())
+	return c:IsCode(45898858) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK|LOCATION_REMOVED,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK|LOCATION_REMOVED)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK|LOCATION_GRAVE,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK|LOCATION_GRAVE)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK|LOCATION_REMOVED,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,nil)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
