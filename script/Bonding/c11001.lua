@@ -74,7 +74,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		sg:RegisterEffect(e1)
 
 
-		
+end		
 end
 end
 	end
