@@ -46,7 +46,7 @@ end
 s.listed_series={0x100}
 function s.cfilter(c)
 
-	return c:IsSetCard(0x100) and not cIsSetCode(id) and (c:IsAbleToHand() or c:IsAbleToGrave())
+	return c:IsSetCard(0x100) and not cIsCode(id) and (c:IsAbleToHand() or c:IsAbleToGrave())
 
 end
 function s.tg(e,tp,eg,ep,ev,re,r,rp,chk)
