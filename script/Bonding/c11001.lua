@@ -48,7 +48,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tc)
 	end
-		if #rc==0 or #tc==0 then return end
 
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 
