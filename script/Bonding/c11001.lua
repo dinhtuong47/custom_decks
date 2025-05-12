@@ -49,17 +49,20 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,tc)
 	end
 
-		local og=Duel.GetOperatedGroup():Filter(Card.IsSummonable,nil,true,nil)
+function s.spfilter(c,tp)
+	return c:IsRace(RACE_DINOSAUR) and c:IsAttribute(ATTRIBUTE_WATER) and c:IsCanbeSpecialSummoned()
+end
+	local c=e:GetHandler()
 
-		if #og>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	if not c:IsRelateToEffect(e) then return end
 
-			Duel.BreakEffect()
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 
-			local sg=og:Select(tp,1,1,nil):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp):GetFirst()
 
-			Duel.Summon(tp,sg,true,nil) end
+	if tc and Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP) then
 
 		local e1=Effect.CreateEffect(c)
 
@@ -71,11 +74,13 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 
-		sg:RegisterEffect(e1)
+		tc:RegisterEffect(e1)
 
+	end
+
+	Duel.SpecialSummonComplete()
 
 end
-
 --send
 function s.tgfilter(c)
 	return  c:IsLevelAbove(8) and c:IsRace(RACE_SEASERPENT) and c:IsAbleToGrave()
