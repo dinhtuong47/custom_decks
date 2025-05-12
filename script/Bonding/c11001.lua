@@ -59,9 +59,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 
 			local sg=og:Select(tp,1,1,nil):GetFirst()
 
-			Duel.Summon(tp,sg,true,nil)
+			Duel.Summon(tp,sg,true,nil) end
 
-		local e1=Effect.CreateEffect(sg)
+		local e1=Effect.CreateEffect(c)
 
 		e1:SetType(EFFECT_TYPE_SINGLE)
 
@@ -71,7 +71,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 
-		sg:RegisterEffect(e1) end
+		sg:RegisterEffect(e1)
 
 
 		end
