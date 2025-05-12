@@ -34,7 +34,7 @@ function s.isfit(c,mc)
 	return (mc.fit_monster and c:IsCode(table.unpack(mc.fit_monster))) or mc:ListsCode(c:GetCode())
 end
 
-function s.spfilter(c,tp)
+function s.spfilter(c,e,tp)
 	return c:IsRace(RACE_DINOSAUR) and c:IsAttribute(ATTRIBUTE_WATER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
