@@ -54,13 +54,13 @@ function s.spfilter(c,tp)
 end
 		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 
-			and Duel.IsExistingMatchingCard(aux.NecroValleyFilter(s.spfilter),tp,LOCATION_HAND|LOCATION_GRAVE,0,1,nil,e,tp)
+			and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp)
 
-			and Duel.SelectYesNo(tp,aux.Stringid(id,5)) then
+			and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 
-			local sc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.spfilter),tp,LOCATION_HAND|LOCATION_GRAVE,0,1,1,nil,e,tp):GetFirst()
+			local sc=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp):GetFirst()
 
 			Duel.BreakEffect()
 
