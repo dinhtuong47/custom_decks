@@ -45,11 +45,30 @@ function s.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 s.listed_series={0x100}
---sent and gain atk
-function s.filter2(c)
-	return c:IsSetCard(0x100) and not cIsSetCode(id) and c:IsAbleToGrave()
+function s.cfilter(c)
+
+	return c:IsSetCard(0x100) and not cIsSetCode(id) and (c:IsAbleToHand() or c:IsAbleToGrave())
+
+end
+function s.tg(e,tp,eg,ep,ev,re,r,rp,chk)
+
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_DECK,0,1,nil) end
+
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
+
 end
 
+function s.op(e,tp,eg,ep,ev,re,r,rp)
+
+	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(id,2))
+
+	local tc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
+
+	aux.ToHandOrElse(tc,tp)
+
+end
 --add
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return tp~=Duel.GetTurnPlayer()
