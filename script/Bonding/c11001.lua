@@ -61,7 +61,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 
 			Duel.Summon(tp,sg,true,nil)
 
-		local e1=Effect.CreateEffect(c)
+		local e1=Effect.CreateEffect(sg)
 
 		e1:SetType(EFFECT_TYPE_SINGLE)
 
@@ -71,7 +71,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 
-		sg:RegisterEffect(e1)
+		sg:RegisterEffect(e1) end
 
 
 		end
