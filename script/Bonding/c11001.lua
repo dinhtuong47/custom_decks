@@ -48,27 +48,27 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tc)
 	end
-	--[[local g=Duel.GetMatchingGroup(Card.IsCanBeSpecialSummoned,tp,LOCATION_HAND,0,nil,e,0,tp,false,false)
+	local g=Duel.GetOperatedGroup():Filter(Card.IsCanBeSpecialSummoned,tp,LOCATION_HAND,0,nil,e,0,tp,false,false)
 	if #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=g:Select(tp,1,1,nil)
-		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP) end]]--
-		local og=Duel.GetOperatedGroup():Filter(Card.IsSummonable,nil,true,nil)
+		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP) end
+		--[[local og=Duel.GetOperatedGroup():Filter(Card.IsSummonable,nil,true,nil)
 
 		if #og>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 			and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 
 			Duel.BreakEffect()
 
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
 
 			local sg=og:Select(tp,1,1,nil):GetFirst()
 
-			Duel.SpecialSummon(tp,sg,true,nil)
+			Duel.Summon(tp,sg,true,nil)
 
-		end
+		end]]--
 
 end
 --send
