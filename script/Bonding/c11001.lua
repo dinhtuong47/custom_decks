@@ -48,7 +48,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tc)
 	end
-	local og=Duel.GetOperatedGroup():Filter(rc,ic,true,nil)
+	local og=Duel.GetOperatedGroup():Filter(Card.IsSummonable,rc,ic,true,nil)
 
 		if #og>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 			and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
