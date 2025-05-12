@@ -80,33 +80,11 @@ Duel.ShuffleHand(tp)
 
 			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 
-			e1:SetReset(RESETS_STANDARD_PHASE_END|RESET_OPPO_TURN)
+			e1:SetReset(RESETS_STANDARD)
 
-			e1:SetValue(1000)
+			e1:SetValue(400)
 
 			sc:RegisterEffect(e1)
-
-			local e2=e1:Clone()
-
-			e2:SetCode(EFFECT_UPDATE_DEFENSE)
-
-			sc:RegisterEffect(e2)
-
-			--Cannot be destroyed by card effects
-
-			local e3=e1:Clone()
-
-			e3:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-
-			e3:SetDescription(3001)
-
-			e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
-
-			e3:SetRange(LOCATION_MZONE)
-
-			e3:SetValue(1)
-
-			sc:RegisterEffect(e3)
 
 		end
 
