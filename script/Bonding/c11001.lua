@@ -33,6 +33,10 @@ end
 function s.isfit(c,mc)
 	return (mc.fit_monster and c:IsCode(table.unpack(mc.fit_monster))) or mc:ListsCode(c:GetCode())
 end
+
+function s.spfilter(c,tp)
+	return c:IsRace(RACE_DINOSAUR) and c:IsAttribute(ATTRIBUTE_WATER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter1,tp,LOCATION_HAND,0,1,nil,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK) 
@@ -47,42 +51,71 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if tc then
 		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tc)
-	end
+Duel.ShuffleHand(tp)
 
-function s.spfilter(c,tp)
-	return c:IsRace(RACE_DINOSAUR) and c:IsAttribute(ATTRIBUTE_WATER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)==0 then return end
 
-			and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_HAND,0,nil,e,tp)
 
-			and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 
-			local sc=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp):GetFirst()
+		local sc=g:Select(tp,1,1,nil):GetFirst()
 
-			Duel.BreakEffect()
+		if not sc then return end
 
-			if Duel.SpecialSummonStep(sc,0,tp,tp,false,false,POS_FACEUP) then
+		Duel.BreakEffect()
 
+		if Duel.SpecialSummonStep(sc,0,tp,tp,false,false,POS_FACEUP) then
 
-				local e1=Effect.CreateEffect(e:GetHandler())
+			--Increase ATK/DEF
 
-				e1:SetCode(EFFECT_UPDATE_ATTACK)
+			local e1=Effect.CreateEffect(c)
 
-                                e1:SetValue(400)
-				e1:SetReset(RESET_EVENT|RESETS_STANDARD)
+			e1:SetType(EFFECT_TYPE_SINGLE)
 
-				sc:RegisterEffect(e1)
+			e1:SetCode(EFFECT_UPDATE_ATTACK)
 
-			end
+			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 
-			Duel.SpecialSummonComplete()
+			e1:SetReset(RESETS_STANDARD_PHASE_END|RESET_OPPO_TURN)
+
+			e1:SetValue(1000)
+
+			sc:RegisterEffect(e1)
+
+			local e2=e1:Clone()
+
+			e2:SetCode(EFFECT_UPDATE_DEFENSE)
+
+			sc:RegisterEffect(e2)
+
+			--Cannot be destroyed by card effects
+
+			local e3=e1:Clone()
+
+			e3:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+
+			e3:SetDescription(3001)
+
+			e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
+
+			e3:SetRange(LOCATION_MZONE)
+
+			e3:SetValue(1)
+
+			sc:RegisterEffect(e3)
 
 		end
 
+		Duel.SpecialSummonComplete()
+
+	end
+
 end
+
+
 
 --send
 function s.tgfilter(c)
