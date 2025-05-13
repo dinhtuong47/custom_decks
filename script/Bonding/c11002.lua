@@ -27,8 +27,8 @@ function s.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetCountLimit(1,id+50)
 	e3:SetCondition(s.scon)
-	e3:SetTarget(s.stg)
-	e3:SetOperation(s.sop)
+	e3:SetTarget(s.sdtg)
+	e3:SetOperation(s.sdop)
 	c:RegisterEffect(e3)
 --inactivatable
 	local e4=Effect.CreateEffect(c)
@@ -67,9 +67,51 @@ function s.op(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
 
 	aux.ToHandOrElse(tc,tp)
+end
+function s.tdfilter(c)
+
+	return c:IsSetCard(0x100) and c:IsAbleToDeck() and c:IsFaceup() 
 
 end
---set
+function s.scon(e,tp,eg,ep,ev,re,r,rp)
+	return tp~=Duel.GetTurnPlayer()
+end
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+
+	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and s.tdfilter(chkc) end
+
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
+
+		and Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_REMOVED,0,1,nil) end
+
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+
+	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_REMOVED,0,1,1,nil)
+
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,tp,0)
+
+end
+
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+
+	local tc=Duel.GetFirstTarget()
+
+	if tc:IsRelateToEffect(e) and Duel.SendtoDeck(tc,nil,SEQ_DECKBOTTOM,REASON_EFFECT)>0
+
+		and tc:IsLocation(LOCATION_DECK) and Duel.IsPlayerCanDraw(tp) then
+
+		Duel.BreakEffect()
+
+		Duel.Draw(tp,1,REASON_EFFECT)
+
+	end
+
+end
+
+
+--[[set
 function s.scon(e,tp,eg,ep,ev,re,r,rp)
 	return tp~=Duel.GetTurnPlayer()
 end
@@ -101,7 +143,7 @@ function s.sop(e,tp,eg,ep,ev,re,r,rp)
 
 	end
 
-end
+end]]--
 --immu
 function s.effectfilter(e,ct)
 	local p=e:GetHandler():GetControler()
