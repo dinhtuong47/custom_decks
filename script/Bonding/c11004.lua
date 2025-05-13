@@ -15,6 +15,7 @@ function s.initial_effect(c)
 	--Return
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_TODECK)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetRange(LOCATION_GRAVE)
 	e3:SetCode(EVENT_RELEASE)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
@@ -60,12 +61,20 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --draw
+function s.spconfilter(c)
+	return c:IsMonster() or c:GetPreviousTypeOnField()&TYPE_MONSTER==TYPE_MONSTER
+
+end
+function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.spconfilter,1,nil)
+
+end
+
 function s.tdfilter(c,e)
 	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT) 
 		and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck()
 
 end
-
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 
 	if chkc then return false end
