@@ -77,17 +77,18 @@ function s.tdfilter(c,e)
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 
-	if chkc then return false end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tdfilter(chkc,e,tp) end
 
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e) end
+	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,1,e:GetHandler(),e,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 
-	local g=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
-
-	Duel.SetTargetCard(g)
+	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,1,ft,nil,e,tp)
 
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
 
 end
+
+
 
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 
