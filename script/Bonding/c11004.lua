@@ -82,7 +82,7 @@ function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,1,e:GetHandler(),e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 
-	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,1,nil,e,tp)
+	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,1,nil,nil,e,tp)
 
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
 
@@ -92,11 +92,11 @@ end
 
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 
-	local tg=Duel.GetTargetCards(e)
+	local g=Duel.GetTargetCards(e)
 
-	if #tg==0 then return end
+	if #g==0 then return end
 
-	Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 
 end
 
