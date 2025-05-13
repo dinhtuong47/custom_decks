@@ -75,28 +75,14 @@ function s.tdfilter(c,e)
 		and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck()
 
 end
-function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tdfilter(chkc,e,tp) end
-
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,1,e:GetHandler(),e,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-
-	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,1,nil,nil,e,tp)
-
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
-
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil)
+	if chk==0 then return #dg>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,dg,#dg,0,0)
 end
-
-
-
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-
-	local g=Duel.GetTargetCards(e)
-
-	if #g==0 then return end
-
-	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-
+	local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil)
+	if #dg==0 then return end
+	Duel.SendtoDeck(dg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end
 
