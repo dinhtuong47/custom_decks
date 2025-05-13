@@ -71,8 +71,7 @@ function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tdfilter(c,e)
-	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT) 
-		and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck()
+	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsRace(RACE_DINOSAUR) or c:IsRace(RACE_SEASERPENT) and c:IsAbleToDeck()
 
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
