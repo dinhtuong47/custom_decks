@@ -17,10 +17,11 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg)
 	e1:SetOperation(s.op)
 	c:RegisterEffect(e1)
---set
+--place draw
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,2))
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+        e3:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetCode(EVENT_PHASE+PHASE_END)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
