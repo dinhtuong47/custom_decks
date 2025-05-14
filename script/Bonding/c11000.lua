@@ -67,11 +67,11 @@ function s.desrepfilter(c)
 end
 function s.desreptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not e:GetHandler():IsReason(REASON_RULE)
-		and Duel.IsExistingMatchingCard(s.desrepfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,2,nil) end
+		and Duel.IsExistingMatchingCard(s.desrepfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,3,nil) end
 	return Duel.SelectEffectYesNo(tp,e:GetHandler(),96)
 end
 function s.desrepop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,s.desrepfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,2,2,nil)
+	local g=Duel.SelectMatchingCard(tp,s.desrepfilter,tp,LOCATION_REMOVED+LOCATION_GRAVE,0,3,3,nil)
 	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT+REASON_REPLACE)
 end
