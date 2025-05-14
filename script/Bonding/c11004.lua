@@ -75,12 +75,12 @@ function s.tdfilter(c,e)
 
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil)
+	local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 	if chk==0 then return #dg>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,dg,#dg,0,0)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil)
+	local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 	if #dg==0 then return end
 	Duel.SendtoDeck(dg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end
