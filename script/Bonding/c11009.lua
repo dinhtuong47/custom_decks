@@ -55,12 +55,12 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 	--"Hydrogeddon": neg 1 face-up card
 	if g:IsExists(Card.IsCode,1,nil,22587018) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-		local dg=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
-		if #dg>0 then
-			Duel.HintSelection(dg,true)
+		local sc=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+		if #sc>0 then
+			Duel.HintSelection(sc,true)
 			if break_chk then Duel.BreakEffect() end
 			break_chk=true
-			if Duel.Destroy(dg,REASON_EFFECT)>0 then
+			if Duel.Destroy(sc,REASON_EFFECT)>0 then
 				Duel.BreakEffect()
 			end
 		end
