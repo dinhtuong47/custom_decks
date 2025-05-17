@@ -57,12 +57,11 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_NEGATE)
 		local sc=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 		if #sc>0 then
-			
-			local sg=sc:Select(tp,1,1,nil)
 
-			Duel.HintSelection(sg)
 
-			local tc=sg:GetFirst()
+			Duel.HintSelection(sc)
+
+			local tc=sc:GetFirst()
 
 			Duel.NegateRelatedChain(tc,RESET_TURN_SET)
 
