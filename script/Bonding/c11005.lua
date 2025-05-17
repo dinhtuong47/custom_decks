@@ -27,31 +27,54 @@ function s.initial_effect(c)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e3:SetTarget(s.destg)
-	e3:SetOperation(s.desop)
+	e3:SetTarget(s.negtg)
+	e3:SetOperation(s.negop)
 	c:RegisterEffect(e3)
 end
 --draw
-function s.tdfilter(c)
-	return c:IsAbleToDeckAsCost() and c:IsCode(62397231) or c:IsRace(RACE_SEASERPENT)
+function s.cfilter(c)
+
+	return c:IsCode(62397231) or c:IsRace(RACE_SEASERPENT) and c:IsDiscardable()
+
 end
+
 function s.drcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil)
-	Duel.SendtoDeck(g,nil,1,REASON_COST)
+
+	if chk==0 then return e:GetHandler():IsDiscardable()
+
+		and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND,0,1,e:GetHandler()) end
+
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
+
+	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND,0,1,1,e:GetHandler())
+
+	g:AddCard(e:GetHandler())
+
+	Duel.SendtoGrave(g,REASON_DISCARD|REASON_COST)
+
 end
+
 function s.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,2) end
+
 	Duel.SetTargetPlayer(tp)
-	Duel.SetTargetParam(1)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+
+	Duel.SetTargetParam(2)
+
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
+
 end
+
 function s.drop(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
+
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+
 	Duel.Draw(p,d,REASON_EFFECT)
+
 end
+
+
 --ss
 function s.filter1(c)
 
