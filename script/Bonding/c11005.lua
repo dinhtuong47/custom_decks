@@ -53,39 +53,85 @@ function s.drop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(p,d,REASON_EFFECT)
 end
 --ss
-function s.spfilter(c,e,tp,code)
-	return c:IsCode(code) and (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function s.filter1(c)
+
+	return c:IsSpellTrap() and c:IsAbleToDeck()
+
 end
-function s.setfilter(c)
-	return c:IsSetCard(0x100) and c:IsSSetable()
+
+function s.filter2(c)
+
+	return c:IsFaceup() and c:IsType(TYPE_EFFECT)
+
 end
-function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
-		and Duel.GetLocationCount(tp,LOCATION_MZONE)>1
-		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_REMOVED,0,1,nil,e,tp,15981690) 
-		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp,58071123) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_REMOVED+LOCATION_GRAVE)
+
+function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+
+	if chkc then return false end
+
+	if chk==0 then return Duel.IsExistingTarget(s.filter1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,2,nil)
+
+		and Duel.IsExistingTarget(s.filter2,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
+
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+
+	local g1=Duel.SelectTarget(tp,s.filter1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,2,2,nil)
+
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+
+	local g2=Duel.SelectTarget(tp,s.filter2,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,1,0,LOCATION_GRAVE+LOCATION_REMOVED)
+
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,g2,1,0,0)
+
 end
-function s.spop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
-		or Duel.GetLocationCount(tp,LOCATION_MZONE)<2 then return end
-	local g1=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.spfilter),tp,LOCATION_REMOVED,0,nil,e,tp,15981690)
-	local g2=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.spfilter),tp,LOCATION_GRAVE,0,nil,e,tp,58071123)
-	if #g1>0 and #g2>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg1=g1:Select(tp,1,1,nil)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg2=g2:Select(tp,1,1,nil)
-		sg1:Merge(sg2)
-                Duel.SpecialSummon(sg1,0,tp,tp,true,false,POS_FACEUP) end
-		if Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil)
-		and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-		local sg=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
-		if #sg>0 then
-			Duel.BreakEffect()
-			Duel.SSet(tp,sg)
+
+function s.negop(e,tp,eg,ep,ev,re,r,rp)
+
+	local ex,g1=Duel.GetOperationInfo(0,CATEGORY_TODECK)
+
+	local ex,g2=Duel.GetOperationInfo(0,CATEGORY_DISABLE)
+
+	if g1:GetFirst():IsRelateToEffect(e) then
+
+		Duel.SendtoDeck(g1,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+
+		local og=Duel.GetOperatedGroup()
+
+		if og:GetFirst():IsLocation(LOCATION_DECK) or og:GetFirst():IsLocation(LOCATION_EXTRA) then
+
+			local tc=g2:GetFirst()
+
+			if tc:IsFaceup() and tc:IsRelateToEffect(e) then
+
+				local e1=Effect.CreateEffect(e:GetHandler())
+
+				e1:SetType(EFFECT_TYPE_SINGLE)
+
+				e1:SetCode(EFFECT_DISABLE)
+
+				e1:SetReset(RESETS_STANDARD_PHASE_END)
+
+				tc:RegisterEffect(e1)
+
+				local e2=Effect.CreateEffect(e:GetHandler())
+
+				e2:SetType(EFFECT_TYPE_SINGLE)
+
+				e2:SetCode(EFFECT_DISABLE_EFFECT)
+
+				e2:SetReset(RESETS_STANDARD_PHASE_END)
+
+				tc:RegisterEffect(e2)
+
+			end
+
 		end
+
 	end
+
 end
+
+
 
