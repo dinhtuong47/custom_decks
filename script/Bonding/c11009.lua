@@ -60,8 +60,34 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.HintSelection(sc,true)
 			if break_chk then Duel.BreakEffect() end
 			break_chk=true
-			sc:NegateEffects(c,RESET_EVENT|RESETS_STANDARD,true)
-			
+			Duel.BreakEffect()
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+
+			local sg=sc:Select(tp,1,1,nil)
+
+			Duel.HintSelection(sg)
+
+			local tc=sg:GetFirst()
+
+			Duel.NegateRelatedChain(tc,RESET_TURN_SET)
+
+			local e1=Effect.CreateEffect(c)
+
+			e1:SetType(EFFECT_TYPE_SINGLE)
+
+			e1:SetCode(EFFECT_DISABLE)
+
+			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+
+			e1:SetReset(RESETS_STANDARD_PHASE_END)
+
+			tc:RegisterEffect(e1)
+
+			local e2=e1:Clone()
+
+			e2:SetCode(EFFECT_DISABLE_EFFECT)
+
+			tc:RegisterEffect(e2)		
 		end
 	end
 	--"Oxygeddon": Destroy 1 monster, then inflict 800 damage to both
