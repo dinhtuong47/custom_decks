@@ -24,6 +24,7 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 	--"Carbonnedon": 1 "Hyozanryu" you control becomes unaffected and gains 1k until the end of this turn
 	if g:IsExists(Card.IsCode,1,nil,15981690) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATKDEF)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_APPLYTO)
 		local tc=Duel.SelectMatchingCard(tp,aux.FaceupFilter(Card.IsCode,62397231),tp,LOCATION_MZONE,0,1,1,nil):GetFirst()
 		if tc then
 			Duel.HintSelection(tc,true)
@@ -53,23 +54,22 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 	end
 	--"Hydrogeddon": neg 1 face-up card
 	if g:IsExists(Card.IsCode,1,nil,22587018) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_APPLYTO)
-		local sc=Duel.SelectMatchingCard(tp,aux.FaceupFilter(Card.IsCode,62397231),tp,LOCATION_MZONE,0,1,1,nil):GetFirst()
-		if sc then
-			Duel.HintSelection(sc,true)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+		local dg=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+		if #dg>0 then
+			Duel.HintSelection(dg,true)
 			if break_chk then Duel.BreakEffect() end
-			break_chk=true
-			--Unaffected by your opponent's monster effects
-			local e2=Effect.CreateEffect(c)
-			e2:SetDescription(3110)
-			e2:SetType(EFFECT_TYPE_SINGLE)
-			e2:SetProperty(EFFECT_FLAG_CLIENT_HINT)
-			e2:SetCode(EFFECT_IMMUNE_EFFECT)
-			e2:SetReset(RESET_EVENT|RESETS_STANDARD|RESET_PHASE|PHASE_END)
-			e2:SetValue(function(e,te) return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() end) --[[and te:IsMonsterEffect()]]--
-			sc:RegisterEffect(e2)
+			if Duel.Destroy(dg,REASON_EFFECT)>0 then
+				Duel.BreakEffect()
+				Duel.Damage(tp,800,REASON_EFFECT)
+				Duel.Damage(1-tp,800,REASON_EFFECT)
+			end
 		end
 	end
+	Duel.BreakEffect()
+	Duel.SendtoGrave(g,REASON_EFFECT)
+end
+
 	--"Oxygeddon": Destroy 1 monster, then inflict 800 damage to both
 	if g:IsExists(Card.IsCode,1,nil,58071123) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
