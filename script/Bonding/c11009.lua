@@ -60,9 +60,8 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.HintSelection(sc,true)
 			if break_chk then Duel.BreakEffect() end
 			break_chk=true
-			if Duel.Destroy(sc,REASON_EFFECT)>0 then
-				Duel.BreakEffect()
-			end
+			sc:NegateEffects(c,RESET_EVENT|RESETS_STANDARD,true)
+			
 		end
 	end
 	--"Oxygeddon": Destroy 1 monster, then inflict 800 damage to both
