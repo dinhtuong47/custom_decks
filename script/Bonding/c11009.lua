@@ -68,7 +68,7 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 	end
 	Duel.BreakEffect()
 	Duel.SendtoGrave(g,REASON_EFFECT)
-end
+
 
 	--"Oxygeddon": Destroy 1 monster, then inflict 800 damage to both
 	if g:IsExists(Card.IsCode,1,nil,58071123) then
@@ -86,6 +86,4 @@ end
 	end
 	Duel.BreakEffect()
 	Duel.SendtoGrave(g,REASON_EFFECT)
-end
-end
 end
