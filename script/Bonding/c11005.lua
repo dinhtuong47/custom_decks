@@ -135,7 +135,7 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
 
 				e1:SetCode(EFFECT_DISABLE)
 
-				e1:SetReset(RESETS_STANDARD_PHASE_END)
+				e1:SetReset(RESETS_EVENT+RESETS_STANDARD)
 
 				tc:RegisterEffect(e1)
 
@@ -145,7 +145,7 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
 
 				e2:SetCode(EFFECT_DISABLE_EFFECT)
 
-				e2:SetReset(RESETS_STANDARD_PHASE_END)
+				e2:SetReset(RESETS_EVENT+RESETS_STANDARD)
 
 				tc:RegisterEffect(e2)
 
