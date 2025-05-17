@@ -14,7 +14,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_DRAW)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_HAND)
-	e2:SetCountLimit(1)
+	e2:SetCountLimit(1,id)
 	e2:SetCost(s.drcost)
 	e2:SetTarget(s.drtg)
 	e2:SetOperation(s.drop)
@@ -26,6 +26,7 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetRange(LOCATION_MZONE)
+        e3:SetCountLimit(1,id+50)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetTarget(s.negtg)
 	e3:SetOperation(s.negop)
@@ -84,7 +85,7 @@ end
 
 function s.filter2(c)
 
-	return c:IsFaceup() and c:IsType(TYPE_EFFECT)
+	return c:IsFaceup() and c:IsType(TYPE_EFFECT) and not c:IsAttribute(ATTRIBUTE_WATER)
 
 end
 
@@ -94,7 +95,7 @@ function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 
 	if chk==0 then return Duel.IsExistingTarget(s.filter1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,2,nil)
 
-		and Duel.IsExistingTarget(s.filter2,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
+		and Duel.IsExistingTarget(s.filter2,tp,0,LOCATION_MZONE,1,nil) end
 
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 
@@ -102,7 +103,7 @@ function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 
-	local g2=Duel.SelectTarget(tp,s.filter2,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+	local g2=Duel.SelectTarget(tp,s.filter2,tp,0,LOCATION_MZONE,1,1,nil)
 
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,1,0,LOCATION_GRAVE+LOCATION_REMOVED)
 
