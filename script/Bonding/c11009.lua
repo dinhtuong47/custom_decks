@@ -21,7 +21,7 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetDecktopGroup(tp,4)
 	local break_chk=false
-	--"Carbonnedon": 1 "Hyozanryu" you control gains 1000 ATK
+	--"Carbonnedon": 1 "Hyozanryu" you control becomes unaffected and gains 1k until the end of this turn
 	if g:IsExists(Card.IsCode,1,nil,15981690) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATKDEF)
 		local tc=Duel.SelectMatchingCard(tp,aux.FaceupFilter(Card.IsCode,62397231),tp,LOCATION_MZONE,0,1,1,nil):GetFirst()
@@ -35,9 +35,23 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetValue(1000)
 			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
 			tc:RegisterEffect(e1)
+			local e2=Effect.CreateEffect(c)
+			e2:SetType(EFFECT_TYPE_SINGLE)
+			e2:SetCode(EFFECT_UPDATE_DEFENSE)
+			e2:SetValue(1000)
+			e2:SetReset(RESET_EVENT|RESETS_STANDARD)
+			tc:RegisterEffect(e2)
+			local e3=Effect.CreateEffect(c)
+			e3:SetDescription(3110)
+			e3:SetType(EFFECT_TYPE_SINGLE)
+			e3:SetProperty(EFFECT_FLAG_CLIENT_HINT)
+			e3:SetCode(EFFECT_IMMUNE_EFFECT)
+			e3:SetReset(RESET_EVENT|RESETS_STANDARD|RESET_PHASE|PHASE_END)
+			e3:SetValue(function(e,te) return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() end) --[[and te:IsMonsterEffect()]]--
+			tc:RegisterEffect(e3)
 		end
 	end
-	--"Hydrogeddon": 1 "Hyozanryu" you control becomes unaffected by your opponent's card effects until the end of this turn
+	--"Hydrogeddon": neg 1 face-up card
 	if g:IsExists(Card.IsCode,1,nil,22587018) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_APPLYTO)
 		local sc=Duel.SelectMatchingCard(tp,aux.FaceupFilter(Card.IsCode,62397231),tp,LOCATION_MZONE,0,1,1,nil):GetFirst()
@@ -56,10 +70,10 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 			sc:RegisterEffect(e2)
 		end
 	end
-	--"Oxygeddon": Destroy 1 monster you opponent controls, then inflict 800 damage to both
+	--"Oxygeddon": Destroy 1 monster, then inflict 800 damage to both
 	if g:IsExists(Card.IsCode,1,nil,58071123) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-		local dg=Duel.SelectMatchingCard(tp,Card.IsMonster,tp,0,LOCATION_MZONE,1,1,nil)
+		local dg=Duel.SelectMatchingCard(tp,Card.IsMonster,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
 		if #dg>0 then
 			Duel.HintSelection(dg,true)
 			if break_chk then Duel.BreakEffect() end
