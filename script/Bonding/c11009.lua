@@ -88,3 +88,4 @@ end
 	Duel.SendtoGrave(g,REASON_EFFECT)
 end
 end
+end
