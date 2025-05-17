@@ -59,6 +59,7 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 		if #dg>0 then
 			Duel.HintSelection(dg,true)
 			if break_chk then Duel.BreakEffect() end
+			break_chk=true
 			if Duel.Destroy(dg,REASON_EFFECT)>0 then
 				Duel.BreakEffect()
 				Duel.Damage(tp,800,REASON_EFFECT)
