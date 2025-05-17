@@ -62,8 +62,6 @@ function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 			break_chk=true
 			if Duel.Destroy(dg,REASON_EFFECT)>0 then
 				Duel.BreakEffect()
-				Duel.Damage(tp,800,REASON_EFFECT)
-				Duel.Damage(1-tp,800,REASON_EFFECT)
 			end
 		end
 	end
