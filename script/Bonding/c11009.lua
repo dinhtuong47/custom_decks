@@ -87,3 +87,4 @@ end
 	Duel.BreakEffect()
 	Duel.SendtoGrave(g,REASON_EFFECT)
 end
+end
