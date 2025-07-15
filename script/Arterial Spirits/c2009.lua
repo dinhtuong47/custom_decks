@@ -46,7 +46,7 @@ function s.atkeff(e,c)
 end
 --immueff
 function s.indfilter(c)
-	return c:IsFaceup() and c:IsLevel(6) and c:IsSetCard(0X7D0) 
+	return c:IsFaceup() and c:IsLevel(4) and c:IsSetCard(0X7D0) 
 end
 function s.actcon(e)
 	local tp=e:GetHandlerPlayer()
