@@ -49,10 +49,10 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.HintSelection(sg)
 		Duel.SendtoGrave(sg,REASON_RULE)
 	end
-	if Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+	--[[if Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 		Duel.BreakEffect()
-		--[[Duel.Draw(tp,1,REASON_EFFECT)]]--
-	end
+		Duel.Draw(tp,1,REASON_EFFECT)
+	end]]--
 	elseif tc:IsRace(RACE_DRAGON) and tc:IsLocation(LOCATION_HAND) and Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil,tp)
 	and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 	--set to field
