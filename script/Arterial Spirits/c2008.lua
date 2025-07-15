@@ -28,7 +28,7 @@ function s.initial_effect(c)
 end
 --indes
 function s.indtg(e,c)
-	return c:IsSetCard(0x7D0) and c:IsLevel(4)
+	return c:IsSetCard(0x7D0)
 end
 function s.indct(e,re,r,rp)
 	local c=e:GetHandler()
