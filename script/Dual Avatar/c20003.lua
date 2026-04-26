@@ -56,3 +56,4 @@ function c20003.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Destroy(sg,REASON_EFFECT)
 	end
 end
+end
