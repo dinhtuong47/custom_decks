@@ -23,12 +23,12 @@ end
 function c20003.valcheck(e,c)
 	local g=c:GetMaterial()
 	if g:IsExists(Card.IsType,1,nil,TYPE_EFFECT) then
-		c:RegisterFlagEffect(20003,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+		c:RegisterFlagEffect(20003,RESET_EVENT+0x4fe0000,0,1)
 	end
 end
 --negate
 function c20003.fmfilter(c)
-	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x14f) and c:IsFaceup() and c:GetFlagEffect(20003)~=0
+	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x14e) and c:IsFaceup() and c:GetFlagEffect(20003)~=0
 end
 function c20003.condition(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and re:IsActiveType(TYPE_MONSTER) and Duel.IsChainNegatable(ev)
