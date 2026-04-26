@@ -48,7 +48,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 --tohand
 function s.tfilter(c)
-	return c:IsFaceup() 
+	return c:IsFaceup() or c:IsFacedown()
 end
 function s.thtg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
@@ -63,8 +63,7 @@ end
 function s.thop2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToChain() and Duel.Destroy(tc,REASON_EFFECT)~=0
-		and c:IsRelateToChain() and aux.NecroValleyFilter()(c) then
+	if Duel.Destroy(tc,REASON_EFFECT)~=0 and aux.NecroValleyFilter()(c) then
 		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end
 end
