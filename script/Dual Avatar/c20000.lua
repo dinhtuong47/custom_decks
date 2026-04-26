@@ -48,7 +48,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 --tohand
 function s.tfilter(c)
-	return c:IsFaceup() or c:IsFacedown()
+	return c:IsFaceup() 
 end
 function s.thtg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
