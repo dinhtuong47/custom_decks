@@ -19,7 +19,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
-end
 --atk
 function s.cfilter(c)
 	return c:IsFaceup() and c:IsType(TYPE_FUSION)
