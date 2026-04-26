@@ -12,9 +12,9 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.condition)
-	e1:SetTarget(s.target)
-	e1:SetOperation(s.activate)
+	e1:SetCondition(c20003.condition)
+	e1:SetTarget(c20003.target)
+	e1:SetOperation(c20003.activate)
 	c:RegisterEffect(e1)
 end
 function c20003.matcheck(e,c)
@@ -24,21 +24,21 @@ function c20003.matcheck(e,c)
 	end
 end
 --negate
-function s.fmfilter(c)
+function c20003.fmfilter(c)
 	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x14f) and c:IsFaceup() and c:GetFlagEffect(85360035)~=0
 end
-function s.condition(e,tp,eg,ep,ev,re,r,rp)
+function c20003.condition(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and re:IsActiveType(TYPE_MONSTER) and Duel.IsChainNegatable(ev)
-		and Duel.IsExistingMatchingCard(s.fmfilter,tp,LOCATION_MZONE,0,1,nil)
+		and Duel.IsExistingMatchingCard(c20003.fmfilter,tp,LOCATION_MZONE,0,1,nil)
 end
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+function c20003.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	if re:GetHandler():IsDestructable() and re:GetHandler():IsRelateToEffect(re) then
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
 end
-function s.activate(e,tp,eg,ep,ev,re,r,rp)
+function c20003.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
 		Duel.Destroy(eg,REASON_EFFECT)
 	end
