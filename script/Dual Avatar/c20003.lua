@@ -1,11 +1,5 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	--effect monster material check
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetCode(EFFECT_MATERIAL_CHECK)
-	e0:SetValue(c20003.matcheck)
-	c:RegisterEffect(e0)
 	--negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
@@ -16,8 +10,17 @@ function s.initial_effect(c)
 	e1:SetTarget(c20003.target)
 	e1:SetOperation(c20003.activate)
 	c:RegisterEffect(e1)
+	if not c20003.global_check then
+		c20003.global_check=true
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD)
+		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
+		ge1:SetCode(EFFECT_MATERIAL_CHECK)
+		ge1:SetValue(c20003.valcheck)
+		Duel.RegisterEffect(ge1,0)
+	end
 end
-function c20003.matcheck(e,c)
+function c20003.valcheck(e,c)
 	local g=c:GetMaterial()
 	if g:IsExists(Card.IsType,1,nil,TYPE_EFFECT) then
 		c:RegisterFlagEffect(85360035,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
