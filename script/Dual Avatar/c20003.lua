@@ -24,7 +24,7 @@ function c20003.matcheck(e,c)
 	end
 end
 function s.negfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_FUSION)
+	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x14e) and c:IsFaceup() and c:GetFlagEffect(85360035)~=0
 end
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(s.negfilter,tp,LOCATION_MZONE,0,2,nil)
