@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
 	e1:SetCondition(s.condtion)
-	e1:SetValue(1000)
+	e1:SetValue(2000)
 	c:RegisterEffect(e1)
 	--search
 	local e2=Effect.CreateEffect(c)
