@@ -54,6 +54,6 @@ function c20003.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.HintSelection(sg)
 		Duel.BreakEffect()
 		Duel.Destroy(sg,REASON_EFFECT)
+		end
 	end
-end
 end
