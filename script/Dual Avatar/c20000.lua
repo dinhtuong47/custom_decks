@@ -47,23 +47,23 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --tohand
-function s.tfilter(c)
-	return c:IsFaceup() or c:IsFacedown()
+function s.thfilter(c)
+	return c:IsLocation(LOCATION_ONFIELD)
 end
 function s.thtg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	if chkc then return s.tfilter(chkc) and chkc:IsOnField() and chkc:IsControler(tp) end
-	if chk==0 then return c:IsAbleToHand()
-		and Duel.IsExistingTarget(s.tfilter,tp,LOCATION_ONFIELD,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectTarget(tp,s.tfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and s.thfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.thfilter,tp,LOCATION_ONFIELD,0,1,c)
+		and c:IsAbleToHand() end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g=Duel.SelectTarget(tp,s.thfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,c)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,0)
 end
 function s.thop2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if Duel.Destroy(tc,REASON_EFFECT)~=0 and aux.NecroValleyFilter()(c) then
+	if tc:IsRelateToEffect(e) and Duel.Destroy(tc,REASON_EFFECT)~=0 and c:IsRelateToEffect(e) then
 		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end
 end
