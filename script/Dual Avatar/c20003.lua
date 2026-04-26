@@ -4,7 +4,7 @@ function s.initial_effect(c)
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetCode(EFFECT_MATERIAL_CHECK)
-	e0:SetValue(c60237530.matcheck)
+	e0:SetValue(s.matcheck)
 	c:RegisterEffect(e0)
 	--negate
 	local e1=Effect.CreateEffect(c)
@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 end
-function c60237530.matcheck(e,c)
+function s.matcheck(e,c)
 	local g=c:GetMaterial()
 	if g:IsExists(Card.IsType,1,nil,TYPE_EFFECT) then
 		c:RegisterFlagEffect(85360035,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
