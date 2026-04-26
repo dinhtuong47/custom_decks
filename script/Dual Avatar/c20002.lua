@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-  e2:SetProperty(EFFECT_FLAG_DELAY)
+    e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetCountLimit(2,id)
 	e2:SetCondition(s.setcon)
@@ -42,9 +42,8 @@ function s.setfilter(c)
 	return c:IsSetCard(0x14e) and (c:IsType(TYPE_QUICKPLAY) or c:IsType(TYPE_TRAP)) and c:IsSSetable()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_HAND,0,1,nil) 
+	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_HAND,0,1,nil) and e:GetHandler():GetFlagEffect(id)==0 end
 	e:GetHandler():RegisterFlagEffect(id,RESET_CHAIN,0,1) end
-	
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
