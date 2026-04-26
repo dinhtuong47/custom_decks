@@ -1,18 +1,6 @@
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--Activate
-	--set
-	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_SSET)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetCountLimit(1,id)
-	e2:SetHintTiming(0,TIMING_END_PHASE)
-	e2:SetCost(s.setcost)
-	e2:SetTarget(s.settg)
-	e2:SetOperation(s.setop)
-	c:RegisterEffect(e2)
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
@@ -31,6 +19,19 @@ function s.initial_effect(c)
 		ge1:SetCode(EFFECT_MATERIAL_CHECK)
 		ge1:SetValue(c20003.valcheck)
 		Duel.RegisterEffect(ge1,0)
+	--set
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,2))
+	e3:SetCategory(CATEGORY_SSET)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetRange(LOCATION_GRAVE)
+	e3:SetCode(EVENT_FREE_CHAIN)
+	e3:SetCountLimit(1,id)
+	e3:SetHintTiming(0,TIMING_END_PHASE)
+	e3:SetCost(s.setcost)
+	e3:SetTarget(s.settg)
+	e3:SetOperation(s.setop)
+	c:RegisterEffect(e3)
 	end
 end
 function c20003.valcheck(e,c)
@@ -74,14 +75,14 @@ function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.SSet(tp,c)~=0 then
+	if c:IsRelateToEffect(e) and Duel.SSet(tp,c)>0 then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
 		e1:SetValue(LOCATION_REMOVED)
-		c:RegisterEffect(e1)
+		c:RegisterEffect(e1,true)
 	end
 end
 
