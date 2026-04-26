@@ -38,6 +38,6 @@ local g=Duel.GetMatchingGroup(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,aux.Excep
 		local sg=g:Select(tp,1,1,nil)
 		Duel.HintSelection(sg)
 		Duel.BreakEffect()
-		Duel.Destroy(sg,REASON_EFFECT)
+		Duel.Destroy(sg,REASON_EFFECT) end
 	end
 end
