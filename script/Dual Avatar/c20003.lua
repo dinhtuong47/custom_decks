@@ -29,8 +29,9 @@ function s.cdesfilter(c)
 	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x14f) and c:IsFaceup() and c:GetFlagEffect(85360035)~=0
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.NegateActivation(ev) and not re:GetHandler():IsRelateToEffect(re) or Duel.Destroy(tc,REASON_EFFECT)<1
-		or not Duel.IsExistingMatchingCard(s.cdesfilter,tp,LOCATION_ONFIELD,0,1,nil) then return end
+	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) and
+		Duel.Destroy(eg,REASON_EFFECT)>0
+		then Duel.IsExistingMatchingCard(s.cdesfilter,tp,LOCATION_ONFIELD,0,1,nil)
 	local g=Duel.GetMatchingGroup(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,aux.ExceptThisCard(e))
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
