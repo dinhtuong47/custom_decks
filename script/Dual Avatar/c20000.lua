@@ -36,7 +36,7 @@ function s.cfilter(c)
 	return c:IsFaceup() and c:IsType(TYPE_FUSION)
 end
 function s.condtion(e)
-	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,2,nil)
+	return Duel.IsExistingMatchingCard(s.cfilter,0,LOCATION_MZONE,0,2,nil)
 end
 --search
 function s.dfilter(c)
