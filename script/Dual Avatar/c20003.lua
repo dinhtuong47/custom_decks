@@ -8,7 +8,6 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--negate
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
 	e2:SetType(EFFECT_TYPE_ACTIVATE)
 	e2:SetCategory(CATEGORY_DISABLE)
 	e2:SetCode(EVENT_FREE_CHAIN)
