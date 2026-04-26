@@ -1,5 +1,11 @@
 local s,id=GetID()
 function s.initial_effect(c)
+	--effect monster material check
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetCode(EFFECT_MATERIAL_CHECK)
+	e0:SetValue(c60237530.matcheck)
+	c:RegisterEffect(e0)
 	--negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
@@ -10,6 +16,12 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
+end
+function c60237530.matcheck(e,c)
+	local g=c:GetMaterial()
+	if g:IsExists(Card.IsType,1,nil,TYPE_EFFECT) then
+		c:RegisterFlagEffect(85360035,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+	end
 end
 function s.cfilter1(c)
 	return c:IsFaceup() and c:IsType(TYPE_FUSION)
