@@ -28,11 +28,14 @@ function c20003.valcheck(e,c)
 end
 --negate
 function c20003.fmfilter(c)
+	return c:IsType(TYPE_FUSION) and c:IsFaceup()  
+end
+function c20003.fmfilter2(c)
 	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x14e) and c:IsFaceup() and c:GetFlagEffect(20003)~=0
 end
 function c20003.condition(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and re:IsActiveType(TYPE_MONSTER) and Duel.IsChainNegatable(ev)
-		and Duel.IsExistingMatchingCard(c20003.fmfilter,tp,LOCATION_MZONE,0,1,nil)
+		and Duel.IsExistingMatchingCard(c20003.fmfilter,tp,LOCATION_MZONE,0,2,nil)
 end
 function c20003.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
@@ -42,7 +45,14 @@ function c20003.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function c20003.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
-		Duel.Destroy(eg,REASON_EFFECT)
+	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re)
+	and Duel.Destroy(eg,REASON_EFFECT)~=0 and Duel.IsExistingMatchingCard(c20003.fmfilter2,tp,LOCATION_MZONE,0,1,nil) then
+	local g=Duel.GetMatchingGroup(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,aux.ExceptThisCard(e))
+	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+		local sg=g:Select(tp,1,1,nil)
+		Duel.HintSelection(sg)
+		Duel.BreakEffect()
+		Duel.Destroy(sg,REASON_EFFECT)
 	end
 end
