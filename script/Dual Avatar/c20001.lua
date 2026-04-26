@@ -45,5 +45,5 @@ function s.efilter(e,re)
 	return re==e:GetLabelObject()
 end
 function s.etarget(e,c)
-	return not c:IsType(TYPE_MONSTER) 
+	return c:IsType(TYPE_MONSTER) 
 end
