@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetCondition(id.condtion)
+	e1:SetCondition(s.condtion)
 	e1:SetValue(1000)
 	c:RegisterEffect(e1)
 	--search
