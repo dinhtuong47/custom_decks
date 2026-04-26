@@ -6,10 +6,24 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCountLimit(1,id)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
+	--todeck
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(id,1))
+	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TOHAND)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCountLimit(1,id+1)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCost(aux.bfgcost)
+	e2:SetTarget(s.thtg)
+	e2:SetOperation(s.thop)
+	c:RegisterEffect(e2)
 end
+--unaffected
 function s.filter(c)
 	return c:IsSetCard(0x14e) and c:IsType(TYPE_MONSTER) 
 end
@@ -46,4 +60,34 @@ function s.efilter(e,re)
 end
 function s.etarget(e,c)
 	return c:IsType(TYPE_MONSTER) 
+end
+
+--todeck
+function s.cfilter(c)
+	return c:IsSetCard(0x14e) and c:IsType(TYPE_MONSTER) and c:IsAbleToDeck()
+end
+function s.thfilter(c)
+	return c:IsFaceup() and (c:IsSetCard(0x14e) and (c:IsType(TYPE_SPELL)or c:IsType(TYPE_TRAP)) and not c:IsCode(id)) and c:IsAbleToHand()
+end
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return false end
+	if chk==0 then return Duel.IsExistingTarget(s.cfilter,tp,LOCATION_GRAVE,0,2,nil)
+		and Duel.IsPlayerCanDraw(tp,1) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectTarget(tp,s.cfilter,tp,LOCATION_GRAVE,0,2,2,nil)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,2,0,0)
+end
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetTargetsRelateToChain()
+	if Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)<1
+		or not g:IsExists(Card.IsLocation,1,nil,LOCATION_DECK+LOCATION_EXTRA) then return end
+	if g:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then Duel.ShuffleDeck(tp) end
+	local g=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_REMOVED,0,nil)
+		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+			local sg=g:Select(tp,1,1,nil)
+			Duel.BreakEffect()
+			Duel.SendtoHand(sg,nil,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,sg)
+		end
 end
