@@ -27,10 +27,10 @@ function s.initial_effect(c)
 	
 end
 function s.matfilter(c,scard,sumtype,tp)
-	return c:IsLevelBelow(4) and c:IsRace(RACE_CYBERSE,scard,sumtype,tp)
+	return c:IsSetCard(SET_DOLL_MONSTER,scard,sumtype,tp)
 end
 function s.thfilter(c)
-	return c:IsCode(CARD_SALAMANGREAT_SANCTUARY) and c:IsAbleToHand()
+	return c:IsCode(71595845) or c:IsCode(67331360) and c:IsAbleToHand()
 end
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsLinkSummoned()
@@ -66,4 +66,21 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 		if #gyg>0 then
 			Duel.SendtoGrave(gyg,REASON_EFFECT)
 		end
+	end
+
+	function s.spfilter(c,e,tp)
+	return c:IsLevelBelow(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
+end
+function s.spop(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp)
+	if #g>0 then
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+	end
 	end
