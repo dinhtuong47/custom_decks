@@ -27,7 +27,7 @@ function s.dfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x14e)
 end
 function s.filter(c)
-	return ( c:IsCode(13764602) or c:IsSetCard(114e) ) and c:IsAbleToHand() 
+	return ( c:IsCode(13764602) or c:IsCode(20002) ) and c:IsAbleToHand() 
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.dfilter,tp,LOCATION_MZONE,0,nil)
