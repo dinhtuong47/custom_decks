@@ -19,13 +19,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
---atk
-function s.cfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_FUSION)
-end
-function s.condtion(e)
-	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,2,nil)
-end
 --to hand
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
@@ -37,6 +30,13 @@ end
 	e3:SetTarget(s.thtg2)
 	e3:SetOperation(s.thop2)
 	c:RegisterEffect(e3)
+end
+--atk
+function s.cfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_FUSION)
+end
+function s.condtion(e)
+	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,2,nil)
 end
 --search
 function s.dfilter(c)
