@@ -42,30 +42,29 @@ function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
 end
-
-
-function s.tdfilter(c)
+function s.filter1(c)
 	return c:IsSetCard(0x14e) and c:IsMonster() and c:IsAbleToDeck()
 end
-function s.thfilter(c)
+function s.filter2(c)
 	return c:IsSetCard(0x14e) and c:IsSpellTrap() and c:IsFaceup() and not c:IsCode(id) and c:IsAbleToHand()
 end
-
-
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re)
-	and Duel.Destroy(eg,REASON_EFFECT)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+	and Duel.Destroy(eg,REASON_EFFECT)>0 then
 --todeck
 local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil)
-Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-		local g=dg:Select(tp,2,2,nil)
-		if #g~=2 then return end
-		Duel.HintSelection(g)
-		if Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)==0 then return end
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local hg=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_REMOVED,0,1,1,nil)
-		if #hg>0 then
-			Duel.HintSelection(hg)
+		if #dg>1 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+local g=Duel.GetMatchingGroup(s.filter1,tp,LOCATION_GRAVE,0,nil)
+	if g:GetCount()<2 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local dg=g:Select(tp,2,2,nil)
+	Duel.ConfirmCards(1-tp,dg)
+	Duel.SendtoDeck(dg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	local sg=Duel.GetMatchingGroup(s.filter2,tp,LOCATION_REMOVED,0,nil)
+	if sg:GetCount()==0 then return end
+	Duel.BreakEffect()
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local hg=sg:Select(tp,1,1,nil)
 			Duel.BreakEffect()
 			Duel.SendtoHand(hg,nil,REASON_EFFECT)
 		end
