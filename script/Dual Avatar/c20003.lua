@@ -48,7 +48,7 @@ function s.tdfilter(c)
 	return c:IsSetCard(0x14e) and c:IsMonster() and c:IsAbleToDeck()
 end
 function s.thfilter(c)
-	return c:IsSetCard(0x14e) and c:IsSpellTrap() and c:IsFaceup() and c:IsAbleToHand()
+	return c:IsSetCard(0x14e) and c:IsSpellTrap() and c:IsFaceup() and not c:IsCode(id) and c:IsAbleToHand()
 end
 
 
@@ -69,4 +69,6 @@ Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 			Duel.BreakEffect()
 			Duel.SendtoHand(hg,nil,REASON_EFFECT)
 		end
+	end
 end
+	
