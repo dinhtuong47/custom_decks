@@ -54,7 +54,7 @@ end
 
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re)
-	and Duel.Destroy(eg,REASON_EFFECT)>0 then
+	and Duel.Destroy(eg,REASON_EFFECT)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 --todeck
 local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil)
 Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
