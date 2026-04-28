@@ -52,10 +52,9 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re)
 	and Duel.Destroy(eg,REASON_EFFECT)>0 then
 --todeck
-local dg=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil)
-		if #dg>1 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 local g=Duel.GetMatchingGroup(s.filter1,tp,LOCATION_GRAVE,0,nil)
-	if g:GetCount()<2 then return end
+	if g:GetCount()>1 and Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_REMOVED,0,1,nil) 
+	and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local dg=g:Select(tp,2,2,nil)
 	Duel.ConfirmCards(1-tp,dg)
