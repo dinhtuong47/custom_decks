@@ -66,6 +66,7 @@ local g=Duel.GetMatchingGroup(s.filter1,tp,LOCATION_GRAVE,0,nil)
 	local hg=sg:Select(tp,1,1,nil)
 			Duel.BreakEffect()
 			Duel.SendtoHand(hg,nil,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,hg)
 		end
 	end
 end
