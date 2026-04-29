@@ -45,28 +45,24 @@ end
 function s.filter1(c)
 	return c:IsSetCard(0x14e) and c:IsMonster() and c:IsAbleToDeck()
 end
-function s.filter2(c)
-	return c:IsSetCard(0x14e) and c:IsSpellTrap() and c:IsFaceup() and not c:IsCode(id) and c:IsAbleToHand()
-end
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re)
 	and Duel.Destroy(eg,REASON_EFFECT)>0 then
 --todeck
 local g=Duel.GetMatchingGroup(s.filter1,tp,LOCATION_GRAVE,0,nil)
-	if g:GetCount()>1 and Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_REMOVED,0,1,nil) 
+	if g:GetCount()>1 and Duel.IsExistingMatchingCard(Card.IsCanChangePosition,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil)
 	and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local dg=g:Select(tp,2,2,nil)
 	Duel.ConfirmCards(1-tp,dg)
 	Duel.SendtoDeck(dg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-	local sg=Duel.GetMatchingGroup(s.filter2,tp,LOCATION_REMOVED,0,nil)
-	if sg:GetCount()==0 then return end
-	Duel.BreakEffect()
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local hg=sg:Select(tp,1,1,nil)
-			Duel.BreakEffect()
-			Duel.SendtoHand(hg,nil,REASON_EFFECT)
-			Duel.ConfirmCards(1-tp,hg)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
+			local g=Duel.SelectMatchingCard(tp,Card.IsCanChangePosition,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+			if #g>0 then
+				Duel.HintSelection(g)
+				Duel.BreakEffect()
+				Duel.ChangePosition(g,POS_FACEUP_DEFENSE,POS_FACEUP_DEFENSE,POS_FACEUP_ATTACK,POS_FACEUP_ATTACK)
+			end
 		end
 	end
 end
