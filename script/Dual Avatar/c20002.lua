@@ -39,17 +39,18 @@ function s.setcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(Card.IsSummonPlayer,1,nil,1-tp)
 end
 function s.setfilter(c)
-	return c:IsSetCard(0x14e) and (c:IsType(TYPE_QUICKPLAY) or c:IsType(TYPE_TRAP)) and c:IsSSetable()
+	return (c:IsSetCard(0x14e) and (c:IsType(TYPE_QUICKPLAY) or c:IsType(TYPE_TRAP)) ) 
+	and c:IsLocation(LOCATION_HAND) or (c:IsLocation(LOCATION_REMOVED) and c:IsFaceup()) and c:IsSSetable()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_HAND,0,1,nil) 
+	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_HAND+LOCATION_REMOVED,0,1,nil) 
 		and e:GetHandler():GetFlagEffect(id)==0 end
 	e:GetHandler():RegisterFlagEffect(id,RESET_CHAIN,0,1)
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	local g=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_HAND,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_HAND+LOCATION_REMOVED,0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc and Duel.SSet(tp,tc)~=0 then
 		if tc:IsType(TYPE_QUICKPLAY) then
