@@ -65,16 +65,15 @@ function s.retop(e,tp,eg,ep,ev,re,r,rp)
 end
 --draw
 function s.filter(c)
-	return c:IsSetCard(0x80) and c:IsMonster() and c:IsAbleToDeck() and not c:IsPublic()
+	return c:IsSetCard(0x80) and c:IsType(TYPE_MONSTER) and c:IsAbleToDeck() and not c:IsPublic()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp)
-		and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND,0,1,nil) end
+		and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND,0,1,e:GetHandler()) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND)
 end
-function s.operation(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
+function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
 	Duel.Hint(HINT_SELECTMSG,p,HINTMSG_TODECK)
 	local g=Duel.SelectMatchingCard(p,s.filter,p,LOCATION_HAND,0,1,99,nil)
@@ -83,8 +82,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		local ct=Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 		Duel.ShuffleDeck(p)
 		Duel.BreakEffect()
-		Duel.Draw(p,ct,REASON_EFFECT)
-		Duel.ShuffleHand(p)
+		Duel.Draw(p,ct+1,REASON_EFFECT)
 	end
 end
  
