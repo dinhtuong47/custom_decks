@@ -66,7 +66,7 @@ function s.setcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.setfilter(c)
-	return c:IsSpellTrap() and c:IsSetCard(0x80) and c:IsSSetable()
+	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsSetCard(0x80) and c:IsSSetable()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil) end
