@@ -160,8 +160,7 @@ end
 
 --Logic Draw
 function s.drcon(e,tp,eg,ep,ev,re,r,rp)
-	local tc=eg:GetFirst()
-	return tc:IsControler(tp) and tc:IsType(TYPE_MONSTER)
+	return eg:IsExists(Card.IsType,1,nil,TYPE_MONSTER)
 end
 function s.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,2) end
