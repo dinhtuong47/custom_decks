@@ -165,12 +165,16 @@ end
 --Logic Draw
 function s.drcon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    -- Kiểm tra xem con này có cái "cờ" chứa nguyên liệu số (3) không
-    local flag=c:GetFlagEffectLabel(id)
-    if not flag or (flag&0x4)==0 then return false end
+    -- Lấy giá trị Flag đã lưu
+    local flag = c:GetFlagEffectLabel(id)
     
-    -- Check xem có quái thú nào được Normal Summon (bao gồm cả chính nó)
-    -- eg là group chứa các quái thú vừa triệu hồi thành công
+    -- KIỂM TRA: Nếu không có flag hoặc flag bị nil thì thoát ngay, không tính toán tiếp
+    if not flag or flag == 0 then return false end
+    
+    -- Nếu có flag, mới thực hiện phép tính bitwise để check nguyên liệu số (3)
+    if (flag&0x4)==0 then return false end
+    
+    -- Cuối cùng, check xem có quái thú nào được Normal Summon không (bao gồm chính nó)
     return eg:IsExists(Card.IsType,1,nil,TYPE_MONSTER)
 end
 
