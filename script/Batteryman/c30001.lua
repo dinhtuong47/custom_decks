@@ -78,10 +78,11 @@ end
 function s.regop(e,tp,eg,ep,ev,re,r,rp)
     local flag=e:GetLabelObject():GetLabel()
     local c=e:GetHandler()
-    -- Cắm "cờ" id vào quái thú, lưu giá trị flag nguyên liệu vào
+    
+    -- Dòng này BẮT BUỘC phải có để nạp dữ liệu vào con quái
     c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1,flag)
     
-    -- (Các hiệu ứng e1, e2 đăng ký động như cũ...)
+    -- ... các đoạn code khác ...
 end
 	
 	--Hiệu ứng 1: Phủ nhận Spell (Nếu dùng card 55401221)
