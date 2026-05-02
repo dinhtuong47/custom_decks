@@ -76,8 +76,13 @@ function s.regcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.regop(e,tp,eg,ep,ev,re,r,rp)
-	local flag=e:GetLabelObject():GetLabel()
-	local c=e:GetHandler()
+    local flag=e:GetLabelObject():GetLabel()
+    local c=e:GetHandler()
+    -- Cắm "cờ" id vào quái thú, lưu giá trị flag nguyên liệu vào
+    c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1,flag)
+    
+    -- (Các hiệu ứng e1, e2 đăng ký động như cũ...)
+end
 	
 	--Hiệu ứng 1: Phủ nhận Spell (Nếu dùng card 55401221)
 	if (flag&0x1)~=0 then
@@ -159,16 +164,25 @@ end
 
 --Logic Draw
 function s.drcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
+    local c=e:GetHandler()
+    -- Kiểm tra xem con này có cái "cờ" chứa nguyên liệu số (3) không
+    local flag=c:GetFlagEffectLabel(id)
+    if not flag or (flag&0x4)==0 then return false end
+    
+    -- Check xem có quái thú nào được Normal Summon (bao gồm cả chính nó)
+    -- eg là group chứa các quái thú vừa triệu hồi thành công
     return eg:IsExists(Card.IsType,1,nil,TYPE_MONSTER)
 end
+
+-- Hàm Target và Operation
 function s.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
-	Duel.SetTargetPlayer(tp)
-	Duel.SetTargetParam(1)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+    if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+    Duel.SetTargetPlayer(tp)
+    Duel.SetTargetParam(1)
+    Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
+
 function s.drop(e,tp,eg,ep,ev,re,r,rp)
-	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	Duel.Draw(p,d,REASON_EFFECT)
+    local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+    Duel.Draw(p,d,REASON_EFFECT)
 end
