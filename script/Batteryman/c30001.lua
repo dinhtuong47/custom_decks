@@ -136,8 +136,6 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
         e4b:SetValue(s.efilter)
         e4b:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
         c:RegisterEffect(e4b)
-	-- Cập nhật lại chỉ số cho card ngay lập tức
-        c:ReadjustStatus()
     end
 end
 
