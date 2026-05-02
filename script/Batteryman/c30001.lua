@@ -78,11 +78,9 @@ end
 function s.regop(e,tp,eg,ep,ev,re,r,rp)
     local flag=e:GetLabelObject():GetLabel()
     local c=e:GetHandler()
-    
-    -- Dòng này BẮT BUỘC phải có để nạp dữ liệu vào con quái
+    -- Cắm cờ "id" và lưu giá trị "flag" vào nhãn (label)
     c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1,flag)
-    
-    -- ... các đoạn code khác ...
+    -- ...
 end
 	
 	--Hiệu ứng 1: Phủ nhận Spell (Nếu dùng card 55401221)
@@ -164,30 +162,29 @@ function s.rmvop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --Logic Draw
+-- Logic Draw
 function s.drcon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    -- Lấy giá trị Flag đã lưu
+    
+    -- 1. Kiểm tra xem bản thân card có nằm trên sân không
+    if not c:IsLocation(LOCATION_MZONE) then return false end
+
+    -- 2. Lấy giá trị Flag an toàn (Dùng c:GetFlagEffect thay vì GetFlagEffectLabel để check sự tồn tại trước)
+    if c:GetFlagEffect(id)==0 then return false end
+    
+    -- 3. Lấy nhãn và kiểm tra nil một lần nữa
     local flag = c:GetFlagEffectLabel(id)
+    if flag == nil or (flag&0x4)==0 then return false end
     
-    -- KIỂM TRA: Nếu không có flag hoặc flag bị nil thì thoát ngay, không tính toán tiếp
-    if not flag or flag == 0 then return false end
-    
-    -- Nếu có flag, mới thực hiện phép tính bitwise để check nguyên liệu số (3)
-    if (flag&0x4)==0 then return false end
-    
-    -- Cuối cùng, check xem có quái thú nào được Normal Summon không (bao gồm chính nó)
+    -- 4. Check xem có quái thú nào được Normal Summon không (bao gồm chính nó)
+    -- eg là group chứa các quái thú vừa triệu hồi thành công
     return eg:IsExists(Card.IsType,1,nil,TYPE_MONSTER)
 end
 
--- Hàm Target và Operation
 function s.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
+    -- Thay vì dùng biến flag ở đây, ta check điều kiện trực tiếp
     if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
     Duel.SetTargetPlayer(tp)
     Duel.SetTargetParam(1)
     Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-end
-
-function s.drop(e,tp,eg,ep,ev,re,r,rp)
-    local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-    Duel.Draw(p,d,REASON_EFFECT)
 end
