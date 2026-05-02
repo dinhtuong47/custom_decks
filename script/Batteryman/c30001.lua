@@ -118,19 +118,22 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
         c:RegisterEffect(e3)
     end
 
-    -- Effect 4: Buff ATK & Immune
+   -- Effect 4: Buff ATK & Immune
     if (flag&0x8)~=0 then
+        -- Tăng ATK
         local e4a=Effect.CreateEffect(c)
         e4a:SetType(EFFECT_TYPE_SINGLE)
-	e4a:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE)
+        e4a:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE)
+        e4a:SetRange(LOCATION_MZONE) -- Phải có Range cho SINGLE_RANGE
         e4a:SetCode(EFFECT_UPDATE_ATTACK)
         e4a:SetValue(1000)
         e4a:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
         c:RegisterEffect(e4a)
 
+        -- Kháng hiệu ứng
         local e4b=Effect.CreateEffect(c)
         e4b:SetType(EFFECT_TYPE_SINGLE)
-	e4b:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE)
+        e4b:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE)
         e4b:SetRange(LOCATION_MZONE)
         e4b:SetCode(EFFECT_IMMUNE_EFFECT)
         e4b:SetValue(s.efilter)
