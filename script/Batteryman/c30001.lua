@@ -1,6 +1,5 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	--Summon from hand
 	local e0=Effect.CreateEffect(c)
 	e0:SetDescription(aux.Stringid(id,3))
 	e0:SetCategory(CATEGORY_SUMMON)
@@ -10,13 +9,13 @@ function s.initial_effect(c)
 	e0:SetTarget(s.tstg)
 	e0:SetOperation(s.tsop)
 	c:RegisterEffect(e0)
-	--Material check
+
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_MATERIAL_CHECK)
 	e1:SetValue(s.valcheck)
 	c:RegisterEffect(e1)
-	--Register effects on summon
+
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_SUMMON_SUCCESS)
@@ -24,6 +23,18 @@ function s.initial_effect(c)
 	e2:SetOperation(s.regop)
 	c:RegisterEffect(e2)
 	e2:SetLabelObject(e1)
+
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,2))
+	e3:SetCategory(CATEGORY_DRAW)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCode(EVENT_SUMMON_SUCCESS)
+	e3:SetCondition(s.drcon)
+	e3:SetTarget(s.drtg)
+	e3:SetOperation(s.drop)
+	c:RegisterEffect(e3)
 end
 
 function s.fufilter(c,race)
@@ -63,7 +74,6 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
 	local flag=e:GetLabelObject():GetLabel()
 	local c=e:GetHandler()
 	c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1,flag)
-	--Effect 1
 	if (flag&0x1)~=0 then
 		local e1=Effect.CreateEffect(c)
 		e1:SetDescription(aux.Stringid(id,0))
@@ -77,7 +87,6 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		c:RegisterEffect(e1)
 	end
-	--Effect 2
 	if (flag&0x2)~=0 then
 		local e2=Effect.CreateEffect(c)
 		e2:SetDescription(aux.Stringid(id,1))
@@ -91,24 +100,8 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 		c:RegisterEffect(e2)
 	end
-	--Effect 3
-	if (flag&0x4)~=0 then
-		local e3=Effect.CreateEffect(c)
-		e3:SetDescription(aux.Stringid(id,2))
-		e3:SetCategory(CATEGORY_DRAW)
-		e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-		e3:SetProperty(EFFECT_FLAG_DELAY)
-		e3:SetRange(LOCATION_MZONE)
-		e3:SetCode(EVENT_SUMMON_SUCCESS)
-		e3:SetCondition(s.drcon)
-		e3:SetTarget(s.drtg)
-		e3:SetOperation(s.drop)
-		e3:SetReset(RESET_EVENT+RESETS_STANDARD)
-		c:RegisterEffect(e3)
-	end
 end
 
---Logic handlers
 function s.discon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and re:IsSpellEffect() and re:IsHasType(EFFECT_TYPE_ACTIVATE) and Duel.IsChainNegatable(ev)
 end
@@ -132,6 +125,7 @@ function s.rmvop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 	if #g>0 then Duel.Remove(g,POS_FACEUP,REASON_EFFECT) end
 end
+
 function s.drcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local flag=c:GetFlagEffectLabel(id)
