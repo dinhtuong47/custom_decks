@@ -128,7 +128,7 @@ end
 		e3:SetOperation(s.drop)
 		e3:SetReset(RESET_EVENT+RESETS_STANDARD)
 		c:RegisterEffect(e3)
-	end
+	
 end
 
 --Logic Negate Spell
