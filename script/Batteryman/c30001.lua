@@ -40,7 +40,7 @@ end
 
 function s.tstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return c:CanSummon(true,nil,1) end
+	if chk==0 then return c:CanSummonOrSet(true,nil,1) end
 	Duel.SetOperationInfo(0,CATEGORY_SUMMON,c,1,tp,LOCATION_HAND)
 end
 
