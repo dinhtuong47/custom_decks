@@ -51,7 +51,7 @@ function s.matfilter(c,lc,sumtype,tp)
     return c:IsLevel(6) and c:IsAttribute(ATTRIBUTE_FIRE,lc,sumtype,tp)
 end
 
--- [[SS Lock: Chan tat ca quai khong phai Hazy Flame
+--[[SS Lock: Chan tat ca quai khong phai Hazy Flame
 function s.splimit(e,c)
     return not c:IsSetCard(0x67)
 end]]--
