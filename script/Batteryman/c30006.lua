@@ -53,7 +53,7 @@ end
 
 -- Fix Cấm SS: Chỉ cấm nếu quái không phải Hazy
 function s.splimit(e,c,tp,sumtp,sumpos)
-	return return not c:IsSetCard(0x67)
+	return not c:IsSetCard(0x67)
 end
 
 -- Check Link Summon
