@@ -14,7 +14,7 @@ function s.initial_effect(c)
     e1:SetValue(aux.tgoval)
     c:RegisterEffect(e1)
     
-    --[[ Lock Special Summon (Hazy Flame only)
+    -- Lock Special Summon (Hazy Flame only)
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_FIELD)
     e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
@@ -22,7 +22,7 @@ function s.initial_effect(c)
     e2:SetRange(LOCATION_MZONE)
     e2:SetTargetRange(1,0)
     e2:SetTarget(s.splimit)
-    c:RegisterEffect(e2)]]--
+    c:RegisterEffect(e2)
     
     -- Special Summon from Deck
     local e3=Effect.CreateEffect(c)
@@ -59,10 +59,10 @@ function s.matfilter(c,scard,sumtype,tp)
     return c:IsLevel(6) and c:IsAttribute(ATTRIBUTE_FIRE)
 end
 
---[[SS Lock: Chan tat ca quai khong phai Hazy Flame
+--SS Lock: Chan tat ca quai khong phai Hazy Flame
 function s.splimit(e,c)
     return not c:IsSetCard(0x67)
-end]]--
+end
 
 -- Condition: Phai la Link Summon
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
