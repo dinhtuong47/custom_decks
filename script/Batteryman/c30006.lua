@@ -4,39 +4,37 @@ function s.initial_effect(c)
     Link.AddProcedure(c,s.matfilter,1,1)
     c:EnableReviveLimit()
     
-    -- 1. Anti-Target
-    local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_SINGLE)
-    e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-    e1:SetRange(LOCATION_MZONE)
-    e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
-    e1:SetValue(aux.tgoval)
-    c:RegisterEffect(e1)
+    --cannot be target
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetValue(aux.tgoval)
+	c:RegisterEffect(e1)
+	
+	--sum limit
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e2:SetTargetRange(1,0)
+	e2:SetTarget(s.splimit)
+	c:RegisterEffect(e2)
     
-    -- 2. Cấm SS: Chỉ kích hoạt khi card đã lên sân thành công
-    local e2=Effect.CreateEffect(c)
-    e2:SetType(EFFECT_TYPE_FIELD)
-    e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-    e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-    e2:SetRange(LOCATION_MZONE)
-    e2:SetTargetRange(1,0)
-    e2:SetTarget(s.splimit)
-    c:RegisterEffect(e2)
+    --Special Summon 
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,0))
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e3:SetCondition(s.spcon1)
+	e3:SetTarget(s.sptg1)
+	e3:SetOperation(s.spop1)
+	c:RegisterEffect(e3)
     
-    -- 3. Triệu hồi từ Deck: Thêm FLAG_DELAY để tránh bị lỡ timing
-    local e3=Effect.CreateEffect(c)
-    e3:SetDescription(aux.Stringid(id,0))
-    e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
-    e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-    e3:SetCode(EVENT_SPSUMMON_SUCCESS)
-    e3:SetProperty(EFFECT_FLAG_DELAY) 
-    e3:SetCountLimit(1,id)
-    e3:SetCondition(s.spcon)
-    e3:SetTarget(s.sptg)
-    e3:SetOperation(s.spop)
-    c:RegisterEffect(e3)
-    
-    -- 4. Cấp hiệu ứng Bất tử: Dùng EFFECT_TYPE_GRANT để nó luôn hoạt động khi là nguyên liệu
     --give effect
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_XMATERIAL)
@@ -54,31 +52,29 @@ function s.matfilter(c,scard,sumtype,tp)
 end
 
 -- Fix Cấm SS: Chỉ cấm nếu quái không phải Hazy
-function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-    return not c:IsSetCard(0x67)
+function s.splimit(e,c,tp,sumtp,sumpos)
+	return return not c:IsSetCard(0x67)
 end
 
 -- Check Link Summon
-function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-    return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
+function s.spcon1(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler():IsLinkSummoned()
 end
-
--- Target & Operation cho hiệu ứng xồ quái
-function s.spfilter(c,e,tp)
-    return c:IsSetCard(0x67) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function s.spfilter1(c,e,tp)
+	return c:IsSetCard(0x67) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-        and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
+function s.sptg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.spfilter1,tp,LOCATION_DECK,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
-function s.spop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-    local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
-    if #g>0 then
-        Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
-    end
+function s.spop1(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<1 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.spfilter1,tp,LOCATION_DECK,0,1,1,nil,e,tp)
+	if #g>0 then 
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+	end
 end
 
 -- Hiệu ứng bất tử để cấp cho Xyz
