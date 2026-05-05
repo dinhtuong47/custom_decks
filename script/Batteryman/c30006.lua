@@ -2,7 +2,7 @@ local s,id=GetID()
 function s.initial_effect(c)
     -- Link Summon: 1 Level 6 FIRE monster
     -- Cu phap: c, filter, min, max, special_check
-    aux.AddLinkProcedure(c,s.matfilter,1,1)
+    Link.AddProcedure(c,s.matfilter,1,1)
     c:EnableReviveLimit()
     
     -- Cannot be targeted
@@ -47,8 +47,8 @@ function s.initial_effect(c)
 end
 
 -- Filter nguyen lieu: Level 6 va thuoc tinh LUA
-function s.matfilter(c,lc,sumtype,tp)
-    return c:IsLevel(6) and c:IsAttribute(ATTRIBUTE_FIRE,lc,sumtype,tp)
+function s.matfilter(c,scard,sumtype,tp)
+    return c:IsLevel(6) and c:IsAttribute(ATTRIBUTE_FIRE)
 end
 
 --[[SS Lock: Chan tat ca quai khong phai Hazy Flame
