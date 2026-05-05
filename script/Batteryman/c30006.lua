@@ -53,7 +53,6 @@ function s.initial_effect(c)
     e5:SetOperation(s.effop) -- Dùng chung operation với e4
     c:RegisterEffect(e5)
 end
-end
 
 -- Filter nguyen lieu: Level 6 va thuoc tinh LUA
 function s.matfilter(c,scard,sumtype,tp)
