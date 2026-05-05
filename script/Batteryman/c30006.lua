@@ -44,6 +44,15 @@ function s.initial_effect(c)
     e4:SetCondition(s.effcon)
     e4:SetOperation(s.effop)
     c:RegisterEffect(e4)
+
+    -- Hỗ trợ Hazy Pillar (Gắn thủ công)
+    local e5=Effect.CreateEffect(c)
+    e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+    e5:SetCode(EVENT_MOVE) 
+    e5:SetCondition(s.attachcon)
+    e5:SetOperation(s.effop) -- Dùng chung operation với e4
+    c:RegisterEffect(e5)
+end
 end
 
 -- Filter nguyen lieu: Level 6 va thuoc tinh LUA
@@ -80,19 +89,35 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --Hieu ung thua huong cho Basiltrice
+-- Kiểm tra khi triệu hồi Xyz bình thường
 function s.effcon(e,tp,eg,ep,ev,re,r,rp)
-    local rc=e:GetHandler():GetReasonCard()
-    return r==REASON_XYZ and rc:IsCode(23776077)
+    return r==REASON_XYZ
 end
+
+-- Kiểm tra khi bị "attach" bởi hiệu ứng card (như Hazy Pillar)
+function s.attachcon(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    -- Kiểm tra nếu card đang ở trong vùng Xyz Material và trước đó nó ở trên sân
+    return c:IsLocation(LOCATION_OVERLAY) and c:GetDestinationType()==LOCATION_OVERLAY
+end
+
+-- Operation cấp hiệu ứng (giữ nguyên logic cũ nhưng thêm check kỹ hơn)
 function s.effop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    local rc=c:GetReasonCard()
-    local e1=Effect.CreateEffect(c)
-    e1:SetDescription(aux.Stringid(id,1))
-    e1:SetType(EFFECT_TYPE_SINGLE)
-    e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
-    e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-    e1:SetValue(1)
-    e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-    rc:RegisterEffect(e1,true)
+    local rc=c:GetOverlayTarget() -- Lấy con Xyz đang chứa nó làm nguyên liệu
+    
+    -- Nếu triệu hồi Xyz thông thường thì dùng GetReasonCard
+    if not rc then rc=c:GetReasonCard() end 
+    
+    -- Kiểm tra nếu đúng là Basiltrice (23776077)
+    if rc and rc:IsCode(23776077) then
+        local e1=Effect.CreateEffect(c)
+        e1:SetDescription(aux.Stringid(id,1))
+        e1:SetType(EFFECT_TYPE_SINGLE)
+        e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
+        e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+        e1:SetValue(1)
+        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+        rc:RegisterEffect(e1,true)
+    end
 end
