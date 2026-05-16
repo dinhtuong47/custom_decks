@@ -79,7 +79,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
                     -- Bắn sự kiện báo cho toàn hệ thống: Vừa có 1 quái vật được SET TAY xuống sân
                     -- REASON_SUMMON (0x100) ép game hiểu đây là hành động Triệu hồi chứ KHÔNG PHẢI hiệu ứng bài.
                     local g2=Group.FromCards(tc)
-                    Duel.RaiseEvent(g2,EVENT_MZONE_COUNT_CHANGED,e,REASON_SUMMON,tp,tp)
+                    Duel.RaiseEvent(g2,1003,e,0x100,tp,tp,0)
                 end
             end
         end
