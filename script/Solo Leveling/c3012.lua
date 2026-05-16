@@ -1,77 +1,87 @@
+-- Scripted by Gemini (Sửa chính xác Filter Set từ tay hoặc sân)
 local s,id=GetID()
+
 function s.initial_effect(c)
-	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_SUMMON)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
-	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e1:SetTarget(s.target)
-	e1:SetOperation(s.activate)
-	c:RegisterEffect(e1)
-	--Flip & set from field
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_POSITION)
-	e2:SetType(EFFECT_TYPE_ACTIVATE)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
-	e2:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e2:SetTarget(s.postg)
-	e2:SetOperation(s.posop)
-	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetDescription(aux.Stringid(id,2))
-	e3:SetTarget(s.postg2)
-	e3:SetOperation(s.posop2)
-	c:RegisterEffect(e3)
-end
---set from hand
-function s.filter(c)
-	return c:IsSetCard(0xBB8) and c:IsSummonable(true,nil)
-end
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
-end
-function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
-	local tc=g:GetFirst()
-	if tc then
-		Duel.MSet(tp,tc,true,nil)
-	end
-end
---set from field
-function s.posfilter(c)
-	return c:IsSetCard(0xBB8) and c:IsFaceup() and c:IsCanTurnSet()
-end
-function s.postg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter,tp,LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,0,0)
-end
-function s.posop(e,tp,eg,ep,ev,re,r,rp,chk)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
-	local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,0,1,1,nil)
-	if #g>0 then
-		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
-	end
-end
---flip
-function s.posfilter2(c)
-	return c:IsSetCard(0xBB8) and c:IsFacedown() and c:IsCanChangePosition()
-end
-function s.postg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.posfilter2,tp,LOCATION_MZONE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,0,0)
-end
-function s.posop2(e,tp,eg,ep,ev,re,r,rp,chk)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
-	local g=Duel.SelectMatchingCard(tp,s.posfilter2,tp,LOCATION_MZONE,0,1,1,nil)
-	if #g>0 then
-		Duel.ChangePosition(g,POS_FACEUP_ATTACK)
-	end
+    -- Kích hoạt bài: Chọn 1 trong 2 hiệu ứng khi Resolve
+    local e1=Effect.CreateEffect(c)
+    e1:SetDescription(aux.Stringid(id,0))
+    e1:SetType(EFFECT_TYPE_ACTIVATE)
+    e1:SetCode(EVENT_FREE_CHAIN)
+    e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
+    e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+    e1:SetTarget(s.target)
+    e1:SetOperation(s.activate)
+    c:RegisterEffect(e1)
 end
 
+-- --- SỬA LẠI FILTER SET: Tách biệt điều kiện trên Tay và trên Sân ---
+function s.filter(c)
+    if not c:IsSetCard(0xBB8) then return false end
+    if c:IsLocation(LOCATION_HAND) then
+        return c:IsSummonable(true,nil) -- Nếu trên tay thì phải Set được
+    elseif c:IsLocation(LOCATION_MZONE) then
+        return c:IsFaceup() and c:IsCanTurnSet() -- Nếu trên sân thì phải đang ngửa và úp xuống được
+    end
+    return false
+end
+
+function s.flipfilter(c)
+    return c:IsSetCard(0xBB8) and c:IsFacedown() and c:IsLocation(LOCATION_MZONE)
+end
+
+-- --- TARGET CHÍNH ---
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+    local b1=Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil)
+    local b2=Duel.IsExistingMatchingCard(s.flipfilter,tp,LOCATION_MZONE,0,1,nil)
+    if chk==0 then return b1 or b2 end
+    
+    if b1 and b2 then
+        e:SetCategory(CATEGORY_SUMMON+CATEGORY_POSITION)
+    elseif b1 then
+        e:SetCategory(CATEGORY_SUMMON)
+    else
+        e:SetCategory(CATEGORY_POSITION)
+    end
+end
+
+-- --- OPERATION CHÍNH ---
+function s.activate(e,tp,eg,ep,ev,re,r,rp)
+    local b1=Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil)
+    local b2=Duel.IsExistingMatchingCard(s.flipfilter,tp,LOCATION_MZONE,0,1,nil)
+    if not (b1 or b2) then return end
+    
+    local op=0
+    if b1 and b2 then
+        op=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
+    elseif b1 then
+        op=Duel.SelectOption(tp,aux.Stringid(id,1))
+    else
+        op=Duel.SelectOption(tp,aux.Stringid(id,2))+1
+    end
+    
+    if op==0 then
+        -- EFF 1: SET TỪ HAND HOẶC FIELD (Logic gốc của bạn xử lý tc)
+        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+        local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
+        local tc=g:GetFirst()
+        if tc then
+            -- Hàm MSet gốc của bạn tự nhận diện vị trí để đưa từ tay xuống hoặc bắt quái trên sân úp tại chỗ
+            Duel.MSet(tp,tc,true,nil) 
+        end
+    else
+        -- EFF 2: IMMEDIATELY FLIP SUMMON (Mã Hex thô cho nhân cũ)
+        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEDOWN)
+        local g=Duel.SelectMatchingCard(tp,s.flipfilter,tp,LOCATION_MZONE,0,1,1,nil)
+        if #g>0 then
+            local tc=g:GetFirst()
+            if Duel.ChangePosition(tc,POS_FACEUP_ATTACK) > 0 then
+                tc:SetStatus(0x40,1)   -- STATUS_FLIP_SUMMONED
+                tc:SetStatus(0x400,1)  -- STATUS_SUMMON_TURN
+                
+                local g2=Group.FromCards(tc)
+                Duel.RaiseEvent(g2,EVENT_FLIP_SUMMON_SUCCESS,e,REASON_EFFECT,tp,tp,0)
+                Duel.RaiseSingleEvent(tc,EVENT_FLIP_SUMMON_SUCCESS,e,REASON_EFFECT,tp,tp,0)
+            end
+        end
+    end
+end
