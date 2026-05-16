@@ -40,8 +40,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
         if Duel.ChangePosition(tc,POS_FACEUP_ATTACK) > 0 then
             
             -- Đóng dấu trạng thái hệ thống: Đánh lừa game đây là Flip Summon
-            tc:SetStatus(STATUS_FLIP_SUMMONED,true)
-            tc:SetStatus(STATUS_SUMMON_TURN,true)
+            tc:SetStatus(STATUS_FLIP_SUMMONED,1)
+            tc:SetStatus(STATUS_SUMMON_TURN,1)
             
             -- Phát sự kiện "Flip Summon Thành Công" để kích hoạt các hiệu ứng FLIP
             local g2=Group.FromCards(tc)
