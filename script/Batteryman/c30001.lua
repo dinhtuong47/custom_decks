@@ -1,113 +1,52 @@
+-- Scripted by Gemini (Non-Target Version)
 local s,id=GetID()
+
 function s.initial_effect(c)
-    -- Summon itself by Tribute Summon (Action từ tay)
-    local e0=Effect.CreateEffect(c)
-    e0:SetDescription(aux.Stringid(id,4)) -- Thêm desc cho dễ nhìn
-    e0:SetCategory(CATEGORY_SUMMON)
-    e0:SetType(EFFECT_TYPE_IGNITION)
-    e0:SetRange(LOCATION_HAND)
-    e0:SetCondition(s.tscon)
-    e0:SetTarget(s.tstg)
-    e0:SetOperation(s.tsop)
-    c:RegisterEffect(e0)
-
-    -- Material check
+    -- Kích hoạt lá bài (Activate)
     local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_SINGLE)
-    e1:SetCode(EFFECT_MATERIAL_CHECK)
-    e1:SetValue(s.valcheck)
+    e1:SetCategory(CATEGORY_POSITION)
+    e1:SetType(EFFECT_TYPE_ACTIVATE)
+    e1:SetCode(EVENT_FREE_CHAIN)
+    e1:SetTarget(s.target)
+    e1:SetOperation(s.activate)
     c:RegisterEffect(e1)
-
-    -- Gain effects based on the monsters used
-    local e2=Effect.CreateEffect(c)
-    e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-    e2:SetCode(EVENT_SUMMON_SUCCESS)
-    e2:SetCondition(s.regcon)
-    e2:SetOperation(s.regop)
-    e2:SetLabelObject(e1)
-    c:RegisterEffect(e2)
 end
 
--- Logic Triệu hồi
-function s.tscon(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.IsMainPhase() and Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsRace,RACE_THUNDER),tp,LOCATION_MZONE,LOCATION_MZONE,1,nil)
+-- --- KIỂM TRA ĐIỀU KIỆN KÍCH HOẠT ---
+function s.filter(c)
+    return c:IsFacedown() and c:IsLocation(LOCATION_MZONE)
 end
 
-function s.tstg(e,tp,eg,ep,ev,re,r,rp,chk)
-    local c=e:GetHandler()
-    if chk==0 then return c:IsSummonable(true,nil,1) end -- Dùng IsSummonable chuẩn hơn
-    Duel.SetOperationInfo(0,CATEGORY_SUMMON,c,1,0,0)
-end
-
-function s.tsop(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    if c:IsRelateToEffect(e) then
-        Duel.Summon(tp,c,true,nil,1)
-    end
-end
-
--- Kiểm tra nguyên liệu
-function s.valcheck(e,c)
-	local g=c:GetMaterial()
-	local flag=0
-	for tc in g:Iter() do
-		local code=tc:GetCode()
-		if code==55401221 then
-			flag=(flag|0x1)
-		elseif code==19733961 then
-			flag=(flag|0x2)
-		elseif code==63142001 then
-			flag=(flag|0x4)
-		elseif code==47346845 then
-            		flag=(flag|0x8)
-		end
-	end
-	e:SetLabel(flag)
-end
-
-function s.regcon(e,tp,eg,ep,ev,re,r,rp)
-    return e:GetHandler():IsTributeSummoned()
-end
-
-function s.regop(e,tp,eg,ep,ev,re,r,rp)
-    local flag=e:GetLabelObject():GetLabel()
-    local c=e:GetHandler()
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+    -- Chỉ kiểm tra xem trên sân có ít nhất 1 quái vật úp mặt hay không
+    if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_MZONE,0,1,nil) end
     
-    -- Effect 1: Negate Spell
-    if (flag&0x1)~=0 then
-        local e1=Effect.CreateEffect(c)
-        e1:SetDescription(aux.Stringid(id,0))
-        e1:SetCategory(CATEGORY_DISABLE)
-        e1:SetType(EFFECT_TYPE_QUICK_O)
-        e1:SetCode(EVENT_CHAINING)
-        e1:SetRange(LOCATION_MZONE)
-        e1:SetCondition(s.discon)
-        e1:SetTarget(s.distg)
-        e1:SetOperation(s.disop)
-        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-        c:RegisterEffect(e1)
-    end
-    
-    -- Effect 2: Banish Trap
-    if (flag&0x2)~=0 then
-        local e2=Effect.CreateEffect(c)
-        e2:SetDescription(aux.Stringid(id,1))
-        e2:SetCategory(CATEGORY_REMOVE)
-        e2:SetType(EFFECT_TYPE_QUICK_O)
-        e2:SetCode(EVENT_CHAINING)
-        e2:SetRange(LOCATION_MZONE)
-        e2:SetCondition(s.rmvcon)
-        e2:SetTarget(s.rmvtg)
-        e2:SetOperation(s.rmvop)
-        e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-        c:RegisterEffect(e2)
-    end
+    -- Không dùng Duel.SelectTarget ở đây, hệ thống sẽ hiểu là Non-target
+    Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,tp,LOCATION_MZONE)
+end
 
-    -- Effect 3: Draw 2
-    if (flag&0x4)~=0 then
-        local e3=Effect.CreateEffect(c)
-        e3:SetDescription(aux.Stringid(id,2))
-        e3:SetCategory(CATEGORY_DRAW)
+-- --- XỬ LÝ HIỆU ỨNG KHI RESOLVE ---
+function s.activate(e,tp,eg,ep,ev,re,r,rp)
+    -- Tiến hành chọn quái vật NGAY LÚC RESOLVE
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEDOWN)
+    local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_MZONE,0,1,1,nil)
+    
+    if #g>0 then
+        local tc=g:GetFirst()
+        -- Lật quái vật lên thế công ngửa mặt
+        if Duel.MoveToField(tc,tp,tp,LOCATION_MZONE,POS_FACEUP_ATTACK,true) then
+            
+            -- Đóng dấu trạng thái hệ thống Flip Summon
+            tc:SetStatus(STATUS_FLIP_SUMMONED,true)
+            tc:SetStatus(STATUS_SUMMON_TURN,true)
+            
+            -- Bắn Event báo cho toàn bộ sàn đấu và bản thân quái vật
+            local g2=Group.FromCards(tc)
+            Duel.RaiseEvent(g2,EVENT_FLIP_SUMMON_SUCCESS,e,REASON_EFFECT,tp,tp,0)
+            Duel.RaiseSingleEvent(tc,EVENT_FLIP_SUMMON_SUCCESS,e,REASON_EFFECT,tp,tp,0)
+        end
+    end
+end
         e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
         e3:SetRange(LOCATION_MZONE)
         e3:SetCode(EVENT_SUMMON_SUCCESS)
