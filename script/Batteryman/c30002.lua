@@ -27,23 +27,22 @@ end
 
 -- --- XỬ LÝ HIỆU ỨNG KHI RESOLVE ---
 -- --- XỬ LÝ HIỆU ỨNG KHI RESOLVE ---
+-- --- XỬ LÝ HIỆU ỨNG KHI RESOLVE ---
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-    -- Tiến hành chọn quái vật NGAY LÚC RESOLVE
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEDOWN)
     local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_MZONE,0,1,1,nil)
     
     if #g>0 then
         local tc=g:GetFirst()
         
-        -- Dùng ChangePosition để lật từ Úp sang Ngửa Tấn Công (POS_FACEUP_ATTACK)
-        -- Hàm này luôn hoạt động với quái vật trên sân mà không bị xích (Chain) chặn lại
+        -- Lật quái vật lên thế công ngửa mặt
         if Duel.ChangePosition(tc,POS_FACEUP_ATTACK) > 0 then
             
-            -- Đóng dấu trạng thái hệ thống: Đánh lừa game đây là Flip Summon
-            tc:SetStatus(STATUS_FLIP_SUMMONED,1)
-            tc:SetStatus(STATUS_SUMMON_TURN,1)
+            -- SỬA LỖI: Dùng giá trị số trực tiếp thay cho hằng số hệ thống bị thiếu
+            tc:SetStatus(0x40,1)   -- 0x40 tương đương STATUS_FLIP_SUMMONED
+            tc:SetStatus(0x400,1)  -- 0x400 tương đương STATUS_SUMMON_TURN
             
-            -- Phát sự kiện "Flip Summon Thành Công" để kích hoạt các hiệu ứng FLIP
+            -- Phát sự kiện Flip Summon thành công
             local g2=Group.FromCards(tc)
             Duel.RaiseEvent(g2,EVENT_FLIP_SUMMON_SUCCESS,e,REASON_EFFECT,tp,tp,0)
             Duel.RaiseSingleEvent(tc,EVENT_FLIP_SUMMON_SUCCESS,e,REASON_EFFECT,tp,tp,0)
