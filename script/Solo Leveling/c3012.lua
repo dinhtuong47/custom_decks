@@ -1,4 +1,4 @@
--- Scripted by Gemini (Sửa chính xác Filter Set từ tay hoặc sân)
+-- Scripted by Gemini (Chuẩn hóa cơ chế Immediately Set cho cả Hand và Field)
 local s,id=GetID()
 
 function s.initial_effect(c)
@@ -14,13 +14,13 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 end
 
--- --- SỬA LẠI FILTER SET: Tách biệt điều kiện trên Tay và trên Sân ---
+-- --- FILTER SET TỪ HAND HOẶC FIELD ---
 function s.filter(c)
     if not c:IsSetCard(0xBB8) then return false end
     if c:IsLocation(LOCATION_HAND) then
-        return c:IsSummonable(true,nil) -- Nếu trên tay thì phải Set được
+        return c:IsSummonable(true,nil) -- Kiểm tra xem trên tay có Set được không
     elseif c:IsLocation(LOCATION_MZONE) then
-        return c:IsFaceup() and c:IsCanTurnSet() -- Nếu trên sân thì phải đang ngửa và úp xuống được
+        return c:IsFaceup() and c:IsCanTurnSet() -- Kiểm tra xem trên sân có đang ngửa và úp xuống được không
     end
     return false
 end
@@ -60,16 +60,33 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
     end
     
     if op==0 then
-        -- EFF 1: SET TỪ HAND HOẶC FIELD (Logic gốc của bạn xử lý tc)
-        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+        -- =================================================================
+        -- EFF 1: IMMEDIATELY SET TỪ HAND HOẶC FIELD (TÍNH LÀ SET TAY)
+        -- =================================================================
+        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
         local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil)
         local tc=g:GetFirst()
         if tc then
-            -- Hàm MSet gốc của bạn tự nhận diện vị trí để đưa từ tay xuống hoặc bắt quái trên sân úp tại chỗ
-            Duel.MSet(tp,tc,true,nil) 
+            if tc:IsLocation(LOCATION_HAND) then
+                -- Từ trên TAY: Gọi hàm MSet gốc của bạn (Core tự tính là Set tay)
+                Duel.MSet(tp,tc,true,nil)
+            else
+                -- Từ trên SÂN: Tiến hành ép úp mặt xuống
+                if Duel.ChangePosition(tc,POS_FACEDOWN_DEFENSE) > 0 then
+                    -- GIẢ LẬP BIẾN THÀNH HÀNH ĐỘNG SET TAY:
+                    tc:SetStatus(0x400,1) -- Đóng dấu STATUS_SUMMON_TURN (Quái vật tính là được Set/Summon lượt này)
+                    
+                    -- Bắn sự kiện báo cho toàn hệ thống: Vừa có 1 quái vật được SET TAY xuống sân
+                    -- REASON_SUMMON (0x100) ép game hiểu đây là hành động Triệu hồi chứ KHÔNG PHẢI hiệu ứng bài.
+                    local g2=Group.FromCards(tc)
+                    Duel.RaiseEvent(g2,EVENT_MZONE_COUNT_CHANGED,e,REASON_SUMMON,tp,tp,0)
+                end
+            end
         end
     else
-        -- EFF 2: IMMEDIATELY FLIP SUMMON (Mã Hex thô cho nhân cũ)
+        -- =================================================================
+        -- EFF 2: IMMEDIATELY FLIP SUMMON (TÍNH LÀ FLIP SUMMON TAY)
+        -- =================================================================
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEDOWN)
         local g=Duel.SelectMatchingCard(tp,s.flipfilter,tp,LOCATION_MZONE,0,1,1,nil)
         if #g>0 then
