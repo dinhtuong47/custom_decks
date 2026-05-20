@@ -1,113 +1,114 @@
--- Scripted by Gemini (Non-Target Version)
-local s,id=GetID()
-
+-- Giả sử đây là script của một con Vật Chủ hoặc Linh Thú
 function s.initial_effect(c)
-    -- Kích hoạt lá bài (Activate)
-    local e1=Effect.CreateEffect(c)
-    e1:SetCategory(CATEGORY_POSITION)
-    e1:SetType(EFFECT_TYPE_ACTIVATE)
-    e1:SetCode(EVENT_FREE_CHAIN)
-    e1:SetTarget(s.target)
-    e1:SetOperation(s.activate)
-    c:RegisterEffect(e1)
+	-- [Hiệu ứng riêng của lá bài viết ở đây, ví dụ e1, e2...]
+
+	-- =========================================================================
+	-- ĐOẠN CODE DƯỚI ĐÂY LÀ KHỞI ĐỘNG CƠ CHẾ (Dán y hệt cho mọi lá bài trong tộc)
+	-- =========================================================================
+	if not s.global_check then
+		s.global_check=true
+		
+		-- Tạo một hiệu ứng quét liên tục đăng ký thẳng vào hệ thống game
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD_CONTINUOUS)
+		ge1:SetCode(EVENT_FREE_CHAIN) -- Quét liên tục để nháy bảng chọn khi đủ điều kiện
+		ge1:SetCondition(s.mechanic_con)
+		ge1:SetOperation(s.mechanic_op)
+		Duel.RegisterEffect(ge1,0) -- Đăng ký cho Player 1
+		
+		local ge2=ge1:Clone()
+		Duel.RegisterEffect(ge2,1) -- Đăng ký cho Player 2
+	end
 end
 
--- --- KIỂM TRA ĐIỀU KIỆN KÍCH HOẠT ---
-function s.filter(c)
-    return c:IsFacedown() and c:IsLocation(LOCATION_MZONE)
+-- 1. ĐIỀU KIỆN KÍCH HOẠT CƠ CHẾ TRONG TRẬN ĐẤU
+function s.mechanic_con(e,tp,eg,ep,ev,re,r,rp)
+	-- Phải là Battle Phase và là lượt của mình
+	if not Duel.IsBattlePhase() or Duel.GetTurnPlayer()~=tp then return false end
+	-- Phải còn ô trống trên sân để gọi thú ra
+	if Duel.GetLocationCount(tp,LOCATION_M_ZONE)<=0 then return false end
+	
+	-- Quét sân xem có con Vật Chủ nào đang chứa Linh Thú thuộc tộc này không (Mã tộc tạm thời là 0xXXXX)
+	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_M_ZONE,0,nil)
+	local has_beast=false
+	for tc in aux.Next(g) do
+		local mat=tc:GetOverlayGroup()
+		if mat:IsExists(Card.IsSetCard,1,nil,0xXXXX) then
+			has_beast = true
+			break
+		end
+	end
+	return has_beast
 end
 
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-    -- Chỉ kiểm tra xem trên sân có ít nhất 1 quái vật úp mặt hay không
-    if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_MZONE,0,1,nil) end
-    
-    -- Không dùng Duel.SelectTarget ở đây, hệ thống sẽ hiểu là Non-target
-    Duel.SetOperationInfo(0,CATEGORY_POSITION,nil,1,tp,LOCATION_MZONE)
+-- 2. VẬN HÀNH CƠ CHẾ: HIỆN POP-UP CHO NGƯỜI CHƠI CHỌN GỌI LINH THÚ
+function s.mechanic_op(e,tp,eg,ep,ev,re,r,rp)
+	-- Hiện bảng hỏi: "Bạn có muốn giải phóng Linh Thú không?"
+	if Duel.SelectYesNo(tp,aux.Stringid(e:GetHandler():GetOriginalCode(),0)) then
+		-- Bước 1: Chọn Vật Chủ đang chứa Linh Thú
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+		local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_M_ZONE,0,nil)
+		local host_g=Group.CreateGroup()
+		for tc in aux.Next(g) do
+			if tc:GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0xXXXX) then
+				host_g:AddCard(tc)
+			end
+		end
+		
+		if #host_g>0 then
+			local hc=host_g:Select(tp,1,1,nil):GetFirst()
+			if hc then
+				-- Bước 2: Chọn con Linh Thú nằm trong bụng con Vật Chủ đó
+				local mat=hc:GetOverlayGroup():Filter(Card.IsSetCard,nil,0xXXXX)
+				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+				local sg=mat:Select(tp,1,1,nil)
+				
+				-- Bước 3: Triệu hồi Đặc biệt ra sân
+				if #sg>0 and Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)~=0 then
+					-- Thêm luật tự động rút lui vào bụng ở END BATTLE PHASE cho con Linh Thú vừa nhảy ra
+					local sc=sg:GetFirst()
+					local e1=Effect.CreateEffect(e:GetHandler())
+					e1:SetType(EFFECT_TYPE_FIELD_CONTINUOUS)
+					e1:SetCode(EVENT_PHASE+PHASE_BATTLE)
+					e1:SetCountLimit(1)
+					e1:SetLabelObject(sc)
+					e1:SetCondition(s.return_con)
+					e1:SetOperation(s.return_op)
+					Duel.RegisterEffect(e1,tp)
+				end
+			end
+		end
+	end
 end
 
--- --- XỬ LÝ HIỆU ỨNG KHI RESOLVE ---
-function s.activate(e,tp,eg,ep,ev,re,r,rp)
-    -- Tiến hành chọn quái vật NGAY LÚC RESOLVE
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEDOWN)
-    local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_MZONE,0,1,1,nil)
-    
-    if #g>0 then
-        local tc=g:GetFirst()
-        -- Lật quái vật lên thế công ngửa mặt
-        if Duel.MoveToField(tc,tp,tp,LOCATION_MZONE,POS_FACEUP_ATTACK,true) then
-            
-            -- Đóng dấu trạng thái hệ thống Flip Summon
-            tc:SetStatus(STATUS_FLIP_SUMMONED,true)
-            tc:SetStatus(STATUS_SUMMON_TURN,true)
-            
-            -- Bắn Event báo cho toàn bộ sàn đấu và bản thân quái vật
-            local g2=Group.FromCards(tc)
-            Duel.RaiseEvent(g2,EVENT_FLIP_SUMMON_SUCCESS,e,REASON_EFFECT,tp,tp,0)
-            Duel.RaiseSingleEvent(tc,EVENT_FLIP_SUMMON_SUCCESS,e,REASON_EFFECT,tp,tp,0)
-        end
-    end
-end
-        e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-        e3:SetRange(LOCATION_MZONE)
-        e3:SetCode(EVENT_SUMMON_SUCCESS)
-        e3:SetCondition(s.drcon)
-        e3:SetTarget(s.drtg)
-        e3:SetOperation(s.drop)
-        e3:SetReset(RESET_EVENT+RESETS_STANDARD)
-        c:RegisterEffect(e3)
-    end
-
-   -- Effect 4: Buff ATK & Immune
-    if (flag&0x8)~=0 then
-        -- Tăng ATK
-        local e4a=Effect.CreateEffect(c)
-        e4a:SetType(EFFECT_TYPE_SINGLE)
-        e4a:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE)
-        e4a:SetRange(LOCATION_MZONE) -- Phải có Range cho SINGLE_RANGE
-        e4a:SetCode(EFFECT_UPDATE_ATTACK)
-        e4a:SetValue(1000)
-        e4a:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
-        c:RegisterEffect(e4a)
-
-        -- Kháng hiệu ứng
-        local e4b=Effect.CreateEffect(c)
-        e4b:SetType(EFFECT_TYPE_SINGLE)
-        e4b:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE)
-        e4b:SetRange(LOCATION_MZONE)
-        e4b:SetCode(EFFECT_IMMUNE_EFFECT)
-        e4b:SetValue(s.efilter)
-        e4b:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
-        c:RegisterEffect(e4b)
-    end
+-- 3. LUẬT TỰ ĐỘNG CHUI LẠI VÀO BỤNG Ở END BATTLE PHASE
+function s.return_con(e,tp,eg,ep,ev,re,r,rp)
+	local tc=e:GetLabelObject()
+	-- Nếu con Linh Thú đó đã rời sân trước khi End Battle Phase thì hủy hiệu ứng này
+	if not tc or not tc:IsLocation(LOCATION_M_ZONE) then 
+		e:Reset()
+		return false 
+	end
+	return true
 end
 
--- Filter Kháng hiệu ứng
-function s.efilter(e,re)
-    return e:GetHandlerPlayer()~=re:GetOwnerPlayer()
+function s.return_op(e,tp,eg,ep,ev,re,r,rp)
+	local tc=e:GetLabelObject()
+	-- Quét tìm lại một con Vật Chủ ngửa trên sân để chui vào
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_M_ZONE,0,nil) -- Có thể thêm filter check hệ Vật Chủ nếu cần
+	if #g>0 then
+		local hc=g:Select(tp,1,1,nil):GetFirst()
+		if hc then
+			-- Luật Game: Tự động biến thành Material (Không tạo chain link, không bị negate)
+			Duel.Overlay(hc,Group.FromCards(tc))
+		end
+	else
+		-- Nếu không còn Vật Chủ nào trên sân, Linh Thú chết (gửi xuống GY)
+		Duel.SendtoGrave(tc,REASON_RULE)
+	end
+	e:Reset() -- Xóa hiệu ứng continuous này sau khi thực hiện xong
 end
-
--- Negate Spell logic
-function s.discon(e,tp,eg,ep,ev,re,r,rp)
-    return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
-        and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:IsActiveType(TYPE_SPELL) and Duel.IsChainNegatable(ev)
-end
-function s.distg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return true end
-    Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
-end
-function s.disop(e,tp,eg,ep,ev,re,r,rp)
-    Duel.NegateEffect(ev)
-end
-
--- Banish logic
-function s.rmvcon(e,tp,eg,ep,ev,re,r,rp)
-    return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
-        and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:IsActiveType(TYPE_TRAP)
-end
-function s.rmvtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-    if chk==0 then return #g>0 end
-    Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
 end
 function s.rmvop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
