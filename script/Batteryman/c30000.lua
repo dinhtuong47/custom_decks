@@ -16,7 +16,7 @@ function s.initial_effect(c)
     e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
     e2:SetType(EFFECT_TYPE_QUICK_O)
     e2:SetCode(EVENT_FREE_CHAIN)
-    e2:SetRange(LOCATION_OVERLAY) -- Vùng kích hoạt nằm ngay trong bụng quái khác
+    e2:SetRange(LOCATION_OVERLAY)
     e2:SetCondition(s.sscon)
     e2:SetTarget(s.sstg)
     e2:SetOperation(s.ssop)
@@ -54,7 +54,8 @@ end
 
 function s.ssop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    if c:IsRelateToEffect(e) then
+    -- Đã sửa: Check vị trí vật lý thay vì check liên kết hiệu ứng
+    if c:IsLocation(LOCATION_OVERLAY) then
         Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
     end
 end
