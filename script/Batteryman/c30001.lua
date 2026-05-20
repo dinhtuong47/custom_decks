@@ -1,6 +1,11 @@
-function s.initial_effect(c)
-	-- [Hiệu ứng riêng của lá bài c30001 nếu có]
+-- Định nghĩa biến s và c30001 cho Core cũ nhận diện
+local s,id=GetID()
+if not s then
+	s={}
+	id=30001
+end
 
+function s.initial_effect(c)
 	-- =========================================================================
 	-- LUẬT CƠ CHẾ KHÔNG RÀNG BUỘC (DÙNG ĐỂ TEST CƠ CHẾ)
 	-- =========================================================================
@@ -39,7 +44,7 @@ end
 
 -- 2. VẬN HÀNH CƠ CHẾ: Lôi bất kỳ lá nào dưới bụng ra sân
 function s.mechanic_op(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.SelectYesNo(tp,aux.Stringid(e:GetHandler():GetOriginalCode(),0)) then
+	if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 		-- Lọc ra những con quái đang có Material
 		local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_M_ZONE,0,nil)
@@ -103,4 +108,3 @@ function s.return_op(e,tp,eg,ep,ev,re,r,rp)
 	end
 	e:Reset()
 end
-
