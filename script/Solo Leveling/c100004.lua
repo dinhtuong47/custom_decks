@@ -1,20 +1,19 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	-- FLIP: You can add to your hand, 1 "Solo Leveling" Equip Spell from your Deck, or 1 Equip Spell from either GY, then you can equip it
+	-- FLIP: You can equip 1 Equip Spell from your Deck or GY to this card, then if you equipped a "Solo Leveling" card by this effect, you can return 1 card your opponent controls to the hand.
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_EQUIP)
+	e1:SetCategory(CATEGORY_EQUIP+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCountLimit(1,id)
-	e1:SetTarget(s.thtg)
-	e1:SetOperation(s.thop)
+	e1:SetTarget(s.eqtg)
+	e1:SetOperation(s.eqop)
 	c:RegisterEffect(e1)
     
 	-- Eff 2: If you control a Set monster, or a "Solo Leveling" monster, and this card is in your hand: Immediately after this effect resolves, you can Normal Set this card.
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_HAND)
-	e2:SetCountLimit(1,id+100)
+	e2:SetCountLimit(1,id)
 	e2:SetCondition(s.setcon)
 	e2:SetTarget(s.settg)
 	e2:SetOperation(s.setop)
@@ -29,51 +28,46 @@ function s.initial_effect(c)
 end
 
 -- ==========================================================
--- LOGIC EFF 1: FLIP (SEARCH/RECYCLE EQUIP SPELL)
+-- LOGIC EFF 1: FLIP (EQUIP & RETURN TO HAND)
 -- ==========================================================
 
-function s.thfilter(c)
-	if c:IsLocation(LOCATION_DECK) then
-		return c:IsSetCard(0xBB8) and c:IsType(TYPE_EQUIP) and c:IsAbleToHand()
-	else
-		return c:IsType(TYPE_EQUIP) and c:IsAbleToHand()
-	end
-end
-
 function s.eqfilter(c,ec)
-	return c:IsFaceup() and ec:CheckEquipTarget(c)
+	return c:IsType(TYPE_EQUIP) and c:CheckEquipTarget(ec)
 end
 
-function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,LOCATION_GRAVE,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+function s.eqtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+		and Duel.IsExistingMatchingCard(s.eqfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e:GetHandler()) end
+	Duel.SetOperationInfo(0,CATEGORY_EQUIP,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,1-tp,LOCATION_ONFIELD)
 end
 
-function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil)
+function s.thfilter(c)
+	return c:IsFacedown() and c:IsAbleToHand()
+end
+
+function s.eqop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or c:IsFacedown() or not c:IsRelateToEffect(e) then return end
 	
-	if #g>0 then
-		local tc=g:GetFirst()
-		if Duel.SendtoHand(tc,tp,REASON_EFFECT)>0 and tc:IsLocation(LOCATION_HAND) then
-			Duel.ConfirmCards(1-tp,tc)
-			Duel.ShuffleHand(tp)
-			
-			if Duel.GetLocationCount(tp,LOCATION_SZONE)>0
-				and Duel.IsExistingMatchingCard(s.eqfilter,tp,LOCATION_MZONE,0,1,nil,tc)
-				and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-				
-				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
-				local sg=Duel.SelectMatchingCard(tp,s.eqfilter,tp,LOCATION_MZONE,0,1,1,nil,tc)
-				if #sg>0 then
-					Duel.HintSelection(sg)
-					Duel.BreakEffect()
-					Duel.Equip(tp,tc,sg:GetFirst())
-				end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
+	local g=Duel.SelectMatchingCard(tp,s.eqfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,c)
+	local tc=g:GetFirst()
+	
+	if tc and Duel.Equip(tp,tc,c) then
+		if tc:IsSetCard(0xBB8) then
+			local og=Duel.GetMatchingGroup(s.thfilter,tp,0,LOCATION_ONFIELD,nil)
+			if #og>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+				Duel.BreakEffect()
+				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
+				local sg=og:Select(tp,1,1,nil)
+				Duel.HintSelection(sg)
+				Duel.SendtoHand(sg,nil,REASON_EFFECT)
 			end
 		end
 	end
 end
+
 
 -- ==========================================================
 -- LOGIC EFF 2: IMMEDIATELY AFTER RESOLVES, NORMAL SET
@@ -105,7 +99,6 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
-
 
 -- ==========================================================
 -- STATIC LOGIC: DIRECT ATTACK IF FLIP SUMMONED

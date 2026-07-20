@@ -52,11 +52,11 @@ end
 -- ==========================================================
 
 function s.eqlimit(e,c)
-	return c:IsCode(100000)
+	return c:IsType(TYPE_FLIP)
 end
 
 function s.eqfilter(c)
-	return c:IsFaceup() and c:IsCode(100000)
+	return c:IsFaceup() and c:IsType(TYPE_FLIP)
 end
 
 function s.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

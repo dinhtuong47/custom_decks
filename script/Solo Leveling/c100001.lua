@@ -3,14 +3,14 @@ function s.initial_effect(c)
 	-- Effect 1: FLIP effect
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
-	e1:SetCode(EVENT_FLIP)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e1:SetTarget(s.thtg)
 	e1:SetOperation(s.thop)
 	c:RegisterEffect(e1)
 	
 	local e1b=e1:Clone()
+    e1b:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1b:SetCode(EVENT_SUMMON_SUCCESS)
 	c:RegisterEffect(e1b)
 	
@@ -47,9 +47,6 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3d)
 end
 
-function s.thfilter(c,ttype)
-	return c:IsSetCard(0xBB8) and c:IsType(ttype) and c:IsAbleToHand()
-end
 
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and chkc:IsFacedown() end
@@ -64,16 +61,21 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 end
 
+function s.thfilter(c,ttype)
+	return c:IsSetCard(0xBB8) and c:IsType(ttype) and c:IsAbleToHand() 
+		and not (c:IsLocation(LOCATION_REMOVED) and c:IsFacedown())
+end
+
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc and tc:IsRelateToEffect(e) and tc:IsFacedown() then
 		Duel.ConfirmCards(1-tc:GetControler(),tc)
 		local ttype=tc:GetType()&(TYPE_MONSTER|TYPE_SPELL|TYPE_TRAP)
-		if e:GetLabel()==1 and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,ttype)
+		if e:GetLabel()==1 and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK|LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil,ttype)
 			and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-			local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil,ttype)
+			local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK|LOCATION_GRAVE|LOCATION_REMOVED,0,1,1,nil,ttype)
 			if #g>0 then
 				Duel.SendtoHand(g,nil,REASON_EFFECT)
 				Duel.ConfirmCards(1-tp,g)
@@ -81,6 +83,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
+
 
 function s.regop(e,tp,eg,ep,ev,re,r,rp)
 	e:GetHandler():RegisterFlagEffect(id,0,0,0)

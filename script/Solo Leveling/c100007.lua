@@ -1,8 +1,12 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	local e0=Effect.CreateEffect(c)
+	e0:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
 	e0:SetCode(EVENT_FREE_CHAIN)
+	e0:SetCountLimit(1, id + EFFECT_COUNT_CODE_OATH)
+	e0:SetTarget(s.target0)
+	e0:SetOperation(s.operation0)
 	c:RegisterEffect(e0)
 
 	local e1=Effect.CreateEffect(c)
@@ -26,7 +30,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1b)
 
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_HANDES)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1)
@@ -34,17 +38,28 @@ function s.initial_effect(c)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
-    
-	-- bao ve bai phep/cam bay (e3)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(LOCATION_ONFIELD,0)
-	e3:SetCondition(s.indcon)
-	e3:SetTarget(s.indtg)
-	e3:SetValue(aux.indoval)
-	c:RegisterEffect(e3)
+end
+
+function s.thfilter0(c)
+	return c:IsSetCard(0xBB8) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+end
+
+function s.target0(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+end
+
+function s.operation0(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local g=Duel.GetMatchingGroup(s.thfilter0,tp,LOCATION_DECK,0,nil)
+	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+		local sg=g:Select(tp,1,1,nil)
+		if #sg>0 then
+			Duel.SendtoHand(sg,nil,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,sg)
+		end
+	end
 end
 
 function s.limcon_chain(e,tp,eg,ep,ev,re,r,rp)
@@ -75,7 +90,7 @@ function s.cfilter(c,tp)
 end
 
 function s.thfilter(c,ctype,code)
-	return c:IsSetCard(0xBB8) and c:IsType(ctype) and not c:IsType(TYPE_FIELD) and not c:IsCode(code) and c:IsAbleToHand()
+	return c:IsSetCard(0xBB8) and c:IsType(ctype) and not c:IsCode(code) and c:IsAbleToHand()
 end
 
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -90,6 +105,7 @@ end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,tp,1)
 end
 
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
@@ -98,22 +114,10 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local code=rc and rc:GetCode() or 0
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil,ctype,code)
-	if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
+	if #g>0 and Duel.SendtoHand(g,nil,REASON_EFFECT)>0 then
 		Duel.ConfirmCards(1-tp,g)
+		Duel.ShuffleHand(tp)
+		Duel.BreakEffect()
+		Duel.DiscardHand(tp,nil,1,1,REASON_EFFECT+REASON_DISCARD)
 	end
-end
-
--- dieu kien va muc tieu cua e3
-
-function s.cfilter2(c)
-	return c:IsFaceup() and c:IsSetCard(0xBB9) and c:IsType(TYPE_MONSTER)
-end
-
-function s.indcon(e)
-	return Duel.IsExistingMatchingCard(s.cfilter2,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil)
-end
-
-function s.indtg(e,c)
-	return c:IsFaceup() and c:IsType(TYPE_SPELL|TYPE_TRAP)
 end

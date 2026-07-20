@@ -47,7 +47,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		
 		local g=Duel.GetMatchingGroup(s.revfilter,tp,LOCATION_HAND,0,nil,ty)
 		
-		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if #g>0 and ((ec:IsType(TYPE_MONSTER) and ec:IsCanTurnSet()) or (not ec:IsType(TYPE_MONSTER) and ec:IsRelateToEffect(re))) 
+        and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 			local rg=g:Select(tp,1,1,nil)
 			Duel.ConfirmCards(1-tp,rg)

@@ -28,13 +28,10 @@ function s.initial_effect(c)
 	e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xBB8))
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	--[[local e1a=e1:Clone()
-	e1a:SetCode(EFFECT_DECREASE_TRIBUTE)
-	c:RegisterEffect(e1a)]]--
 
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetCode(EFFECT_DESTROY_REPLACE)
+	e2:SetCode(EFFECT_SEND_REPLACE)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetTarget(s.reptg)
 	e2:SetValue(s.repval)
@@ -43,9 +40,9 @@ function s.initial_effect(c)
 end
 
 function s.repfilter(c,tp)
-	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) 
-		and c:IsSetCard(0xBB9) and (c:IsReason(REASON_BATTLE) or c:IsReason(REASON_EFFECT))
-		and not c:IsReason(REASON_REPLACE)
+	return c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) and c:IsFaceup()
+		and c:IsSetCard(0xBB9) and c:IsReason(REASON_DESTROY) 
+		and c:GetDestination()==LOCATION_GRAVE
 end
 
 function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -67,7 +64,7 @@ end
 
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
 	local g=e:GetLabelObject()
-	Duel.SendtoHand(g,nil,REASON_EFFECT+REASON_REPLACE)
+	Duel.SendtoHand(g,nil,REASON_EFFECT)
 	g:DeleteGroup()
 end
 

@@ -10,7 +10,6 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 end
 
--- Ham thuc cong kiem tra xem Group co the dat duoc tong Level >= lv hay khong
 function s.check_greater_or_equal(g,lv)
     local t={}
     local mc=g:GetFirst()
@@ -24,22 +23,18 @@ end
 function s.recursive_check(t,lv,idx,current_sum)
     if current_sum>=lv then return true end
     if idx>#t then return false end
-    -- Truong hop 1: Lay quai vat nay lam te pham
     if s.recursive_check(t,lv,idx+1,current_sum+t[idx]:GetLevel()) then return true end
-    -- Truong hop 2: Bo qua quai vat nay
     return s.recursive_check(t,lv,idx+1,current_sum)
 end
 
--- Filter: Quai vat he DARK trong GY co the banish
 function s.matfilter(c)
-    return (c:IsCode(100000) or c:IsCode(100002)) and c:IsAbleToRemove()  --[[c:IsType(TYPE_MONSTER) and c:IsAttribute(ATTRIBUTE_DARK)]]--
+    return (c:IsCode(100000) or c:IsCode(100002)) and c:IsAbleToRemove()
 end
 
--- Filter: Quai vat Ritual Solo Leveling
 function s.tgfilter(c,e,tp,mg)
     if not (c:IsSetCard(0xBB8) and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_MONSTER)) then return false end
+    if c:IsLocation(LOCATION_REMOVED) and c:IsFacedown() then return false end
     
-    -- ?? S?A: ??i th?nh true, true ?? v?a cho ph?p check ?i?u ki?n v?a b? qua Revive Limit ? GY
     local b1 = c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,true,true,POS_FACEUP_ATTACK)
     local b2 = c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,true,true,POS_FACEDOWN_DEFENSE)
     if not (b1 or b2) then return false end
@@ -55,9 +50,9 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
         local mg=Duel.GetRitualMaterial(tp)
         local mg2=Duel.GetMatchingGroup(s.matfilter,tp,LOCATION_GRAVE,0,nil)
         mg:Merge(mg2)
-        return Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,e,tp,mg)
+        return Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e,tp,mg)
     end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED)
 end
 
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
@@ -66,7 +61,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
     mg:Merge(mg2)
     
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-    local tg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,e,tp,mg)
+    local tg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,e,tp,mg)
     local tc=tg:GetFirst()
     if not tc then return end
     
@@ -75,7 +70,6 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
     
     local lv=tc:GetLevel()
     
-    -- Vong lap chon tay tung la bai cho den khi tong Level >= yeu cau (Tuong thich moi core)
     local mat=Group.CreateGroup()
     while true do
         local sum=0
@@ -98,7 +92,6 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
     if mat:GetCount()==0 then return end
     tc:SetMaterial(mat)
     
-    -- Phan chia nguyen lieu: Tren tay/san thi hien te, duoi GY thi truc xuat
     local rg1=Group.CreateGroup()
     local rg2=Group.CreateGroup()
     local mc=mat:GetFirst()
@@ -117,6 +110,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
     if rg2:GetCount()>0 then
         Duel.Remove(rg2,POS_FACEUP,REASON_EFFECT+REASON_MATERIAL+REASON_RITUAL)
     end
+    
     local b1=tc:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,true,true,POS_FACEUP_ATTACK)
     local b2=tc:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,true,true,POS_FACEDOWN_DEFENSE)
     
@@ -129,8 +123,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
         pos=POS_FACEDOWN_DEFENSE
     end
     
-    if Duel.SpecialSummon(tc,SUMMON_TYPE_RITUAL,tp,tp,true,true,pos)>0   then 
-   --[[and Duel.ConfirmCards(1-tp,tc)>0 then]]--
+    if Duel.SpecialSummon(tc,SUMMON_TYPE_RITUAL,tp,tp,true,true,pos)>0 then 
         tc:CompleteProcedure()
     end
 end

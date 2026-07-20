@@ -1,21 +1,22 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
+    e1:SetDescription(aux.Stringid(id,2))
 	e1:SetCategory(CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCountLimit(1,id)
 	e1:SetTarget(s.destg)
 	e1:SetOperation(s.desop)
 	c:RegisterEffect(e1)
 
 	local e2=Effect.CreateEffect(c)
+    e2:SetDescription(aux.Stringid(id,3))
 	e2:SetCategory(CATEGORY_TOGRAVE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
-	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_CARD_TARGET)
-	e2:SetCode(EVENT_CHANGE_POS)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,id+100)
+	e2:SetCountLimit(1,id)
 	e2:SetCondition(s.tgcon)
 	e2:SetTarget(s.tgtg)
 	e2:SetOperation(s.tgop)
@@ -29,7 +30,7 @@ function s.initial_effect(c)
 end
 
 function s.desfilter(c)
-	return c:IsFacedown()
+	return c:IsType(TYPE_SPELL+TYPE_TRAP)
 end
 
 function s.shadow_filter(c)
@@ -38,16 +39,16 @@ end
 
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then 
-		return Duel.IsExistingMatchingCard(s.desfilter,tp,0,LOCATION_SZONE+LOCATION_FZONE,1,nil) 
+		return Duel.IsExistingMatchingCard(s.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) 
 	end
-	local g=Duel.GetMatchingGroup(s.desfilter,tp,0,LOCATION_SZONE+LOCATION_FZONE,nil)
+	local g=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.GetMatchingGroupCount(s.shadow_filter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
 	if ct==0 then return end
-	local g=Duel.GetMatchingGroup(s.desfilter,tp,0,LOCATION_SZONE+LOCATION_FZONE,nil)
+	local g=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
 	if #g>0 then
 		if #g>ct then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
@@ -59,25 +60,19 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if not c:IsFaceup() then return false end
-	return eg:IsExists(function(tc) 
-		return tc:IsControler(tp) and tc:IsFaceup() and tc:IsPreviousPosition(POS_FACEDOWN) and tc~=c 
-	end,1,nil)
+	return not eg:IsContains(e:GetHandler())
 end
 
-function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) end
-	if chk==0 then return true end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectTarget(tp,nil,tp,0,LOCATION_MZONE,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,0,0)
+function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,1-tp,LOCATION_MZONE)
 end
 
 function s.tgop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) then
-		Duel.SendtoGrave(tc,REASON_EFFECT)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,0,LOCATION_MZONE,1,1,nil)
+	if #g>0 then
+		Duel.SendtoGrave(g,REASON_EFFECT)
 	end
 end
 

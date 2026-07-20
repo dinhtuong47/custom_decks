@@ -3,7 +3,7 @@ function s.initial_effect(c)
 	-- FLIP (Mandatory): Register End Phase effect
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_F)
-	e1:SetCountLimit(1,id)
+    e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetTarget(s.fptg)
 	e1:SetOperation(s.fpop)
 	c:RegisterEffect(e1)
@@ -14,7 +14,7 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
-	e2:SetCountLimit(1,id+100)
+	e2:SetCountLimit(1,id)
     e2:SetCondition(s.flipcon)
 	e2:SetCost(s.flipcost)
 	e2:SetTarget(s.fliptg)
@@ -90,16 +90,15 @@ function s.epop(e,tp,eg,ep,ev,re,r,rp)
 	if ft<=0 then return end
 	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=1 end
 	
-	if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-		local g=Duel.SelectMatchingCard(tp,s.epfilter,tp,0,LOCATION_GRAVE,1,ft,nil,e,tp)
-		if #g>0 then
-			if Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)>0 then
-				Duel.ConfirmCards(1-tp,g)
-			end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+	local g=Duel.SelectMatchingCard(tp,s.epfilter,tp,0,LOCATION_GRAVE,1,ft,nil,e,tp)
+	if #g>0 then
+		if Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)>0 then
+			Duel.ConfirmCards(1-tp,g)
 		end
 	end
 end
+
 
 -- ==========================================================
 -- LOGIC EFF 2: REVEAL TO FLIP SUMMON
