@@ -1,8 +1,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
-	-- Effect 1: FLIP effect
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_HANDES)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e1:SetTarget(s.thtg)
@@ -10,7 +9,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	
 	local e1b=e1:Clone()
-    e1b:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1b:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1b:SetCode(EVENT_SUMMON_SUCCESS)
 	c:RegisterEffect(e1b)
 	
@@ -21,7 +20,6 @@ function s.initial_effect(c)
 	e2:SetOperation(s.regop)
 	c:RegisterEffect(e2)
 
-	-- Effect 2: Hand Normal Set
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_SUMMON)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
@@ -47,7 +45,6 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3d)
 end
 
-
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and chkc:IsFacedown() end
 	if chk==0 then return Duel.IsExistingTarget(Card.IsFacedown,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
@@ -71,7 +68,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if tc and tc:IsRelateToEffect(e) and tc:IsFacedown() then
 		Duel.ConfirmCards(1-tc:GetControler(),tc)
 		local ttype=tc:GetType()&(TYPE_MONSTER|TYPE_SPELL|TYPE_TRAP)
-		if e:GetLabel()==1 and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK|LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil,ttype)
+		if Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK|LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil,ttype)
 			and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
@@ -79,11 +76,14 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 			if #g>0 then
 				Duel.SendtoHand(g,nil,REASON_EFFECT)
 				Duel.ConfirmCards(1-tp,g)
+				if e:GetLabel()==0 then
+					Duel.BreakEffect()
+					Duel.DiscardHand(tp,nil,1,1,REASON_EFFECT+REASON_DISCARD)
+				end
 			end
 		end
 	end
 end
-
 
 function s.regop(e,tp,eg,ep,ev,re,r,rp)
 	e:GetHandler():RegisterFlagEffect(id,0,0,0)

@@ -85,7 +85,7 @@ end
 
 function s.cfilter(c,tp)
 	local ctype=c:GetType()&(TYPE_MONSTER|TYPE_SPELL|TYPE_TRAP)
-	return c:IsSetCard(0xBB8) and not c:IsPublic()
+	return  not c:IsPublic()
 		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,ctype,c:GetCode())
 end
 

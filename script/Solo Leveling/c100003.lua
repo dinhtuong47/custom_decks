@@ -9,14 +9,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e2:SetCode(EFFECT_DESTROY_REPLACE)
+	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,id)
-	e2:SetCondition(s.gycon)
-	e2:SetTarget(s.gytg)
-	e2:SetOperation(s.gyop)
+	e2:SetTarget(s.reptg)
+	e2:SetOperation(s.repop)
 	c:RegisterEffect(e2)
 
 	local e3=Effect.CreateEffect(c)
@@ -32,6 +31,7 @@ function s.initial_effect(c)
 	e6:SetOperation(s.flipop)
 	c:RegisterEffect(e6)
 end
+
 
 function s.flipop(e,tp,eg,ep,ev,re,r,rp)
 	e:GetHandler():RegisterFlagEffect(id,0x1ec0000,0,1)
@@ -71,25 +71,17 @@ function s.fpop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
-function s.gycon(e,tp,eg,ep,ev,re,r,rp)
+
+function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_ONFIELD) and c:GetFlagEffect(id)~=0
+	if chk==0 then return c:IsReason(REASON_BATTLE) and c:GetFlagEffect(id)~=0 and c:IsCanTurnSet() end
+	return Duel.SelectEffectYesNo(tp,c,96)
 end
 
-function s.gytg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+function s.repop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.ChangePosition(e:GetHandler(),POS_FACEDOWN_DEFENSE)
 end
 
-function s.gyop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
-        Duel.ConfirmCards(1-tp,c)
-	end
-end
 
 function s.fssop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -108,8 +100,13 @@ function s.fssop(e,tp,eg,ep,ev,re,r,rp)
 	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCode(EFFECT_CANNOT_REMOVE)
+	e2:SetValue(s.rmval)
 	e2:SetReset(RESET_EVENT+0x1fe0000)
 	c:RegisterEffect(e2)
 			
 	c:RegisterFlagEffect(0,RESET_EVENT+0x1fe0000,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(id,1))
+end
+
+function s.rmval(e,re,r,rp)
+	return r&REASON_EFFECT~=0
 end
